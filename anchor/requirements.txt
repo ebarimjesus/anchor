@@ -1,4 +1,4 @@
 django
 django-polaris
 gunicorn
-
+corsheaders
