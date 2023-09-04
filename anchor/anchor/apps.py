@@ -10,3 +10,4 @@ class AnchorConfig(AppConfig):
         register_integrations(
             toml=return_toml_contents,
         )
+
