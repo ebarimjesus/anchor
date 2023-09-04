@@ -15,11 +15,11 @@ Including another URLconf
 """
 
 import polaris.urls
-
+from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     path("", include(polaris.urls)),
-    
+    path('admin/', admin.site.urls),
 ]
 

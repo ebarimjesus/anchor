@@ -8,6 +8,5 @@ class AnchorConfig(AppConfig):
         from .sep1 import return_toml_contents
 
         register_integrations(
-            toml=return_toml_contents
+            toml=return_toml_contents,
         )
-
