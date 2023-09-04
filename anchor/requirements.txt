@@ -1,4 +1,5 @@
 django
 django-polaris
 gunicorn
-corsheaders
+django-cors-headers
+
