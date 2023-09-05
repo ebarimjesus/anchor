@@ -3,4 +3,5 @@ django-polaris
 gunicorn
 django-cors-headers
 python-dateutil
+stellar-sdk
 
