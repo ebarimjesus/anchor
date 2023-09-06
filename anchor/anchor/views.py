@@ -174,9 +174,11 @@ class StellarMnemonic(Mnemonic):
         return il
 
 
-
 @login_required
-def create_account(username):
+def create_account(request):
+    # Get the authenticated user's username
+    username = request.user.username
+
     # Generate a new Stellar mnemonic
     stellar_mnemonic = StellarMnemonic()
     mnemonic = stellar_mnemonic.generate()
@@ -235,7 +237,8 @@ def create_account(username):
     )
     stellar_account.save()
 
-    return stellar_account
+    return redirect('view_account', account_id=stellar_account.pk)
+
 
 
 
