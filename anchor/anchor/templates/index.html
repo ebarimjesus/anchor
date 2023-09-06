@@ -178,6 +178,23 @@
                 max-width: 300px; /* Adjust the product icon size for smaller screens */
             }
         }
+
+        /* CSS for the crypto-card container */
+        .crypto-card {
+            width: 33.33%; /* Display each card in 1/3 of the container width */
+            float: left; /* Float cards to the left for horizontal layout */
+            padding: 10px; /* Add spacing between cards */
+            box-sizing: border-box; /* Include padding and borders in the card width */
+        }
+
+        /* CSS to change card layout to vertical on mobile devices */
+        @media (max-width: 767px) {
+            .crypto-card {
+                width: 100%; /* Display each card in full width on mobile devices */
+                float: none; /* Remove float for vertical layout */
+                margin-bottom: 20px; /* Add spacing between cards vertically */
+            }
+        }
     </style>
 </head>
 
@@ -189,13 +206,35 @@
 
     <nav>
         <a href="{% url 'create_account' %}">Create AFRO Account</a>
-        <a href="#motivation">Moivation</a>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'register' %}">Register</a>
+        <a href="#motivation">Motivation</a>
         <a href="#products">Products</a>
         <a href="#services">Services</a>
         <a href="#about">About Us</a>
         <a href="#team">ZingyPay Team</a>
         <a href="#wallets">Zingy Wallets</a>
     </nav>
+    
+
+     <!-- Embed the iframes within a container div for horizontal display -->
+     <div id="stellar-widget-container">
+        <!-- AFRO cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/AFRO-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+
+        <!-- LIFE cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/LIFE-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+
+        <!-- NATURE cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/NATURE-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+    </div>
     
     <section id="motivation">
         <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1691869114/Go-Afro-Go_kflsey.png" class="max-image">

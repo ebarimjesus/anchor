@@ -43,6 +43,37 @@ from mnemonic import Mnemonic
 from mnemonic.mnemonic import PBKDF2_ROUNDS
 
 
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.views import View
+from .forms import RegistrationForm
+
+class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'  # Create this template
+    # Additional customization if needed
+
+class CustomLogoutView(LogoutView):
+    template_name = 'registration/logout.html' 
+    # Additional customization if needed
+
+class RegistrationView(View):
+    template_name = 'registration/register.html'  # Create this template
+    form_class = RegistrationForm  # Use the custom registration form
+    success_url = reverse_lazy('login')  # URL to redirect after successful registration
+
+    def get(self, request):
+        return render(request, self.template_name, {'form': self.form_class()})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Additional logic like sending confirmation email, logging in the user, etc.
+            return redirect(self.success_url)
+        return render(request, self.template_name, {'form': form})
+
+
 
 def home(request):
     return render(request, 'index.html')

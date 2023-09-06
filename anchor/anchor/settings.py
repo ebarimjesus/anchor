@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x7t(e2sofl%pexf)8$0(*d0z!q9*ikp$ej=xkwt9&2w#(1#s_!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['anchor-gdpq.onrender.com', '8000-febarim-anchor-gkhovxu0eeo.ws-eu104.gitpod.io', 'zingypay.com']
 
@@ -61,7 +61,7 @@ ROOT_URLCONF = 'anchor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'anchor', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -131,10 +131,10 @@ SESSION_ENGINE =  'django.contrib.sessions.backends.db'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-AUTH_USER_MODEL =  'auth.User'
-LOGIN_REDIRECT_URL = '/accounts/profile/'
-LOGIN_URL = '/accounts/login/'
-LOGOUT_REDIRECT_URL =  'home'
+AUTH_USER_MODEL =  'anchor.User'
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'accounts/login'
+LOGOUT_REDIRECT_URL =  'login'
 
 
 PASSWORD_HASHERS = [

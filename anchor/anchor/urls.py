@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
+from .views import CustomLoginView, CustomLogoutView, RegistrationView
 
 
 
@@ -29,5 +30,12 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('create_account/', views.create_account, name='create_account'),
     path('account/<int:account_id>/', views.view_account, name='view_account'),
+    path('accounts/login/', CustomLoginView.as_view(), name='login'),
+    path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
+    path('accounts/register/', RegistrationView.as_view(), name='register'),
 ]
 
+
+
+
+    
