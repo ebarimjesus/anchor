@@ -20,6 +20,8 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from . import views
 from .views import CustomLoginView, CustomLogoutView, RegistrationView
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 
@@ -35,7 +37,8 @@ urlpatterns = [
     path('accounts/register/', RegistrationView.as_view(), name='register'),
 ]
 
-
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
     
