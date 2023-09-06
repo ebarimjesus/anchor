@@ -2,6 +2,8 @@
 import os
 import requests
 import time
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
@@ -48,6 +50,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from .forms import RegistrationForm
+from .models import StellarAccount, User
 
 class CustomLoginView(LoginView):
     template_name = 'registration/login.html'  # Create this template
@@ -171,8 +174,8 @@ class StellarMnemonic(Mnemonic):
         return il
 
 
-from .models import StellarAccount  # Import your Django model
 
+@login_required
 def create_account(username):
     # Generate a new Stellar mnemonic
     stellar_mnemonic = StellarMnemonic()
@@ -200,7 +203,7 @@ def create_account(username):
         TransactionBuilder(
             source_account=funded_account,
             network_passphrase=network_passphrase,
-            base_fee=10000,
+            base_fee=100,
         )
         .append_create_account_op(
             destination=public_key,
