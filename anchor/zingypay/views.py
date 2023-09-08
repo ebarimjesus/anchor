@@ -309,6 +309,8 @@ PAYSTACK_SECRET_KEY = "sk_live_3af6fcdcd5a0c34064d4dbce95f29313bc705261"  # Repl
 # Define the fixed exchange rate (1 AFRO = $0.5 USD)
 FIXED_AFRO_TO_USD_RATE = 0.5
 
+# Define the exchange rate for USD to NGN
+USD_TO_NGN_RATE = 790
 
 # Define the asset you want to send
 asset = Asset("AFRO", "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV")  # Replace with your actual asset details
@@ -321,8 +323,8 @@ def paystack_callback(request):
         data = request.POST.get("data")
         data = json.loads(data)
         
-        # Extract the paid amount from the Paystack callback data
-        user_paid_amount_in_fiat = data["amount"]  # Amount paid in fiat currency (e.g., NGN)
+        # Extract the paid amount from the Paystack callback data in NGN
+        user_paid_amount_in_naira = data["amount"]  # Amount paid in NGN
 
         # Determine the destination (Stellar public key or federation address) provided by the user
         destination = request.POST.get("destination")
@@ -340,8 +342,11 @@ def paystack_callback(request):
             # Destination is a direct Stellar public key
             user_stellar_public_key = destination
 
-        # Calculate the token amount based on the user's paid amount in fiat currency
-        token_amount = user_paid_amount_in_fiat / FIXED_AFRO_TO_USD_RATE
+        # Convert the paid amount from NGN to USD
+        user_paid_amount_in_usd = user_paid_amount_in_naira / USD_TO_NGN_RATE
+
+        # Calculate the token amount based on the user's paid amount in USD
+        token_amount = user_paid_amount_in_usd / FIXED_AFRO_TO_USD_RATE
 
         # Create and submit the Stellar transaction with the calculated token amount
         source_keypair = Keypair.from_secret(SECRET_KEY)
@@ -379,7 +384,10 @@ def initialize_payment(request):
     if request.method == "POST":
         # Get data from the submitted form
         email = request.POST.get("email")
-        amount = request.POST.get("amount")
+        amount_in_usd = float(request.POST.get("amount"))  # Amount in USD
+
+        # Convert the amount from USD to NGN
+        amount_in_naira = amount_in_usd * USD_TO_NGN_RATE
 
         # Generate a unique reference for the payment
         reference = 'AFROICO_' + str(int(time.time()))
@@ -389,16 +397,16 @@ def initialize_payment(request):
 
         payment_response = paystackapi.Transaction.initialize(
             email=email,
-            amount=amount * 100,  # Convert to kobo (Paystack's currency unit)
+            amount=amount_in_naira * 100,  # Convert to kobo (Paystack's currency unit)
             reference=reference,
-            currency="NGN"  # Adjust the currency as needed
+            currency="NGN"  # Payment currency is NGN
         )
 
         if payment_response.status:
             # Payment request successful, store payment details and redirect to Paystack payment page
             # You can store payment details in your database if needed
             # For example:
-            payment = Payment(user=request.user, amount=amount, reference=reference)
+            payment = Payment(user=request.user, amount=amount_in_usd, reference=reference)
             payment.save()
 
             # Redirect the user to the Paystack payment page
@@ -414,5 +422,6 @@ def initialize_payment(request):
 def payment_form(request):
     # Render the payment form template
     return render(request, 'payment_form.html')
+
 
 
