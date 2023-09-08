@@ -22,6 +22,12 @@
 
     <div id="total-cost">
         <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
+        <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
+    </div>
+
+    <div>
+        <label for="email-address">Enter your email address:</label>
+        <input type="email" id="email-address" placeholder="Your email address">
     </div>
 
     <div id="user-info">
@@ -46,6 +52,11 @@
             const afroToUsd = parseFloat(document.getElementById("afro-to-usdc").textContent);
             const totalAmount = amount * afroToUsd;
             document.getElementById("total-amount").textContent = totalAmount.toFixed(2);
+
+            // Calculate the total cost in NGN based on the calculated total amount in USD
+            const ngnRate = 500; // Replace with your NGN to USD exchange rate
+            const totalAmountNGN = totalAmount * ngnRate;
+            document.getElementById("total-amount-ngn").textContent = totalAmountNGN.toFixed(2);
         }
 
         // Add an event listener to the "Calculate Total" button
@@ -53,8 +64,8 @@
 
         // Function to initialize the Paystack payment
         function initializePayment() {
-            const amount = parseFloat(document.getElementById("amount").value) * 100; // Convert to kobo (Paystack's currency unit)
-            const email = getUserEmailAddress(); // Replace with the user's email
+            const amountNGN = parseFloat(document.getElementById("total-amount-ngn").textContent) * 100; // Convert to kobo (Paystack's currency unit)
+            const email = document.getElementById('email-address').value;
             const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
             const reference = "AFROICO_" + Date.now(); // Generate a unique reference
 
@@ -62,7 +73,7 @@
             var handler = PaystackPop.setup({
                 key: publicKey,
                 email: email,
-                amount: amount,
+                amount: amountNGN,
                 currency: "NGN", // Use the appropriate currency code
                 ref: reference,
                 callback: function (response) {
@@ -79,14 +90,10 @@
             handler.openIframe();
         }
 
-        // Function to get the user's email address (Replace this with your logic)
-        function getUserEmailAddress() {
-            // Replace this with your logic to fetch the user's email address
-            return "user@example.com";
-        }
-
         // Add an event listener to the "Pay with Paystack" button
         document.getElementById("paystack-button").addEventListener("click", initializePayment);
     </script>
 </body>
 </html>
+
+
