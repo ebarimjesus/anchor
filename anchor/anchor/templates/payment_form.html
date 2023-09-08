@@ -2,10 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>AFRO Token ICO</title>
+    <title>AFRO Smartchain - The Future of Innovation</title>
     <!-- Include Paystack's JavaScript library -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,22 +13,37 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 20; /* Remove margin to ensure full page coverage */
+            margin: 30; /* Remove margin to ensure full page coverage */
+            padding-top: 20px;
+            margin-top: 250px
         }
     
-        h1 {
-            color: #086423;
-            text-align: center;
-            padding: 20px 0;
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px; /* Add padding to the top of the container */
+            margin-bottom: 20px;
         }
+
     
         .container {
-            max-width: 600px;
+            max-width: 100%;
             background-color: #fff;
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center; /* Center text within the container */
+            margin-top: 20px !important; /* Add margin to create spacing between top and container */
+            margin-bottom: 20px; /* Add margin to separate the containers */
+        }
+    
+        h1 {
+            color: #086423;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px 
+            
         }
     
         p {
@@ -69,52 +83,94 @@
             padding-top: 10px;
         }
 
-        /* Mobile-friendly styles */
+
+        /* Add media query for screens with a maximum width of 480px (typical mobile screens) */
         @media screen and (max-width: 480px) {
-            .container {
-                max-width: 100%;
-            }
+        body {
+            margin: 30; /* Remove margin to ensure full page coverage */
+            padding-top: 20px;
+            margin-top: 250px
         }
-    </style>    
+
+        .container {
+            margin-top: 20; /* Remove margin for mobile */
+        }
+
+        h1 {
+            margin-top: 20; /* Remove margin for mobile */
+        }
+    }
+    </style>      
 </head>
 <body>
-    <div class="container">
-        <h1>AFRO Token Initial Coin Offering (ICO)</h1>
-        <p>Welcome to the AFRO Token ICO! Get your AFRO tokens now.</p>
-
-        <div id="token-price">
-            <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
+    <div class="page-container">
+        <div class="container">
+            <h1>Welcome to the AFRO Token ICO!</h1>
+        
+            <p>At AFRO Smartchain, we're thrilled to introduce you to the future of innovation. On January 1st, 2024, we will launch the AFRO Smartchain, a revolutionary blockchain platform designed to empower developers, entrepreneurs, and innovators across Africa and the world.</p>
+        
+            <p>The AFRO Smartchain is not just a blockchain; it's a canvas for endless possibilities. Here's why it's a game-changer:</p>
+        
+            <h2>Key Features:</h2>
+            <ul>
+                <li>**Scalability**: AFRO Smartchain is designed to handle a vast number of transactions per second, ensuring that it can support large-scale applications and services.</li>
+                <li>**Security**: Our blockchain employs state-of-the-art security measures, safeguarding your data and assets with the utmost diligence.</li>
+                <li>**Flexibility**: AFRO Smartchain provides developers with the freedom to create decentralized applications (dApps) tailored to their specific needs.</li>
+                <li>**Interoperability**: Our platform seamlessly interacts with existing blockchain ecosystems, including Ethereum. This means you can leverage the power of both worlds.</li>
+                <li>**Low Transaction Costs**: AFRO Smartchain ensures that transaction fees remain minimal, making it cost-effective for users and developers alike.</li>
+                <li>**Community-Driven**: We believe in the strength of community collaboration. AFRO Smartchain encourages active participation and governance by its users.</li>
+            </ul>
+        
+            <p>As an investor in AFRO Token, the native currency of the AFRO Smartchain, you stand to benefit in numerous ways:</p>
+        
+            <h2>Investor Benefits:</h2>
+            <ul>
+                <li>**Potential for Growth**: AFRO Token has the potential to appreciate in value as the AFRO Smartchain gains traction and adoption.</li>
+                <li>**Participation in Innovation**: By owning AFRO Tokens, you become a part of the innovation journey, supporting projects that drive positive change in Africa and globally.</li>
+                <li>**Access to Exclusive Services**: AFRO Token holders may gain access to exclusive services, discounts, or opportunities within the AFRO Smartchain ecosystem.</li>
+                <li>**Global Impact**: Your investment contributes to the development of groundbreaking solutions that address challenges not only in Africa but also on a global scale.</li>
+            </ul>
+        
+            <p>Join us in revolutionizing the way we innovate, collaborate, and build a brighter future. Together, we'll unleash the potential of the AFRO Smartchain and empower innovators to create lasting change.</p>
+        
+            <p>Get ready to embark on this extraordinary journey with us. Stay tuned for updates and be prepared to secure your AFRO Tokens when the ICO launches on January 1st, 2024!</p>
         </div>
 
-        <div id="token-amount">
-            <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
-            <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
-            <button id="calculate-button">Calculate Total</button>
-        </div>
+        <div class="container">
+            <div id="token-price">
+                <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
+            </div>
 
-        <div id="total-cost">
-            <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
-            <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
-        </div>
+            <div id="token-amount">
+                <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
+                <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
+                <button id="calculate-button">Calculate Total</button>
+            </div>
 
-        <div>
-            <label for="email-address">Enter your email address:</label>
-            <input type="email" id="email-address" placeholder="Your email address">
-        </div>
+            <div id="total-cost">
+                <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
+                <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
+            </div>
 
-        <div id="user-info">
-            <label for="user-address">Enter your Stellar public key or federation address:</label>
-            <input type="text" id="user-address" placeholder="Stellar public key or federation address">
-        </div>
+            <div>
+                <label for="email-address">Enter your email address:</label>
+                <input type="email" id="email-address" placeholder="Your email address">
+            </div>
 
-        <div id="payment-options">
-            <p>Select your payment method:</p>
-            <!-- Use Paystack's payment form -->
-            <button id="paystack-button">Pay with Paystack</button>
-        </div>
+            <div id="user-info">
+                <label for="user-address">Enter your Stellar public key or federation address:</label>
+                <input type="text" id="user-address" placeholder="Stellar public key or federation address">
+            </div>
 
-        <div id="transaction-status">
-            <!-- Transaction status will be displayed here -->
+            <div id="payment-options">
+                <p>Select your payment method:</p>
+                <!-- Use Paystack's payment form -->
+                <button id="paystack-button">Pay with Paystack</button>
+            </div>
+
+            <div id="transaction-status">
+                <!-- Transaction status will be displayed here -->
+            </div>
         </div>
     </div>
 
@@ -168,5 +224,6 @@
     </script>
 </body>
 </html>
+
 
 
