@@ -35,6 +35,7 @@ urlpatterns = [
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
     path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
     path('accounts/register/', RegistrationView.as_view(), name='register'),
+    path('zingypay/', include('zingypay.urls')),
 ]
 
 if settings.DEBUG:

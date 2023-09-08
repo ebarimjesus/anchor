@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>AFRO Token ICO</title>
+    <!-- Include Paystack's JavaScript library -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body>
+    <h1>AFRO Token Initial Coin Offering (ICO)</h1>
+    <p>Welcome to the AFRO Token ICO! Get your AFRO tokens now.</p>
+
+    <div id="token-price">
+        <p>1 AFRO Token = $<span id="afro-to-usd">0.00</span> USD</p>
+    </div>
+
+    <div id="token-amount">
+        <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
+        <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
+        <button onclick="calculateTotal()">Calculate Total</button>
+    </div>
+
+    <div id="total-cost">
+        <p>Total Cost: $<span id="total-amount">0.00</span> USD</p>
+    </div>
+
+    <div id="payment-options">
+        <p>Select your payment method:</p>
+        <!-- Use Paystack's payment form -->
+        <button onclick="initializePayment()">Pay with Paystack</button>
+    </div>
+
+    <div id="transaction-status">
+        <!-- Transaction status will be displayed here -->
+    </div>
+
+    <script>
+        // Fetch the AFRO to USD exchange rate from your backend API
+        function fetchExchangeRate() {
+            // Replace with your backend API endpoint for fetching exchange rates
+            fetch("/get_exchange_rate/")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const afroToUsd = data.afro_to_usd;
+                        document.getElementById("afro-to-usd").textContent = afroToUsd.toFixed(2);
+                    } else {
+                        console.error("Error fetching exchange rate:", data.error_message);
+                    }
+                })
+                .catch(error => {
+                    console.error("Error fetching exchange rate:", error);
+                });
+        }
+
+        // Call fetchExchangeRate function to get the initial exchange rate
+        fetchExchangeRate();
+
+        // Function to calculate the total cost based on the number of tokens entered
+        function calculateTotal() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            const afroToUsd = parseFloat(document.getElementById("afro-to-usd").textContent);
+            const totalAmount = amount * afroToUsd;
+            document.getElementById("total-amount").textContent = totalAmount.toFixed(2);
+        }
+
+        // Function to initialize the Paystack payment
+        function initializePayment() {
+            const amount = parseFloat(document.getElementById("amount").value) * 100; // Convert to kobo (Paystack's currency unit)
+            const email = "user@example.com"; // Replace with the user's email
+            const publicKey = "your_paystack_public_key"; // Replace with your Paystack public key
+
+            const paymentParams = {
+                key: publicKey,
+                email: email,
+                amount: amount,
+                currency: "NGN", // Use the appropriate currency code
+                ref: "AFROICO_" + Date.now(), // Generate a unique reference
+                callback: function (response) {
+                    // Handle successful payment here
+                    document.getElementById("transaction-status").innerHTML = "<p>Payment successful! You will receive your AFRO tokens shortly.</p>";
+                },
+                onClose: function () {
+                    // Handle payment cancellation or failure
+                    document.getElementById("transaction-status").innerHTML = "<p>Payment canceled or failed. Please try again.</p>";
+                }
+            };
+
+            // Open the Paystack payment modal
+            const handler = PaystackPop.setup(paymentParams);
+            handler.openIframe();
+        }
+    </script>
+</body>
+</html>

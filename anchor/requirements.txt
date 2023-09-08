@@ -5,4 +5,5 @@ django-cors-headers
 python-dateutil
 stellar-sdk
 whitenoise
+paystackapi
 
