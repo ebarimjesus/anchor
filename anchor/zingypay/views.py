@@ -380,6 +380,7 @@ def paystack_callback(request):
 
 
 # View to initiate a payment
+@login_required
 def initialize_payment(request):
     if request.method == "POST":
         # Get data from the submitted form
@@ -418,6 +419,8 @@ def initialize_payment(request):
     # Handle other HTTP methods or provide a fallback response
     return JsonResponse({"success": False, "error_message": "Invalid HTTP method or action."})
 
+
+@login_required
 # Define a view to display the form for initiating payment
 def payment_form(request):
     # Render the payment form template
