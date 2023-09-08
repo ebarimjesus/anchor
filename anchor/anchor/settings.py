@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "anchor",
     "polaris",
+    'zingypay'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'anchor.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'anchor', 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'anchor', 'zingypay' 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'anchor.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'zingy.db',
+        'NAME': BASE_DIR / 'zingypay.db',
     }
 }
 
@@ -131,7 +132,7 @@ SESSION_ENGINE =  'django.contrib.sessions.backends.db'
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-AUTH_USER_MODEL =  'anchor.User'
+AUTH_USER_MODEL =  'zingypay.User'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'accounts/login'
 LOGOUT_REDIRECT_URL =  'login'

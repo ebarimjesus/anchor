@@ -1,0 +1,539 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZingyPay - Your Payment Solution</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+
+        header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        header img {
+            max-width: 450px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            padding: 0.5rem 1rem;
+        }
+
+        nav a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        section {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        section img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+        }
+
+        li img {
+            max-width: 300px;
+            margin-right: 1rem;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        footer img {
+            max-width: 30px;
+            margin: 0 0.5rem;
+            filter: invert(1);
+        }
+
+        button {
+            padding: 1rem 2rem;
+            background-color: #007bff;
+            color: #fff;
+            border: 5px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Add this CSS to your existing styles */
+        .social-icons ul {
+           list-style: none;
+           padding: 0;
+           margin: 0;
+           display: flex; /* Use flexbox to arrange the icons horizontally */
+        }
+
+        .social-icons {
+           display: flex;
+           justify-content: center;
+           list-style: none;
+           padding: 0;
+           margin: 0;
+        }
+
+        .social-icons li {
+            margin-right: 10px; /* Add some spacing between the icons */
+        }
+
+        .social-icons li:last-child {
+            margin-right: 0; /* Remove the margin for the last icon */
+        }
+
+        .social-icons a {
+           display: inline-block;
+           font-size: 24px;
+           color: #007bff;
+           text-decoration: none;
+           padding: 5px;
+           background-color: #fff; /* Add a light background color */
+           border-radius: 50%; /* Make the icons circular */
+        }
+
+
+        .social-icons a:hover {
+           color: #007bff;
+           background-color: #f0f0f0; /* Update the background color on hover */
+        }
+
+       .social-icons li:last-child {
+          margin-right: 0;
+       }
+
+       .max-image {
+           max-width: 400px;
+           max-height: 400px;
+       }
+
+
+        /* Mobile Responsiveness */
+        @media (max-width: 767px) {
+            header img {
+                max-width: 300px; /* Adjust the logo size for smaller screens */
+            }
+
+            section img {
+                max-width: 90%; /* Adjust the image size for smaller screens */
+            }
+
+            li {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            li img {
+                max-width: 300px; /* Adjust the product icon size for smaller screens */
+            }
+        }
+
+        /* CSS for the crypto-card container */
+        .crypto-card {
+            width: 33.33%; /* Display each card in 1/3 of the container width */
+            float: left; /* Float cards to the left for horizontal layout */
+            padding: 10px; /* Add spacing between cards */
+            box-sizing: border-box; /* Include padding and borders in the card width */
+        }
+
+        /* CSS to change card layout to vertical on mobile devices */
+        @media (max-width: 767px) {
+            .crypto-card {
+                width: 100%; /* Display each card in full width on mobile devices */
+                float: none; /* Remove float for vertical layout */
+                margin-bottom: 20px; /* Add spacing between cards vertically */
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1691598801/ZingyPay_Pitch_Deck_t94sjx.svg" alt="ZingyPay Logo">
+        <p>Your Instant Cross-Border Payment Solution.</p>
+    </header>
+
+    <nav>
+        <a href="{% url 'create_account' %}">Create AFRO Account</a>
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'register' %}">Register</a>
+        <a href="#motivation">Motivation</a>
+        <a href="#products">Products</a>
+        <a href="#services">Services</a>
+        <a href="#about">About Us</a>
+        <a href="#team">ZingyPay Team</a>
+        <a href="#wallets">Zingy Wallets</a>
+    </nav>
+    
+
+     <!-- Embed the iframes within a container div for horizontal display -->
+     <div id="stellar-widget-container">
+        <!-- AFRO cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/AFRO-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+
+        <!-- LIFE cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/LIFE-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+
+        <!-- NATURE cryptocurrency -->
+        <div class="crypto-card">
+            <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/NATURE-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
+        </div>
+    </div>
+    
+    <section id="motivation">
+        <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1691869114/Go-Afro-Go_kflsey.png" class="max-image">
+        <h2>Our Motivation</h2>
+        <div>
+        <p>Dear Esteemed People, Respected Afros, and all Humans,</p>
+        <p>Welcome to this special innovation, where we embark on a fascinating journey through the annals of history to explore the importance and unique place of Africa in shaping the story of humankind. As we delve into the past, we will discover the incredible tales of Mitochondrial Eve and Y-chromosomal Adam, who are key figures in understanding our shared human heritage.</p>
+        <p>Let us begin our adventure by unraveling the tale of Mitochondrial Eve. She represents the most recent common matrilineal ancestor of all living humans and lived in Africa approximately 150,000 to 200,000 years ago. Through the marvels of science and the study of mitochondrial DNA (which is passed down exclusively from mothers to their children), we have traced her lineage to a single African woman, whose descendants spread across the world, creating the diverse tapestry of humanity we see today.</p>
+        <p>Y-chromosomal Adam, her counterpart, is the most recent common patrilineal ancestor of all living humans. He, too, called Africa his home around 200,000 to 300,000 years ago. Through the analysis of Y-chromosomal DNA (which is passed down exclusively from fathers to their sons), scientists have traced his lineage back to a single African man, whose descendants are among us, reflecting the interconnectedness of our human family.</p>
+        <p>Indeed, Africa is the birthplace of Homo sapiens, the species to which we all belong. Our ancient ancestors, the first Homo sapiens, evolved in Africa around 200,000 years ago. Fossil evidence of our species has been found in countries such as Ethiopia, Kenya, and South Africa, providing tangible proof that Africa is the cradle of humanity.</p>
+        <p>But the story of Africa in human history goes beyond the origin of Homo sapiens. This vast and diverse continent has given birth to ancient civilizations that have left an indelible mark on the world. One such civilization is ancient Egypt, which emerged along the fertile banks of the Nile River over 5,000 years ago. The ancient Egyptians developed remarkable achievements in architecture, mathematics, medicine, and more, leaving us awe-inspired by their accomplishments.</p>
+        <p>In West Africa, the Mali Empire flourished during the medieval era, boasting the legendary city of Timbuktu—a center of learning and trade, attracting scholars and traders from distant lands. Its wealth and cultural heritage have inspired generations.</p>
+        <p>And let us not forget the Kingdom of Kush, a powerful civilization that thrived along the Nile in what is now Sudan. The Kushites built impressive pyramids and engaged in trade with other great civilizations, such as ancient Egypt.</p>
+        <p>Africa's significance in human history is further exemplified by its rich biodiversity, captivating landscapes, and vibrant cultures. From the vast savannas, dense jungles, and arid deserts to the intricate music, art, and storytelling of its diverse peoples, Africa is a treasure trove of wonders that continue to captivate the world.</p>
+        <p>As a people, you hold the future in your hands, and understanding Africa's pivotal role in human history can inspire you to embrace diversity, promote unity, and work towards a better world. Let the stories of Mitochondrial Eve, Y-chromosomal Adam, and the ancient civilizations of Africa kindle the flames of curiosity and appreciation for the rich tapestry of human heritage.</p>
+        <p>So, let us celebrate Africa—the continent that birthed humanity, the home of ancient civilizations, and a land of endless wonders. May our journey through history fill us with admiration for the resilience, creativity, and contributions of African peoples and inspire us all to make a positive impact on the world.</p>
+        <p>Thank you for being part of this enlightening experience, and may we continue to learn and grow together on this marvelous journey of discovery.</p>
+        <h3>Scripturally:</h3>
+        <cite>
+            Genesis 2:13 And the name of the second river is Gihon: the same is it that compasseth the whole land of Ethiopia.
+            <br>
+     
+           19  In that day shall there be an altar to the LORD in the midst of the land of Egypt, and a pillar at the border thereof to the LORD. 
+           <br>
+           20  And it shall be for a sign and for a witness unto the LORD of hosts in the land of Egypt: for they shall cry unto the LORD because of the oppressors, and he shall send them a saviour, and a great one, and he shall deliver them.
+           <br> 
+           21  And the LORD shall be known to Egypt, and the Egyptians shall know the LORD in that day, and shall do sacrifice and oblation; yea, they shall vow a vow unto the LORD, and perform it.
+           <br>
+           22  And the LORD shall smite Egypt: he shall smite and heal it: and they shall return even to the LORD, and he shall be intreated of them, and shall heal them.
+           <br>
+           23  In that day shall there be a highway out of Egypt to Assyria, and the Assyrian shall come into Egypt, and the Egyptian into  Assyria, and the Egyptians shall serve with the Assyrians.
+           <br>
+           24  In that day shall Israel be the third with Egypt and with Assyria, even a blessing in the midst of the land:
+           <br>
+           25  Whom the LORD of hosts shall bless, saying, Blessed be Egypt my people, and Assyria the work of my hands, and Israel mine inheritance.
+           <br>
+           <strong>Isaiah 19v19-25.</strong>
+        </cite>
+        <p>From the scriptures above, we see that Africa is not cursed. Both Ethiopia and Egypt as used in the Bible represents Africa. We're the first continent to be mentioned in the Bible by name, and that is in line with recent scientific discoveries. We're not where we are because we are cursed, but just like righteous Job in the Bible, have gone through our own phase of unmeritted tribulations; but, watch what becomes of Africa in the coming 20 years. This generation of Afros will build a civilization that will beat all human imaginations because among the Afros are the Noahs and Nimrods who will build immersive and ground breaking technoloies the world will admire. Africa gave birth to all extant human specie and civilization, and to regain control, we begin with our finance, economy, and then technology. Today, we're constantly seperated by religions, education, and ideologies imported from our own children who should actually learn from the Afro people. 40% of AFRO Digital Currency is dedicated to developing our science and technology by setting up zingy research and development centres.</p>
+        <p>It's important to note that the study of ancient history, particularly that of Africa, can be challenging due to the limited surviving written records <strong>and the influence of historical biases</strong>. However, ongoing archaeological discoveries and research efforts continually shed new light on the contributions of ancient African civilizations to global education and industry. Hence, this project will also sponsor further researches.</p>
+        <p>You can now buy AFRO with your cards or bank transfer as we begin our journey to Africa's resurgence and glocal influence.</p>
+    </div>
+    </section>
+
+    <section id="products">
+        <h2>Our Products</h2>
+        <p>
+            ZingyPay is under active development by Wiz Technologies. More products to come in the following days. You can get some of the products here. <button><a href="https://zingypay.wiztech.site">Learn more</a></button>
+        </p>
+        <ul>
+           <li>
+               <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO">
+               <strong>AFRO:</strong> Afro is the 'One Africa' Digital Currency designed to facilitate glocal trade in Africa's economies to forestall over dependence on the USD, Euro, Etc.; while also showcasing and promoting the afro culture which is the bedrock of all extant humanity. The current price for 1 AFRO is about 1 dollar, but to enable us build a stronger liquidity pool we're offering 1000 AFRO for as low as 10,000 naira. <button><a href="https://paystack.com/pay/zingypay">Buy AFRO Here</a></button></p>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1690689235/life_y29ju9.png" alt="LIFE">
+                <strong>LIFE:</strong> Life is Zingypay's glocally facing currency to facilitate glocal trade amongst individuals, businesses, organizations, and governments for fast, seamless, and cheap transactions. It is created to enhance lives on the planet. Life is free, but a rich life isn't. You can now buy LIFE with your cards or bank transfer. <button><a href="https://lobstr.co/trade/LIFE:GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV">Buy Life</a></button>
+            </li>
+            <!-- Add more product details as needed -->
+        </ul>
+    </section>
+
+    <section id="services">
+        <h2>Our Services</h2>
+        <p>
+            ZingyPay is under active development by Wiz Technologies. You can get some of the services here. <button><a href="https://zingypay.wiztech.site">Learn more</a></button>
+        </p>
+        <ul>
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Telepay_gzns5w.png" alt="Connect">
+                <strong>Connect Bank Acc.:</strong>ZingyPay enables you to connect and maintain all your bank accounts and account transactions from on place. You don't have to wonder from app to app when viewing account balances, or initiating transactions anymore. <button><a href="https://connect.zingypay.com">Connect Accounts</a></button>
+            </li>
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573602/Exchange_ivh3zz.png" alt="Swap">
+                <strong>Swap/Trade on Cryptocurrencies:</strong> ZingyPay enables you to trade on several cryptocurrencies from a single dashboard. You can buy new crypto currencies or trade existing ones. <button><a href="https://interstellar.exchange/app/#/trade/GBSBVFTPVRTCIM3DCDOXNRTAPPTJQBRLPNVQYKFUTHLMDR43HJYO2YHZ/AFRO/GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV/NGNT/GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD">Trade here</a></button>
+            </li>
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573725/Savings_pqmhjj.png" alt="Savings">
+                <h2>Time-Bound Savings</h2>
+                Our savings scheme is designed to stem habitual borrowing amongst individuals and organizations, thereby fostering self-confidence through dedicated tithe savings with minimum duration of 12 months interest free.
+                Savers would loose 10% of total savings should they opt to withdraw prematurely, because savers funds are not used for any investment options by Zingypay. 
+                Don't miss out on our exclusive time-bound savings opportunity designed to help you secure a brighter financial future. Take advantage of this limited-time offer and experience the benefits of time-bound savings today!  
+                Act Now, Secure Your Financial Future! 
+                <div>
+                     <button><strong><a href="">Coming Soon!</a></strong></button>
+                </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Zingy_rvbn7f.png" alt="PoS">
+    
+                <h2>ZingyPay Terminals</h2>
+                The ZingyPay terminal or PoS supports all kinds of transactions that can be done with the Telepay Protocol at just a fraction paid to the terminal operators no matter the volume of money involved...
+                <div>
+                    <button><a href="">Order Terminal</a></button>
+               </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573727/Zingy-t_zypniz.png" alt="Feature Image 8">
+                <h2>Zingy Pay Points</h2>
+                Zingy Pay Point is a feature delibrately created by Zingypay to serve as a bank for the unbanked majority rural dwellers.
+                With ZPP ID, individuals or businesses can receive or send funds to anyone anywhere in the world utilizing the  Telepay Protocol to deliver same-minute transactions at just 2.5% fee.
+                <div>
+                   <button><a href="">Use ZPP</a></button>
+                </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Virtual-Accounts_Cards_mrofne.png" alt="Virtual">
+                <h2>ZingyPay Virtual Accounts/Cards</h2>
+                ZingyPay Platform also support the creation of both local and foreign virtual bank accounts, and virtual ATM cards that facilitates all kinds of banking and cards transactions at little or no costs, as the case may be. We'll issue physical ATM cards in the near future. 
+                <div>
+                     <button><a href="">Create Virtual Account/Card</a></button>
+                </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686712364/WizApp-500x209_uhrm4v.png" alt="Zingy Bank">
+                <h2>Zingy AI</h2>
+                We offer TalkGPT which functions like OPENAI ChatGPT, but with speech synthesis. 
+                <div>
+                    <button><a href="https://ai.zingypay.com" target="_blank"> Use AI Here!</a></button>
+                </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573226/samples/ecommerce/accessories-bag.jpg" alt="Marketplace">
+                <h2>Zingy Marketplace</h2>
+                We are excited to announce that we are launching the Zingy Marketplace, an online marketplace for our vendors and buyers, where buyers will receive instant payments from sellers anywhere in the world. With Zingy Marketplace, you can easily find the products and services you need at the best prices. The Zingy Marketplace is designed to be a one-stop-shop for all your needs. You can browse through a variety of products and services, compare prices and make purchases in a secure and convenient environment. We are also introducing a range of new features that will make your shopping experience even better. Our advanced search and filter options will allow you to quickly find exactly what you are looking for. You can also save your favorite products and services for easy access in the future. We are confident that the Zingy Marketplace will become your go-to destination for all your shopping needs. 
+                <div class="feature-button">
+                     <button><a href="" target="_blank">Marketplace</a></button>
+                </div>
+            </li>
+
+            <li>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Exchange_kioaeb.png" alt="Exchange">
+                <strong>Download Wallets:</strong> You can download any wallet of your choice and trade on ZingyPay's digital assets in both Lobstr and Solar Wallets. Just type in the asset code or the issuer domain name{zingypay.com}, and the assets would pop up.
+                <div>
+                    <br>
+                    <button><a href="https://stellarterm.com/markets/?search=zingypay.com">Trade Aseets</a></button>
+                    <br> 
+                    <button><a href="https://lobstr.co/">Download Lobstr Wallet</a></button>
+                    <br>
+                    <button><a href="https://solarwallet.io/">Download Solar Wallet</a></button>
+                    <br>
+                </div>
+            </li>
+            <!-- Add more services details as needed -->
+        </ul>
+    </section>
+
+    <section id="about">
+        <h2>About ZingyPay</h2>
+        <p>
+            A glocal payment platform built to facilitate instant glocal transactions with a throughput of 50,000 transactions per second utilizing the Telepay Protocol for fiat, and the decentralize Stellar Blockchain for fiat/crypto on/off-ramp transactions. 
+        </p>
+        <h2><strong>TECHNOLOGY STACK</strong></h2>
+        <h4>Decentralized architecture:</h4>
+        <p> 
+            ZingyPay's payment platform is built on a decentralized architecture, which means there is no single point of failure or vulnerability. Unlike traditional centralized payment systems that rely on a single server or data center, our platform distributes the database across multiple nodes, each hosting a separate instance of the database.
+        </p>
+        <h4>Scalability and high throughput:</h4>
+        <p>
+            The distributed database architecture allows ZingyPay to achieve exceptional scalability and high throughput. By leveraging the power of multiple nodes working in parallel, we can process a large number of transactions concurrently. With careful design, optimization, and scalability features of the chosen distributed database technology, we can achieve a throughput of 50,000 transactions per second.
+        </p>
+        <h4>Fault tolerance and resilience:</h4>
+        <p>
+            The decentralized nature of our platform provides inherent fault tolerance and resilience. Even if a few nodes fail or go offline, the network continues to function seamlessly, ensuring uninterrupted payment processing. Additionally, the data replication and synchronization mechanisms in place ensure data redundancy and prevent data loss.
+        </p>
+        <h4>Data synchronization and consistency:</h4>
+        <p>
+            Our peer-to-peer network employs robust data synchronization mechanisms. When a transaction occurs, it is propagated and synchronized across multiple nodes, ensuring data consistency and integrity. This approach guarantees that all nodes have an up-to-date and synchronized view of the payment data, eliminating discrepancies or conflicts.
+        </p>
+        <h4>Security and trust:</h4>
+        <p>
+            The decentralized architecture enhances security and trust within the ZingyPay payment platform. With data distributed across multiple nodes, it becomes exceedingly difficult for malicious actors to compromise the entire network. Furthermore, the cryptographic measures and access controls implemented within the system protect user data and ensure secure transactions.
+        </p>
+        <h4>Competitive advantage:</h4>
+        <p> 
+            ZingyPay's use of a distributed database and a peer-to-peer network with data synchronization sets us apart from competitors. While other payment platforms may rely on centralized infrastructures, our decentralized approach provides increased reliability, scalability, and fault tolerance. The ability to process 50,000 transactions per second gives us a significant advantage in handling high transaction volumes and meeting the needs of a rapidly growing user base.
+        </p>
+        <p>
+            By leveraging these advantages, ZingyPay can deliver a robust and scalable payment platform that provides fast, secure, and reliable transactions. Our decentralized architecture ensures the integrity of the system, reduces the risk of single points of failure, and enables us to achieve the high transaction throughput necessary for seamless payment processing.
+        </p>
+        <br>
+        <h2><strong>TELEPAY</strong></h2>
+        <h4>Real-time cross-border transfers:</h4>
+        <p>
+            Telepay is specifically designed to facilitate same-minute cross-border transfers. Unlike traditional payment systems that often involve lengthy processing times, Telepay leverages advanced technology and optimized processes to deliver near-instantaneous transfer of funds across borders.
+        </p>
+        <h4>Efficient routing and settlement:</h4> 
+        <p>
+            Telepay employs an intelligent routing and settlement mechanism that minimizes latency and maximizes efficiency. By leveraging a network of trusted intermediaries and financial institutions, Telepay identifies the most optimal and secure route for each transaction, ensuring swift delivery of funds.
+        </p>
+        <h4>Streamlined transaction processing:</h4>
+        <p>
+            Through careful protocol design and optimization, Telepay minimizes the processing time required for each transaction. The protocol eliminates unnecessary intermediaries and reduces the number of steps involved in the transaction flow, resulting in accelerated processing and settlement times.
+        </p>
+        <h4>Low-latency infrastructure:</h4>
+        <p>
+           ZingyPay's infrastructure is built to support the high-speed requirements of Telepay. With strategically located data centers, high-performance servers, and robust network connectivity, ZingyPay ensures low-latency transmission of transaction data, further enhancing the speed of the platform.
+       </p>
+        <h4>Scalability and parallel processing:</h4>
+        <p>
+            Telepay is architected to scale horizontally, allowing ZingyPay to handle a massive volume of transactions concurrently. By leveraging the distributed database and peer-to-peer network with data synchronization, as mentioned earlier, Telepay can process up to 50,000 transactions per second, meeting the demands of a rapidly growing user base without compromising speed.
+        </p>
+        <h4>Competitive advantage:</h4>
+        <p>
+            The speed of Telepay sets ZingyPay apart from competitors in the payment industry. Traditional cross-border transfers often suffer from long processing times and delays, creating frustrations for users and businesses. ZingyPay's ability to deliver same-minute transfers through Telepay provides a significant competitive advantage, making us an attractive choice for users seeking fast and efficient payment solutions.
+        </p>
+        <p>
+            By combining the high-speed capabilities of Telepay with ZingyPay's decentralized infrastructure and distributed database, we have created a powerful payment platform capable of handling an impressive throughput of 50,000 transactions per second. This speed, coupled with the efficiency and reliability of our system, positions ZingyPay as a leader in the industry and enables us to deliver exceptional user experiences to our customers.
+        </p>
+        <br>
+        <h2>How Telepay Protocol Works</h2>
+        <p>
+            Telepay is a payment protocol designed by ZingyPay to facilitate fast and efficient cross-border transfers. It is specifically developed to enable same-minute transfers, providing users with near-instantaneous movement of funds across different countries and currencies. Here's an overview of how Telepay works:
+        </p>
+        <br>
+        <p>
+            1. Initiation: The Telepay process begins when a user initiates a cross-border payment request through the ZingyPay platform or an integrated application. The user specifies the recipient, the amount to be transferred, and any additional details required for the transaction. 
+        </p>
+        <p>
+            2. Transaction Validation: Once the payment request is received, Telepay validates the transaction details. This includes verifying the sender's identity, ensuring sufficient funds, and performing any necessary compliance checks to meet regulatory requirements.
+        </p>
+        <p>
+            3. Routing Optimization: Telepay determines the most optimal and efficient route for the payment based on factors like cost, speed, and reliability. It leverages a network of trusted intermediaries, financial institutions, and liquidity providers to identify the path that offers the best combination of speed and cost-effectiveness.
+        </p>
+        <p>
+            4. Currency Conversion: If the payment involves currency conversion, Telepay calculates the exchange rate based on real-time market rates or predetermined rates. It ensures transparency and provides users with competitive rates to minimize the impact of currency conversion fees.
+        </p>
+        <p>
+            5. Settlement and Transfer: Once the routing and currency conversion are determined, Telepay facilitates the settlement process. It initiates the transfer of funds from the sender's account to the chosen intermediary or financial institution. The intermediaries collaborate to ensure the timely delivery of funds to the recipient's account.
+        </p>
+        <p>
+            6. Confirmation and Notifications: Throughout the payment process, Telepay provides real-time notifications and updates to the users, keeping them informed about the status of their transactions. Users receive confirmation once the funds are successfully transferred to the recipient's account.
+        </p>
+        <p>
+            7. Transaction Tracking and Reporting: Telepay offers transaction tracking and reporting capabilities, allowing users to monitor the progress of their transfers. Users can access detailed transaction history, including timestamps, exchange rates, fees, and other relevant information.
+        </p>
+        <p>
+            8. Security and Compliance: Telepay incorporates robust security measures to protect user data and ensure compliance with regulatory requirements. It employs encryption protocols, secure communication channels, and adheres to applicable financial regulations to maintain the integrity and confidentiality of transactions.
+        </p>
+        <br>
+        <p><strong>
+            By leveraging the speed, efficiency, and optimized routing of Telepay, ZingyPay aims to provide users with a seamless cross-border payment experience. The protocol's focus on real-time transfers and competitive currency conversion rates sets it apart from traditional payment systems, enabling users to move funds quickly and securely across borders.
+        </strong></p>
+        <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1691671461/ZingyPay_Pitch_Logo-001_dum5yy.png" alt="ZingyPay">
+    </section>
+
+    <section id="team">
+          <h2>Meet Our Team</h2>
+    <hr>
+    <div class="row">
+     <div class="col-md-4">
+       <div class="card mb-4 shadow-sm">
+         <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1690689843/Ebarim_tmwmrg.jpg" class="card-img-top" alt="Ebarim" style="max-width: 300px; max-height: 300px;">
+        <div class="card-body">
+        <h4 class="card-title">Ebarim Godsend</h4>
+        <p class="card-text">Founder/CEO</p>
+        <div class="card-text">
+        <p>Ebarim Godsend is a Living Scientific Pastor and Prime Minister of God's Tabernacle Worldwide.</p>
+        <p>A seasoned author/indie publisher; zingy-stack developer, cloud computing expert; software enthusiast; blockchain developer; techie; avid reader; living student; environmental conservation champion; and a public speaker. </p>
+        <p>He believes that both scripture and sciences have a common place in human existence and advancement.</p>
+       </div>
+       <div class="btn-group">
+       <a href="https://www.amazon.in/Ebarim-Fortune-Godsend./e/B07QSDHVSZ%3Fref=dbs_a_mng_rwt_scns_share" target="_blank">
+       <button type="button" class="btn btn-sm btn-outline-secondary">View profile</button>
+       </a>
+       </div>
+       </div>
+       </div>
+       </div>
+    </section>   
+
+    <section id="wallets">
+    <h2>Download Zingy Wallets</h2>
+    <p>Zingy wallets will be released in the comming days.</p>
+    </section>
+
+    <footer>
+    <p>Contact us via email by clicking the link <a href="mailto:info@zingypay.com">info@zingypay.com</a> | Follow us on social media:</p>
+    <div class="social-icons">
+    <ul>
+        <li><a href="https://www.facebook.com/zingypay" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a></li>
+        <li><a href="https://www.twitter.com/zingypay" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a></li>
+        <li><a href="https://instagram.com/zingypay"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://linkedin.com/zingypay"><i class="fab fa-linkedin"></i></a></li>
+    </ul>
+    </div>
+
+    <p>&copy; 2023 ZingyPay. All rights reserved.</p>
+    <p>Made with ❤️ by Wiz Fractal Technologies</p>
+</footer>
+
+</body>
+
+</html>
+
+

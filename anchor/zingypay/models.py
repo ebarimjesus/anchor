@@ -1,0 +1,56 @@
+from django.db import models
+
+from django.contrib.auth.models import User
+
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    username = models.CharField(max_length=50, unique=True)  # Set username as unique
+
+    class Meta:
+        permissions = [
+            ("can_view_special_content", "Can view special content"),
+        ]
+        abstract = False
+
+    def __str__(self):
+        return self.username
+
+
+class StellarAccount(models.Model):
+    public_key = models.CharField(max_length=56)
+    secret_key = models.CharField(max_length=56)
+    mnemonic = models.TextField()
+    transaction_hash = models.CharField(max_length=64)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    stellar_expert_link = models.URLField()
+    federation_address = models.CharField(max_length=100)  # Add this field
+    username = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.public_key
+
+
+
+
+
+class Transaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    stellar_public_key = models.CharField(max_length=56)
+    asset_code = models.CharField(max_length=12)
+    amount = models.DecimalField(max_digits=20, decimal_places=6)
+    transaction_hash = models.CharField(max_length=64)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    federation_address = models.CharField(max_length=100)
+    stellar_public_key = models.CharField(max_length=56)
+    stellar_secret_key = models.CharField(max_length=56) 
+    mnemonic = models.TextField()
+
+    def __str__(self):
+        return self.user.username
+
+
+
