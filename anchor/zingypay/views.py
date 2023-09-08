@@ -299,82 +299,20 @@ except Exception as e:
 
 
 
-# ...
+# AFRO ICO/SALE LOGIC
 
 # Initialize Stellar SDK and Paystack API (replace with your credentials)
 STELLAR_SERVER = Server("https://horizon.stellar.org")
 SECRET_KEY = "SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW"  # Replace with your issuer's secret key
 PAYSTACK_SECRET_KEY = "sk_live_3af6fcdcd5a0c34064d4dbce95f29313bc705261"  # Replace with your Paystack secret key
 
+# Define the fixed exchange rate (1 AFRO = $0.5 USD)
+FIXED_AFRO_TO_USD_RATE = 0.5
+
+
 # Define the asset you want to send
 asset = Asset("AFRO", "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV")  # Replace with your actual asset details
 
-
-# Function to fetch live market rates
-def get_live_market_rates(base_asset_code, quote_asset_code):
-    order_book = STELLAR_SERVER.orderbook(base_asset_code, quote_asset_code).call()
-    top_bid = order_book["bids"][0]["price"]
-    top_ask = order_book["asks"][0]["price"]
-    market_rate = (float(top_bid) + float(top_ask)) / 2
-    return market_rate
-
-# Define a view to get the current AFRO to USD exchange rate
-def get_exchange_rate(request):
-    try:
-        # Fetch the order book for the AFRO/USD trading pair
-        order_book = STELLAR_SERVER.orderbook("AFRO", "USD").call()
-        top_bid = order_book["bids"][0]["price"]
-        afro_to_usd_rate = 1 / float(top_bid)  # Invert the rate to get AFRO to USD
-
-        # Return the exchange rate as JSON
-        return JsonResponse({"success": True, "afro_to_usd": afro_to_usd_rate})
-    except Exception as e:
-        # Handle any errors that may occur while fetching the order book
-        return JsonResponse({"success": False, "error_message": str(e)})
-
-
-
-def fetch_data_with_retry(url, max_retries=3, retry_delay=5):
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(url)
-            
-            # Check if the response status code indicates success (e.g., 200 OK)
-            if response.status_code == 200:
-                return response.json()  # Parse and return the JSON data
-                
-            # If the response status code is not 200, raise an exception
-            response.raise_for_status()
-        
-        except requests.exceptions.RequestException as e:
-            print(f"Request failed (attempt {attempt + 1}/{max_retries}): {e}")
-        
-        # Wait for a moment before the next retry
-        time.sleep(retry_delay)
-    
-    # If all retries fail, raise an exception or return an error response
-    raise Exception("Failed to fetch data after multiple retries")
-
-# Example usage:
-try:
-    data = fetch_data_with_retry("https://horizon.stellar.org/order_book")
-    print("Data fetched successfully:", data)
-except Exception as e:
-    print("Error:", e)
-
-
-
-
-# Define the asset you want to send (AFRO tokens)
-asset = Asset("AFRO", "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV")
-
-# Function to retrieve the user's AFRO token balance from your database
-def get_user_afro_balance(user_stellar_public_key):
-    # Replace this with your database query logic to retrieve the user's AFRO token balance
-    # For example, if you have a User model with a token_balance field:
-    user = User.objects.get(stellar_public_key=user_stellar_public_key)
-    user_afro_balance = user.token_balance
-    return user_afro_balance
 
 # Paystack callback endpoint
 def paystack_callback(request):
@@ -402,56 +340,44 @@ def paystack_callback(request):
             # Destination is a direct Stellar public key
             user_stellar_public_key = destination
 
-        # Query the Stellar DEX API to get the current token price
-        # Replace 'XLM' and 'AFRO' with the desired trading pair (e.g., 'XLM' for Lumens and 'AFRO' for AFRO tokens)
-        response = requests.get("https://horizon.stellar.org/order_book", params={"selling_asset_type": "native", "buying_asset_type": "credit_alphanum4", "buying_asset_code": "AFRO", "buying_asset_issuer": "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV"})
-        if response.status_code == 200:
-            order_book = response.json()
-            # Extract the current best price (e.g., the highest bid)
-            best_price = float(order_book["bids"][0]["price"])
-            
-            # Calculate the token amount based on the user's paid amount in fiat currency
-            token_amount = user_paid_amount_in_fiat / best_price
-            
-            # Create and submit the Stellar transaction with the calculated token amount
-            source_keypair = Keypair.from_secret(SECRET_KEY)
-            transaction = (
-                TransactionBuilder(source_account=STELLAR_SERVER.load_account(source_keypair.public_key))
-                .append_payment_op(destination=user_stellar_public_key, amount=str(token_amount), asset=asset)
-                .build()
+        # Calculate the token amount based on the user's paid amount in fiat currency
+        token_amount = user_paid_amount_in_fiat / FIXED_AFRO_TO_USD_RATE
+
+        # Create and submit the Stellar transaction with the calculated token amount
+        source_keypair = Keypair.from_secret(SECRET_KEY)
+        transaction = (
+            TransactionBuilder(source_account=STELLAR_SERVER.load_account(source_keypair.public_key))
+            .append_payment_op(destination=user_stellar_public_key, amount=str(token_amount), asset=AFRO_ASSET)
+            .build()
+        )
+        transaction.sign(source_keypair)
+        response = STELLAR_SERVER.submit_transaction(transaction)
+
+        if response["successful"]:
+            # Transaction successful, save the transaction details to the database
+            user = User.objects.get(stellar_public_key=user_stellar_public_key)
+            currency = Currency.objects.get(code="AFRO")  # Replace with the appropriate currency code
+            transaction = Transaction(
+                user=user,
+                currency=currency,
+                amount=token_amount
             )
-            transaction.sign(source_keypair)
-            response = STELLAR_SERVER.submit_transaction(transaction)
+            transaction.save()
 
-            if response["successful"]:
-                # Transaction successful, save the transaction details to the database
-                user = User.objects.get(stellar_public_key=user_stellar_public_key)
-                currency = Currency.objects.get(code="AFRO")  # Replace with the appropriate currency code
-                transaction = Transaction(
-                    user=user,
-                    currency=currency,
-                    amount=token_amount
-                )
-                transaction.save()
-
-                # Redirect the user to a page showing their token balance
-                return redirect("token_balance", user_stellar_public_key=user_stellar_public_key)
-            else:
-                # Transaction failed, handle error and display an error message
-                return HttpResponse("Payment successful, but token transfer failed. Please contact support.")
+            # Redirect the user to a page showing their token balance
+            return redirect("token_balance", user_stellar_public_key=user_stellar_public_key)
         else:
-            # Handle error when querying the Stellar DEX API
-            return HttpResponse("Error querying Stellar DEX API.")
+            # Transaction failed, handle error and display an error message
+            return HttpResponse("Payment successful, but token transfer failed. Please contact support.")
     else:
         # Handle invalid HTTP methods
         return HttpResponse("Invalid HTTP method.")
 
 
-
 # View to initiate a payment
-def initiate_payment(request):
+def initialize_payment(request):
     if request.method == "POST":
-        # Get data from the frontend
+        # Get data from the submitted form
         email = request.POST.get("email")
         amount = request.POST.get("amount")
 
@@ -469,28 +395,24 @@ def initiate_payment(request):
         )
 
         if payment_response.status:
-            # Payment request successful, create a transaction record
-            transaction = Transaction(
-                user=request.user,
-                stellar_public_key="",  # To be filled after successful payment
-                asset_code="AFRO",
-                amount=amount,
-                transaction_hash=reference
-            )
-            transaction.save()
+            # Payment request successful, store payment details and redirect to Paystack payment page
+            # You can store payment details in your database if needed
+            # For example:
+            payment = Payment(user=request.user, amount=amount, reference=reference)
+            payment.save()
 
-            # Render the frontend template and pass necessary data to it
-            context = {
-                "payment_url": payment_response.data['authorization_url'],
-                "amount": amount,  # Pass any other data you want to display in the template
-            }
-            return render(request, 'payment.html', context)
+            # Redirect the user to the Paystack payment page
+            return redirect(payment_response.data['authorization_url'])
         else:
-            # Payment request failed, return an error response to the frontend
+            # Payment request failed, return an error response
             return JsonResponse({"success": False, "error_message": "Payment request failed."})
 
     # Handle other HTTP methods or provide a fallback response
     return JsonResponse({"success": False, "error_message": "Invalid HTTP method or action."})
 
+# Define a view to display the form for initiating payment
+def payment_form(request):
+    # Render the payment form template
+    return render(request, 'payment_form.html')
 
 
