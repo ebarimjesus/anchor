@@ -5,44 +5,117 @@
     <title>AFRO Token ICO</title>
     <!-- Include Paystack's JavaScript library -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 20; /* Remove margin to ensure full page coverage */
+        }
+    
+        h1 {
+            color: #086423;
+            text-align: center;
+            padding: 20px 0;
+        }
+    
+        .container {
+            max-width: 600px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Center text within the container */
+        }
+    
+        p {
+            color: #666;
+        }
+    
+        label {
+            font-weight: bold;
+        }
+    
+        input[type="number"],
+        input[type="email"],
+        input[type="text"] {
+            width: 70%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+    
+        button:hover {
+            background-color: #0056b3;
+        }
+    
+        #total-cost {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 10px;
+        }
+
+        /* Mobile-friendly styles */
+        @media screen and (max-width: 480px) {
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>    
 </head>
 <body>
-    <h1>AFRO Token Initial Coin Offering (ICO)</h1>
-    <p>Welcome to the AFRO Token ICO! Get your AFRO tokens now.</p>
+    <div class="container">
+        <h1>AFRO Token Initial Coin Offering (ICO)</h1>
+        <p>Welcome to the AFRO Token ICO! Get your AFRO tokens now.</p>
 
-    <div id="token-price">
-        <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
-    </div>
+        <div id="token-price">
+            <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
+        </div>
 
-    <div id="token-amount">
-        <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
-        <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
-        <button id="calculate-button">Calculate Total</button>
-    </div>
+        <div id="token-amount">
+            <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
+            <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
+            <button id="calculate-button">Calculate Total</button>
+        </div>
 
-    <div id="total-cost">
-        <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
-        <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
-    </div>
+        <div id="total-cost">
+            <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
+            <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
+        </div>
 
-    <div>
-        <label for="email-address">Enter your email address:</label>
-        <input type="email" id="email-address" placeholder="Your email address">
-    </div>
+        <div>
+            <label for="email-address">Enter your email address:</label>
+            <input type="email" id="email-address" placeholder="Your email address">
+        </div>
 
-    <div id="user-info">
-        <label for="user-address">Enter your Stellar public key or federation address:</label>
-        <input type="text" id="user-address" placeholder="Stellar public key or federation address">
-    </div>
+        <div id="user-info">
+            <label for="user-address">Enter your Stellar public key or federation address:</label>
+            <input type="text" id="user-address" placeholder="Stellar public key or federation address">
+        </div>
 
-    <div id="payment-options">
-        <p>Select your payment method:</p>
-        <!-- Use Paystack's payment form -->
-        <button id="paystack-button">Pay with Paystack</button>
-    </div>
+        <div id="payment-options">
+            <p>Select your payment method:</p>
+            <!-- Use Paystack's payment form -->
+            <button id="paystack-button">Pay with Paystack</button>
+        </div>
 
-    <div id="transaction-status">
-        <!-- Transaction status will be displayed here -->
+        <div id="transaction-status">
+            <!-- Transaction status will be displayed here -->
+        </div>
     </div>
 
     <script>
