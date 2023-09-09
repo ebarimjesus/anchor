@@ -1,55 +1,109 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
-    <!-- Add your CSS styles and other meta tags here -->
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <div class="container">
-        <div class="register-form">
-            <h2>Register</h2>
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <label for="{{ form.first_name.id_for_label }}">First Name</label>
-                    {{ form.first_name }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.last_name.id_for_label }}">Last Name</label>
-                    {{ form.last_name }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.username.id_for_label }}">Username:</label>
-                    {{ form.username }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.email.id_for_label }}">Email:</label>
-                    {{ form.email }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.password1.id_for_label }}">Password:</label>
-                    {{ form.password1 }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
-                    {{ form.password2 }}
-                </div>
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-            <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+<div class="register-container"> <!-- Add a specific class to scope the styles -->
+    <h2>Register</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.first_name.id_for_label }}">First Name</label>
+            {{ form.first_name }}
         </div>
-    </div>
-</body>
-</html>
-
+        <div class="form-group">
+            <label for="{{ form.last_name.id_for_label }}">Last Name</label>
+            {{ form.last_name }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.username.id_for_label }}">Username:</label>
+            {{ form.username }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.email.id_for_label }}">Email:</label>
+            {{ form.email }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password1.id_for_label }}">Password:</label>
+            {{ form.password1 }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+            {{ form.password2 }}
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
 {% endblock %}
 
+{% block style %}
+<style>
+    /* Styles for elements within .register-container */
+    .register-container {
+        /* Your specific styles here */
+        background-color: #610404;
+            border-radius: 8px;
+            display: flex;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            align-items: center;
+            justify-content: center;
+            max-width: 600px;
+            text-align: center;
+            margin: 20px;
+    }
+
+    .register-container h2 {
+        margin-bottom: 20px;
+        color: #0fcaeb;
+    }
+
+    .register-container .form-group {
+        margin-bottom: 10px;
+        text-align: left;
+    }
+
+    .register-container label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #e0c5c5;
+    }
+
+    .register-container input[type="text"],
+    .register-container input[type="password"],
+    .register-container input[type="email"] {
+        width: 100%;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+
+    .register-container button.btn {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    .register-container button.btn:hover {
+        background-color: #0056b3;
+    }
+
+    .register-container a {
+        text-decoration: none;
+        color: #007bff;
+    }
+
+    .register-container a:hover {
+        text-decoration: underline;
+    }
+</style>
+{% endblock %}
+
+
+ 
