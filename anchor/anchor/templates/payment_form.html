@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -6,7 +9,8 @@
     <!-- Include Paystack's JavaScript library -->
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
-        body {
+        /* Renamed styles to avoid conflicts with base template */
+        .payment-body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
@@ -17,7 +21,7 @@
             min-height: 100vh;
         }
     
-        .container {
+        .payment-container {
             max-width: 100%;
             background-color: #fff;
             padding: 20px;
@@ -27,23 +31,21 @@
             margin: 20px;
         }
     
-        h1 {
+        .payment-heading {
             color: #086423;
             text-align: center;
             padding: 20px;
         }
     
-        p {
+        .payment-text {
             color: #666;
         }
     
-        label {
+        .payment-label {
             font-weight: bold;
         }
     
-        input[type="number"],
-        input[type="email"],
-        input[type="text"] {
+        .payment-input {
             width: 70%;
             padding: 10px;
             margin-bottom: 20px;
@@ -51,7 +53,7 @@
             border-radius: 3px;
         }
     
-        button {
+        .payment-button {
             background-color: #007bff;
             color: #fff;
             border: none;
@@ -60,11 +62,11 @@
             cursor: pointer;
         }
     
-        button:hover {
+        .payment-button:hover {
             background-color: #0056b3;
         }
     
-        #total-cost {
+        .payment-total-cost {
             border-top: 1px solid #ccc;
             margin-top: 20px;
             padding-top: 10px;
@@ -74,17 +76,17 @@
     
         /* Mobile-friendly styles */
         @media screen and (max-width: 480px) {
-            body {
+            .payment-body {
                 padding: 20px;
                 align-items: flex-start;
             }
     
-            .container {
+            .payment-container {
                 margin: 0;
                 border-radius: 0;
             }
     
-            h1 {
+            .payment-heading {
                 margin-top: 0;
             }
         }
@@ -93,14 +95,14 @@
 </head>
 <body>
     <div class="page-container">
-        <div class="container">
-            <h1>Welcome to the AFRO Token ICO!</h1>
+        <div class="payment-container">
+            <h1 class="payment-heading">Welcome to the AFRO Token ICO!</h1>
         
-            <p>At AFRO Smartchain, we're thrilled to introduce you to the future of innovation. On January 1st, 2024, we will launch the AFRO Smartchain, a revolutionary blockchain platform designed to empower developers, entrepreneurs, and innovators across Africa and the world.</p>
+            <p class="payment-text">At AFRO Smartchain, we're thrilled to introduce you to the future of innovation. On January 1st, 2024, we will launch the AFRO Smartchain, a revolutionary blockchain platform designed to empower developers, entrepreneurs, and innovators across Africa and the world.</p>
         
-            <p>The AFRO Smartchain is not just a blockchain; it's a canvas for endless possibilities. Here's why it's a game-changer:</p>
+            <p class="payment-text">The AFRO Smartchain is not just a blockchain; it's a canvas for endless possibilities. Here's why it's a game-changer:</p>
         
-            <h2>Key Features:</h2>
+            <h2 class="payment-heading">Key Features:</h2>
             <ul>
                 <li>**Scalability**: AFRO Smartchain is designed to handle a vast number of transactions per second, ensuring that it can support large-scale applications and services.</li>
                 <li>**Security**: Our blockchain employs state-of-the-art security measures, safeguarding your data and assets with the utmost diligence.</li>
@@ -110,9 +112,9 @@
                 <li>**Community-Driven**: We believe in the strength of community collaboration. AFRO Smartchain encourages active participation and governance by its users.</li>
             </ul>
         
-            <p>As an investor in AFRO Token, the native currency of the AFRO Smartchain, you stand to benefit in numerous ways:</p>
+            <p class="payment-text">As an investor in AFRO Token, the native currency of the AFRO Smartchain, you stand to benefit in numerous ways:</p>
         
-            <h2>Investor Benefits:</h2>
+            <h2 class="payment-heading">Investor Benefits:</h2>
             <ul>
                 <li>**Potential for Growth**: AFRO Token has the potential to appreciate in value as the AFRO Smartchain gains traction and adoption.</li>
                 <li>**Participation in Innovation**: By owning AFRO Tokens, you become a part of the innovation journey, supporting projects that drive positive change in Africa and globally.</li>
@@ -120,44 +122,44 @@
                 <li>**Global Impact**: Your investment contributes to the development of groundbreaking solutions that address challenges not only in Africa but also on a global scale.</li>
             </ul>
         
-            <p>Join us in revolutionizing the way we innovate, collaborate, and build a brighter future. Together, we'll unleash the potential of the AFRO Smartchain and empower innovators to create lasting change.</p>
+            <p class="payment-text">Join us in revolutionizing the way we innovate, collaborate, and build a brighter future. Together, we'll unleash the potential of the AFRO Smartchain and empower innovators to create lasting change.</p>
         
-            <p>Get ready to embark on this extraordinary journey with us. Stay tuned for updates and be prepared to secure your AFRO Tokens when the Afro Smartchain launches on January 1st, 2024!</p>
+            <p class="payment-text">Get ready to embark on this extraordinary journey with us. Stay tuned for updates and be prepared to secure your AFRO Tokens when the Afro Smartchain launches on January 1st, 2024!</p>
         </div>
 
-        <div class="container">
-            <div id="token-price">
+        <div class="payment-container">
+            <div class="payment-total-cost">
                 <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
             </div>
 
-            <div id="token-amount">
-                <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
-                <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
-                <button id="calculate-button">Calculate Total</button>
+            <div class="payment-total-cost">
+                <label class="payment-label" for="amount">Enter the number of AFRO tokens you want to purchase:</label>
+                <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
+                <button class="payment-button" id="calculate-button">Calculate Total</button>
             </div>
 
-            <div id="total-cost">
+            <div class="payment-total-cost">
                 <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
                 <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
             </div>
 
-            <div>
-                <label for="email-address">Enter your email address:</label>
-                <input type="email" id="email-address" placeholder="Your email address">
+            <div class="payment-total-cost">
+                <label class="payment-label" for="email-address">Enter your email address:</label>
+                <input class="payment-input" type="email" id="email-address" placeholder="Your email address">
             </div>
 
-            <div id="user-info">
-                <label for="user-address">Enter your Stellar public key or federation address:</label>
-                <input type="text" id="user-address" placeholder="Stellar public key or federation address">
+            <div class="payment-total-cost">
+                <label class="payment-label" for="user-address">Enter your Stellar public key or federation address:</label>
+                <input class="payment-input" type="text" id="user-address" placeholder="Stellar public key or federation address">
             </div>
 
-            <div id="payment-options">
+            <div class="payment-total-cost">
                 <p>Select your payment method:</p>
                 <!-- Use Paystack's payment form -->
-                <button id="paystack-button">Pay with Paystack</button>
+                <button class="payment-button" id="paystack-button">Pay with Paystack</button>
             </div>
 
-            <div id="transaction-status">
+            <div class="payment-total-cost">
                 <!-- Transaction status will be displayed here -->
             </div>
         </div>
@@ -213,6 +215,6 @@
     </script>
 </body>
 </html>
-
+{% endblock %}
 
 
