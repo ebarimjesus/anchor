@@ -38,19 +38,23 @@
 {% block style %}
 <style>
     /* Styles for elements within .register-container */
+    /* Reset some default browser styles */
+    body, h2, p {
+        margin: 10px; /* Add 'px' unit to margin */
+        padding: 10px; /* Add 'px' unit to padding */
+    }    
     .register-container {
         /* Your specific styles here */
         background-color: #610404;
             border-radius: 8px;
-            display: flex;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             width: 100%;
+            display: flex;
+            flex-direction: column; /* Adjust flex direction for mobile */
             align-items: center;
-            justify-content: center;
-            max-width: 600px;
             text-align: center;
-            margin: 20px;
+            margin-bottom: 20px;
     }
 
     .register-container h2 {
