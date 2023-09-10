@@ -5,7 +5,7 @@ from stellar_sdk import Server, Keypair, TransactionBuilder, Asset
 import requests
 import json
 import re
-from .models import Transaction, UserProfile, User, StellarAccount
+from .models import Transaction, UserProfile, User, StellarAccount, Payment, TokenConversion
 from .forms import DepositForm
 import paystackapi  # Make sure you've installed this package
 
@@ -306,14 +306,54 @@ STELLAR_SERVER = Server("https://horizon.stellar.org")
 SECRET_KEY = "SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW"  # Replace with your issuer's secret key
 PAYSTACK_SECRET_KEY = "sk_live_3af6fcdcd5a0c34064d4dbce95f29313bc705261"  # Replace with your Paystack secret key
 
-# Define the fixed exchange rate (1 AFRO = $0.5 USD)
-FIXED_AFRO_TO_USD_RATE = 0.5
+# Define the fixed exchange rate (1 OSO = $0.50 USD)
+FIXED_OSO_TO_USD_RATE = 0.5
 
 # Define the exchange rate for USD to NGN
-USD_TO_NGN_RATE = 790
+USD_TO_NGN_RATE = 820
 
 # Define the asset you want to send
-asset = Asset("AFRO", "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV")  # Replace with your actual asset details
+asset = Asset("OSO", "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC")  # Replace with your actual asset details
+
+
+@login_required
+def initialize_payment(request):
+    if request.method == "POST":
+        # Get data from the submitted form
+        email = request.POST.get("email")
+        amount_in_usd = float(request.POST.get("amount"))  # Amount in USD
+
+        # Convert the amount from USD to NGN
+        amount_in_naira = amount_in_usd * USD_TO_NGN_RATE
+
+        # Generate a unique reference for the payment
+        reference = 'OSOICO_' + str(int(time.time()))
+
+        # Create the payment request using Paystack API
+        paystackapi.secret = PAYSTACK_SECRET_KEY
+
+        payment_response = paystackapi.Transaction.initialize(
+            email=email,
+            amount=amount_in_naira * 100,  # Convert to kobo (Paystack's currency unit)
+            reference=reference,
+            currency="NGN"  # Payment currency is NGN
+        )
+
+        if payment_response.status:
+            # Payment request successful, store payment details and redirect to Paystack payment page
+            # You can store payment details in your database if needed
+            # For example:
+            payment = Payment(user=request.user, amount_ngn=amount_in_naira, payment_reference=reference)
+            payment.save()
+
+            # Redirect the user to the Paystack payment page
+            return redirect(payment_response.data['authorization_url'])
+        else:
+            # Payment request failed, return an error response
+            return HttpResponse("Payment request failed.")
+
+    # Handle other HTTP methods or provide a fallback response
+    return HttpResponse("Invalid HTTP method or action.")
 
 
 # Paystack callback endpoint
@@ -346,13 +386,13 @@ def paystack_callback(request):
         user_paid_amount_in_usd = user_paid_amount_in_naira / USD_TO_NGN_RATE
 
         # Calculate the token amount based on the user's paid amount in USD
-        token_amount = user_paid_amount_in_usd / FIXED_AFRO_TO_USD_RATE
+        token_amount_in_oso = user_paid_amount_in_usd / FIXED_OSO_TO_USD_RATE
 
-        # Create and submit the Stellar transaction with the calculated token amount
+        # Create and submit the Stellar transaction with the calculated token amount in OSO
         source_keypair = Keypair.from_secret(SECRET_KEY)
         transaction = (
             TransactionBuilder(source_account=STELLAR_SERVER.load_account(source_keypair.public_key))
-            .append_payment_op(destination=user_stellar_public_key, amount=str(token_amount), asset=AFRO_ASSET)
+            .append_payment_op(destination=user_stellar_public_key, amount=str(token_amount_in_oso), asset=OSO_ASSET)
             .build()
         )
         transaction.sign(source_keypair)
@@ -361,16 +401,28 @@ def paystack_callback(request):
         if response["successful"]:
             # Transaction successful, save the transaction details to the database
             user = User.objects.get(stellar_public_key=user_stellar_public_key)
-            currency = Currency.objects.get(code="AFRO")  # Replace with the appropriate currency code
-            transaction = Transaction(
+            currency = Currency.objects.get(code="OSO")  # Replace with the appropriate currency code
+            transaction = Payment(
                 user=user,
-                currency=currency,
-                amount=token_amount
+                amount_ngn=user_paid_amount_in_naira,
+                amount_oso=token_amount_in_oso,
+                payment_reference=reference,
             )
             transaction.save()
 
-            # Redirect the user to a page showing their token balance
-            return redirect("token_balance", user_stellar_public_key=user_stellar_public_key)
+            # Convert OSO to AFRO
+            amount_afro = convert_oso_to_afro(token_amount_in_oso)
+
+            # Save the conversion details in the database
+            conversion = TokenConversion(
+                user=user,
+                amount_oso=token_amount_in_oso,
+                amount_afro=amount_afro,
+            )
+            conversion.save()
+
+            # Redirect the user to a page showing their token balance or transaction history
+            return redirect("transaction_history")
         else:
             # Transaction failed, handle error and display an error message
             return HttpResponse("Payment successful, but token transfer failed. Please contact support.")
@@ -379,52 +431,21 @@ def paystack_callback(request):
         return HttpResponse("Invalid HTTP method.")
 
 
-# View to initiate a payment
+# Function to convert OSO to AFRO based on your desired rate
+def convert_oso_to_afro(token_amount_in_oso):
+    # Define the conversion rate from OSO to AFRO
+    OSO_TO_AFRO_RATE = 1.0  # Example rate: 1 OSO = 1 AFRO
+
+    # Calculate the equivalent amount in AFRO
+    equivalent_amount_in_afro = token_amount_in_oso * OSO_TO_AFRO_RATE
+
+    return equivalent_amount_in_afro
+
+
+# View to display the payment form
 @login_required
-def initialize_payment(request):
-    if request.method == "POST":
-        # Get data from the submitted form
-        email = request.POST.get("email")
-        amount_in_usd = float(request.POST.get("amount"))  # Amount in USD
-
-        # Convert the amount from USD to NGN
-        amount_in_naira = amount_in_usd * USD_TO_NGN_RATE
-
-        # Generate a unique reference for the payment
-        reference = 'AFROICO_' + str(int(time.time()))
-
-        # Create the payment request using Paystack API
-        paystackapi.secret = PAYSTACK_SECRET_KEY
-
-        payment_response = paystackapi.Transaction.initialize(
-            email=email,
-            amount=amount_in_naira * 100,  # Convert to kobo (Paystack's currency unit)
-            reference=reference,
-            currency="NGN"  # Payment currency is NGN
-        )
-
-        if payment_response.status:
-            # Payment request successful, store payment details and redirect to Paystack payment page
-            # You can store payment details in your database if needed
-            # For example:
-            payment = Payment(user=request.user, amount=amount_in_usd, reference=reference)
-            payment.save()
-
-            # Redirect the user to the Paystack payment page
-            return redirect(payment_response.data['authorization_url'])
-        else:
-            # Payment request failed, return an error response
-            return JsonResponse({"success": False, "error_message": "Payment request failed."})
-
-    # Handle other HTTP methods or provide a fallback response
-    return JsonResponse({"success": False, "error_message": "Invalid HTTP method or action."})
-
-
-@login_required
-# Define a view to display the form for initiating payment
 def payment_form(request):
     # Render the payment form template
     return render(request, 'payment_form.html')
-
 
 

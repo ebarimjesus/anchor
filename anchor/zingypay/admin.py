@@ -1,8 +1,5 @@
 from django.contrib import admin
-
-# Register your models here.
-
-from .models import User, StellarAccount, Transaction, UserProfile
+from .models import User, StellarAccount, Transaction, UserProfile, Currency, Payment, TokenConversion
 
 # Define admin classes for your models
 
@@ -18,11 +15,24 @@ class TransactionAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'stellar_public_key', 'stellar_secret_key', 'mnemonic')
 
+class CurrencyAdmin(admin.ModelAdmin):
+    list_display = ('code', 'name', 'symbol')
+
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount_ngn', 'amount_oso', 'amount_afro', 'payment_reference', 'timestamp')
+
+class TokenConversionAdmin(admin.ModelAdmin):
+    list_display = ('user', 'amount_oso', 'amount_afro', 'timestamp')
+
 # Register your models with their respective admin classes
 
 admin.site.register(User, UserAdmin)
 admin.site.register(StellarAccount, StellarAccountAdmin)
 admin.site.register(Transaction, TransactionAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Currency, CurrencyAdmin)
+admin.site.register(Payment, PaymentAdmin)
+admin.site.register(TokenConversion, TokenConversionAdmin)
+
 
 

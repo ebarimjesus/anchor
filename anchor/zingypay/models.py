@@ -1,6 +1,9 @@
+# models.py
+
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
+import decimal
 
 class User(AbstractUser):
     username = models.CharField(max_length=50, unique=True, default='')
@@ -29,7 +32,7 @@ class StellarAccount(models.Model):
     secret_key = models.CharField(max_length=56, default='')
     mnemonic = models.TextField(default='')
     transaction_hash = models.CharField(max_length=64, default='')
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    balance = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
     stellar_expert_link = models.URLField(default='')
     federation_address = models.CharField(max_length=100, default='')
     username = models.CharField(max_length=50, default='')
@@ -49,7 +52,7 @@ class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     stellar_public_key = models.CharField(max_length=56, default='')
     asset_code = models.CharField(max_length=12, default='')
-    amount = models.DecimalField(max_digits=20, decimal_places=6, default=0)
+    amount = models.DecimalField(max_digits=20, decimal_places=6, default=decimal.Decimal('0.00'))
     transaction_hash = models.CharField(max_length=64, default='')
     timestamp = models.DateTimeField(auto_now_add=True)
     currency = models.ForeignKey(Currency, on_delete=models.PROTECT, default='')
@@ -57,5 +60,25 @@ class Transaction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.amount} {self.currency}"
+
+class Payment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount_ngn = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
+    amount_oso = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
+    amount_afro = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
+    payment_reference = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment by {self.user.username} - NGN: {self.amount_ngn}, OSO: {self.amount_oso}, AFRO: {self.amount_afro}"
+
+class TokenConversion(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    amount_oso = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
+    amount_afro = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"OSO to AFRO Conversion by {self.user.username}: OSO: {self.amount_oso}, AFRO: {self.amount_afro}"
 
 

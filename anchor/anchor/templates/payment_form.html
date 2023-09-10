@@ -129,90 +129,91 @@
 
         <div class="payment-container">
             <div class="payment-total-cost">
-                <p>1 AFRO Token = $<span id="afro-to-usdc">0.50</span> USD</p>
+                <p>1 OSO Token = $<span id="oso-to-usdc">0.50</span> USD</p>
             </div>
-
+        
             <div class="payment-total-cost">
-                <label class="payment-label" for="amount">Enter the number of AFRO tokens you want to purchase:</label>
+                <label class="payment-label" for="amount">Enter the number of OSO tokens you want to purchase:</label>
                 <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
                 <button class="payment-button" id="calculate-button">Calculate Total</button>
             </div>
-
+        
             <div class="payment-total-cost">
                 <p>Total Cost: $<span id="total-amount">0.50</span> USD</p>
                 <p>Total Cost in NGN: ₦<span id="total-amount-ngn">0.00</span> NGN</p>
             </div>
-
+        
             <div class="payment-total-cost">
                 <label class="payment-label" for="email-address">Enter your email address:</label>
                 <input class="payment-input" type="email" id="email-address" placeholder="Your email address">
             </div>
-
+        
             <div class="payment-total-cost">
                 <label class="payment-label" for="user-address">Enter your Stellar public key or federation address:</label>
                 <input class="payment-input" type="text" id="user-address" placeholder="Stellar public key or federation address">
             </div>
-
+        
             <div class="payment-total-cost">
                 <p>Select your payment method:</p>
                 <!-- Use Paystack's payment form -->
                 <button class="payment-button" id="paystack-button">Pay with Paystack</button>
             </div>
-
+        
             <div class="payment-total-cost">
                 <!-- Transaction status will be displayed here -->
+                <p id="transaction-status"></p>
             </div>
         </div>
-    </div>
-
-    <script>
-        // Function to calculate the total cost based on the number of tokens entered
-        function calculateTotal() {
-            const amount = parseFloat(document.getElementById("amount").value);
-            const afroToUsd = parseFloat(document.getElementById("afro-to-usdc").textContent);
-            const totalAmount = amount * afroToUsd;
-            document.getElementById("total-amount").textContent = totalAmount.toFixed(2);
-
-            // Calculate the total cost in NGN based on the calculated total amount in USD
-            const ngnRate = 790; // Replace with your NGN to USD exchange rate
-            const totalAmountNGN = totalAmount * ngnRate;
-            document.getElementById("total-amount-ngn").textContent = totalAmountNGN.toFixed(2);
-        }
-
-        // Add an event listener to the "Calculate Total" button
-        document.getElementById("calculate-button").addEventListener("click", calculateTotal);
-
-        // Function to initialize the Paystack payment
-        function initializePayment() {
-            const amountNGN = parseFloat(document.getElementById("total-amount-ngn").textContent) * 100; // Convert to kobo (Paystack's currency unit)
-            const email = document.getElementById('email-address').value;
-            const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
-            const reference = "AFROICO_" + Date.now(); // Generate a unique reference
-
-            // Create the Paystack handler
-            var handler = PaystackPop.setup({
-                key: publicKey,
-                email: email,
-                amount: amountNGN,
-                currency: "NGN", // Use the appropriate currency code
-                ref: reference,
-                callback: function (response) {
-                    // Handle successful payment here
-                    document.getElementById("transaction-status").innerHTML = "<p>Payment successful! You will receive your AFRO tokens shortly.</p>";
-                },
-                onClose: function () {
-                    // Handle payment cancellation or failure
-                    document.getElementById("transaction-status").innerHTML = "<p>Payment canceled or failed. Please try again.</p>";
-                }
-            });
-
-            // Open the Paystack payment modal
-            handler.openIframe();
-        }
-
-        // Add an event listener to the "Pay with Paystack" button
-        document.getElementById("paystack-button").addEventListener("click", initializePayment);
-    </script>
+        </div>
+        
+        <script>
+            // Function to calculate the total cost based on the number of tokens entered
+            function calculateTotal() {
+                const amount = parseFloat(document.getElementById("amount").value);
+                const osoToUsd = parseFloat(document.getElementById("oso-to-usdc").textContent);
+                const totalAmount = amount * osoToUsd;
+                document.getElementById("total-amount").textContent = totalAmount.toFixed(2);
+        
+                // Calculate the total cost in NGN based on the calculated total amount in USD
+                const ngnRate = 820; // Replace with your NGN to USD exchange rate
+                const totalAmountNGN = totalAmount * ngnRate;
+                document.getElementById("total-amount-ngn").textContent = totalAmountNGN.toFixed(2);
+            }
+        
+            // Add an event listener to the "Calculate Total" button
+            document.getElementById("calculate-button").addEventListener("click", calculateTotal);
+        
+            // Function to initialize the Paystack payment
+            function initializePayment() {
+                const amountNGN = parseFloat(document.getElementById("total-amount-ngn").textContent) * 100; // Convert to kobo (Paystack's currency unit)
+                const email = document.getElementById('email-address').value;
+                const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
+                const reference = "OSOICO_" + Date.now(); // Generate a unique reference
+        
+                // Create the Paystack handler
+                var handler = PaystackPop.setup({
+                    key: publicKey,
+                    email: email,
+                    amount: amountNGN,
+                    currency: "NGN", // Use the appropriate currency code
+                    ref: reference,
+                    callback: function (response) {
+                        // Handle successful payment here
+                        document.getElementById("transaction-status").innerHTML = "<p>Payment successful! You will receive your OSO tokens shortly.</p>";
+                    },
+                    onClose: function () {
+                        // Handle payment cancellation or failure
+                        document.getElementById("transaction-status").innerHTML = "<p>Payment canceled or failed. Please try again.</p>";
+                    }
+                });
+        
+                // Open the Paystack payment modal
+                handler.openIframe();
+            }
+        
+            // Add an event listener to the "Pay with Paystack" button
+            document.getElementById("paystack-button").addEventListener("click", initializePayment);
+        </script>        
 </body>
 </html>
 {% endblock %}
