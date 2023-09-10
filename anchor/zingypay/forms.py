@@ -27,4 +27,7 @@ class WithdrawForm(forms.Form):
     asset_code = forms.CharField(max_length=12)
     amount = forms.DecimalField(max_digits=20, decimal_places=6)
 
+class UsernameForm(forms.Form):
+    username = forms.CharField(max_length=50, label='Username')
 
+    

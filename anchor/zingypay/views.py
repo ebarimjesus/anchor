@@ -7,6 +7,7 @@ import json
 import re
 from .models import Transaction, UserProfile, User, StellarAccount, Payment, TokenConversion
 from .forms import DepositForm
+from .forms import UsernameForm
 import paystackapi  # Make sure you've installed this package
 
 
@@ -100,7 +101,7 @@ def home(request):
 
 
 # Stellar server instance
-server = Server(horizon_url="https://horizon.stellar.org")  # Create the server object globally
+server = Server(horizon_url="https://horizon.stellar.org") 
 
 
 
@@ -193,70 +194,85 @@ class StellarMnemonic(Mnemonic):
 
 @login_required
 def create_account(request):
-    # Get the authenticated user's username
-    username = request.user.username
+    # Check if the user has already created an account
+    existing_account = StellarAccount.objects.filter(user=request.user).first()
 
-    # Generate a new Stellar mnemonic
-    stellar_mnemonic = StellarMnemonic()
-    mnemonic = stellar_mnemonic.generate()
+    if existing_account:
+        # If the user already has an account, redirect to the account view
+        return redirect('view_account', account_id=existing_account.pk)
 
-    # Generate a new Stellar key pair
-    keypair = Keypair.random()
+    if request.method == 'POST':
+        # If the form is submitted with a username, create the account
+        form = UsernameForm(request.POST)
+        if form.is_valid():
+            # Get the authenticated user's username
+            username = form.cleaned_data['username']
 
-    # Extract the public key and secret key
-    public_key = keypair.public_key
-    secret_key = keypair.secret
+            # Generate a new Stellar mnemonic
+            stellar_mnemonic = StellarMnemonic()
+            mnemonic = stellar_mnemonic.generate()
 
-    # Generate the federation address using the provided username
-    federation_address = f"{username}*zingypay.com"  # Adjust the federation address format as needed
+            # Generate a new Stellar key pair
+            keypair = Keypair.random()
 
-    # Connect to the Stellar main network (replace with the main network Horizon URL)
-    server = Server(horizon_url="https://horizon.stellar.org")  # Use the main network Horizon URL
-    network_passphrase = Network.PUBLIC_NETWORK_PASSPHRASE  # Use the main network passphrase
+            # Extract the public key and secret key
+            public_key = keypair.public_key
+            secret_key = keypair.secret
 
-    # Fetch a funded account from the Stellar main network (replace with funded account details)
-    funded_account = server.load_account("GCLCIGPIF52BY3ASVR4QBLCZ7BHDYZRTAT75UYPSR4EXTI5KLUXHS2YG")
+            # Generate the federation address using the provided username
+            federation_address = f"{username}*zingypay.com"  # Adjust the federation address format as needed
 
-    # Create the new account transaction
-    transaction = (
-        TransactionBuilder(
-            source_account=funded_account,
-            network_passphrase=network_passphrase,
-            base_fee=100,
-        )
-        .append_create_account_op(
-            destination=public_key,
-            starting_balance="0"  # Amount of XLM to fund the new account with
-        )
-        .append_set_options_op(
-            home_domain="zingypay.com"  # Set the home domain
-        )
-        .set_timeout(30)
-        .build()
-    )
+            # Connect to the Stellar main network (replace with the main network Horizon URL)
+            server = Server(horizon_url="https://horizon.stellar.org")  # Use the main network Horizon URL
+            network_passphrase = Network.PUBLIC_NETWORK_PASSPHRASE  # Use the main network passphrase
 
-    # Sign the transaction with the funded account's secret key
-    transaction.sign("SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW")
+            # Fetch a funded account from the Stellar main network (replace with funded account details)
+            funded_account = server.load_account("GCLCIGPIF52BY3ASVR4QBLCZ7BHDYZRTAT75UYPSR4EXTI5KLUXHS2YG")
 
-    # Submit the transaction to create the new account
-    response = server.submit_transaction(transaction)
-    transaction_hash = response["hash"]
+            # Create the new account transaction
+            transaction = (
+                TransactionBuilder(
+                    source_account=funded_account,
+                    network_passphrase=network_passphrase,
+                    base_fee=100,
+                )
+                .append_create_account_op(
+                    destination=public_key,
+                    starting_balance="0"  # Amount of XLM to fund the new account with
+                )
+                .append_set_options_op(
+                    home_domain="zingypay.com"  # Set the home domain
+                )
+                .set_timeout(30)
+                .build()
+            )
 
-    # Create a new StellarAccount object and save it to the database
-    stellar_account = StellarAccount(
-        public_key=public_key,
-        secret_key=secret_key,
-        mnemonic=mnemonic,
-        transaction_hash=transaction_hash,
-        balance=0,  # Initialize balance as 0
-        stellar_expert_link=get_stellar_expert_link(public_key),  # Generate Stellar.expert link
-        username=username  # Save the provided username as the federation address
-    )
-    stellar_account.save()
+            # Sign the transaction with the funded account's secret key
+            transaction.sign("SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW")
 
-    return redirect('view_account', account_id=stellar_account.pk)
+            # Submit the transaction to create the new account
+            response = server.submit_transaction(transaction)
+            transaction_hash = response["hash"]
 
+            # Create a new StellarAccount object and save it to the database
+            stellar_account = StellarAccount(
+                user=request.user,
+                public_key=public_key,
+                secret_key=secret_key,
+                mnemonic=mnemonic,
+                transaction_hash=transaction_hash,
+                balance=0,  # Initialize balance as 0
+                stellar_expert_link=get_stellar_expert_link(public_key),  # Generate Stellar.expert link
+                username=username  # Save the provided username as the federation address
+            )
+            stellar_account.save()
 
+            return redirect('view_account', account_id=stellar_account.pk)
+    else:
+        # If the user is not logged in or the form is not submitted, display the form
+        form = UsernameForm()
+
+    return render(request, 'create_account.html', {'form': form})
 
 
 def view_account(request, account_id):

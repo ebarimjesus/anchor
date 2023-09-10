@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <title>Create Afro Account</title>
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column; /* Stack child elements vertically */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            
+            width: 400px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-container {
+            text-align: center;
+        }
+
+        .form-container button {
+            margin-top: 20px;
+        }
+
+        .header {
+            text-align: center; /* Center-align the header text */
+        }
+
+        /* Style the form input elements */
+        .form-container input[type="text"],
+        .form-container input[type="password"] {
+            padding: 10px; /* Add padding to text fields */
+            margin: 5px 0; /* Add margin for spacing between fields */
+            width: 100%; /* Make text fields full-width */
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1 class="header">Create Afro Account</h1>
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+
+{% endblock %}
+
+

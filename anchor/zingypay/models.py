@@ -28,17 +28,20 @@ class UserProfile(models.Model):
         return self.user.username
 
 class StellarAccount(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     public_key = models.CharField(max_length=56, default='')
     secret_key = models.CharField(max_length=56, default='')
-    mnemonic = models.TextField(default='')
+    mnemonic = models.CharField(max_length=100, default='')
     transaction_hash = models.CharField(max_length=64, default='')
-    balance = models.DecimalField(max_digits=10, decimal_places=2, default=decimal.Decimal('0.00'))
-    stellar_expert_link = models.URLField(default='')
-    federation_address = models.CharField(max_length=100, default='')
+    balance = models.DecimalField(max_digits=20, decimal_places=7, default=0)
+    stellar_expert_link = models.URLField(max_length=200, default='')
     username = models.CharField(max_length=50, default='')
+    federation_address = models.CharField(max_length=100, default='')
+    home_domain = models.CharField(max_length=100, default='')
 
     def __str__(self):
-        return self.public_key
+        return f"Username: {self.username}, Public Key: {self.public_key}, Secret Key: {self.secret_key}, Mnemonic: {self.mnemonic}, Federation Address: {self.federation_address}, Home Domain: {self.home_domain}, Balance: {self.balance}"
+
 
 class Currency(models.Model):
     code = models.CharField(max_length=10, unique=True, default='')
