@@ -191,6 +191,10 @@ class StellarMnemonic(Mnemonic):
             ir = i.digest()[32:]
         return il
 
+def get_stellar_expert_link(public_key):
+    # You can create a Stellar.expert link based on the public key
+    return f"https://stellar.expert/explorer/public/account/{public_key}"
+
 
 @login_required
 def create_account(request):
@@ -238,7 +242,7 @@ def create_account(request):
                 )
                 .append_create_account_op(
                     destination=public_key,
-                    starting_balance="0"  # Amount of XLM to fund the new account with
+                    starting_balance="1"  # Amount of XLM to fund the new account with
                 )
                 .append_set_options_op(
                     home_domain="zingypay.com"  # Set the home domain
