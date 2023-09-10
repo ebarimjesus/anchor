@@ -67,6 +67,17 @@ CONFIG_DATA = {
             "fixed_number": 10000000000,
             "desc": "NATURE is Zingypay's asset created to cater to the environment, and nature's reengineering and conservation. 'Replenish the earth' is the mantra. More info in the White Paper.",
             "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png"
+        },
+        {
+            "code": "OSO",
+            "issuer": "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC",
+            "status": "live",
+            "display_decimals": 7,
+            "is_asset_anchored": True,
+            "anchor_asset_type": "crypto",
+            "fixed_number": 900000000000,
+            "desc": "OSO is Zingypay's asset created to cater to the Zingypay ecosystem, and the Osomba Smartchain. Users can readily buy OSO tokens and exchange them 1on1 with AFRO. More info in the White Paper.",
+            "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png"
         }
     ],
 

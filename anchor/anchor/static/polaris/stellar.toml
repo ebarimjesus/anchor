@@ -1,4 +1,5 @@
 
+
 ACCOUNTS = ["GBZAC3UPMX3QI4346PRRNE77QORHFO2V4CVDICI6DUVJJSD3QHO7RFAF", "GD72XP6N3LQFP4C27GUDV22LBYASGACAIEME64IEGKNU2HGO6RIALLRR", "GBRTM5TWRKX2DCOH6OETIA45NJJXGVP6QB7JJ754QFAO62XG2XMCDBAA"]
 SIGNING_KEY = "GCLCIGPIF52BY3ASVR4QBLCZ7BHDYZRTAT75UYPSR4EXTI5KLUXHS2YG"
 FEDERATION_SERVER="https://zingypay.com/federation"
@@ -46,6 +47,20 @@ display_decimals=7
 fixed_number=10000000000
 desc = "NATURE is Zingypay's asset created to cater to the environment, and nature's reengineering and conservation. 'Replenish the earth' is the mantra. More info in the White Paper."
 image="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png"
+
+# Add support for OSOMBA
+[[CURRENCIES]]
+code = "OSO"
+issuer = "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC"
+status = "live"
+is_asset_anchored = true
+anchor_asset_type = "crypto"
+display_decimals=7
+fixed_number=900000000000
+desc = "OSO is Zingypay's asset created to cater to the Zingypay ecosystem, and the Osomba Smartchain. Users can readily buy OSO tokens and exchange them 1on1 with AFRO. More info in the White Paper."
+image="https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png"
+
+
 
 [DOCUMENTATION]
 ORG_NAME = "Zingypay Glocal Services Co. Ltd."
