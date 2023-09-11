@@ -372,6 +372,9 @@ def view_account(request, account_pk):
     try:
         stellar_account = StellarAccount.objects.get(pk=account_pk)
 
+        # Get the username from the stellar_account object
+        username = stellar_account.username  # Assuming the username is already set correctly
+
         # Connect to the Stellar main network (replace with the main network Horizon URL)
         server = Server(horizon_url="https://horizon.stellar.org")
 
@@ -380,7 +383,6 @@ def view_account(request, account_pk):
 
         # Initialize lists to store balances and assets
         balances = []
-        assets = []
 
         for balance in account['balances']:
             balance_amount = balance['balance']
@@ -390,23 +392,19 @@ def view_account(request, account_pk):
             # Fetch asset information from Stellar.toml or StellarTerm API
             asset_info = get_asset_info(asset_code, asset_issuer)
 
-            # Create or update the Balance object
-            currency, created = Currency.objects.get_or_create(code=asset_code, defaults={'name': asset_info['name'], 'symbol': asset_code})
-            Balance.objects.update_or_create(account=stellar_account, currency=currency, defaults={'balance': balance_amount})
-
-            balances.append(balance_amount)
-            assets.append({
+            balances.append({
                 'amount': balance_amount,
-                'name': asset_info['name'],
-                'ticker': asset_code,
-                'image_url': asset_info['image_url'],
+                'currency': {
+                    'name': asset_info['name'],
+                    'ticker': asset_code,
+                    'image_url': asset_info['image_url'],
+                }
             })
 
         context = {
             'stellar_account': stellar_account,
             'balances': balances,
-            'assets': assets,
-            'federation_address': f"{username}*zingypay.com",
+            'federation_address': f"{username}*zingypay.com"
         }
 
     except StellarAccount.DoesNotExist:
@@ -414,6 +412,7 @@ def view_account(request, account_pk):
         context = {'stellar_account': None}
 
     return render(request, 'account_details.html', context)
+
 
 
 

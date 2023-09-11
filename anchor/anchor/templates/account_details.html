@@ -11,6 +11,13 @@
         .account-details p {
             margin: 10px 0;
         }
+        .balance-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .balance-item {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
@@ -22,19 +29,17 @@
         <p>Transaction Hash: {{ stellar_account.transaction_hash }}</p>
         {% if balances %}
             <p>Balances:</p>
-            <ul>
+            <ul class="balance-list">
                 {% for balance in balances %}
-                    <li>{{ balance.amount }} - {{ balance.currency.ticker }}</li>
-                    <li>Currency Name: {{ balance.currency.name }}</li>
-                    <li>Currency Ticker: {{ balance.currency.ticker }}</li>
-                    <li><img src="{{ balance.currency.image_url }}" alt="{{ balance.currency.name }}"></li>
+                    <li class="balance-item">
+                        <p>{{ balance.amount }} {{ balance.currency.ticker }}</p>  
+                        <p><img src="{{ balance.currency.image_url }}" alt="{{ balance.currency.name }}"></p>
+                    </li>
                 {% endfor %}
             </ul>
         {% endif %}
-        <p>Federation Address: {{ stellar_account.username }}</p>
+        <p>Federation Address: {{ federation_address }}</p>
         <p>Stellar.expert Link: <a href="{{ stellar_account.stellar_expert_link }}" target="_blank">{{ stellar_account.stellar_expert_link }}</a></p>
     </div>
 </body>
 {% endblock %}
-
-
