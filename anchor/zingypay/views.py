@@ -292,43 +292,70 @@ def create_account(request):
     return render(request, 'create_account.html', {'form': form})
 
 # ...
+def beautify_asset_code(asset_code):
+    # Add logic to beautify or colorize the asset code here
+    # For example, you can add styling or apply colors to the code
+    return f"<span style='color: blue; font-weight: bold;'>{asset_code}</span>"
 
-# Define a function to retrieve asset information from the Stellar.toml file
+
+
+def beautify_asset_code(asset_code):
+    # Add logic to beautify or colorize the asset code here
+    # For example, you can add styling or apply colors to the code
+    return f"<span style='color: blue; font-weight: bold;'>{asset_code}</span>"
+
+
+def get_beautified_image_url(asset_code):
+    # You can return a URL to a beautified or colored image here
+    # For example, you can generate an image URL with a colored background and the asset code as text
+    # Replace 'COLOR_CODE' with your desired color code (e.g., 'ff0000' for red)
+    return f"https://dummyimage.com/100x100/ff0000/ffffff.png&text={asset_code}"
+
+
+
 def get_asset_info(asset_code, issuer):
-    # Define the URL of the Stellar.toml file
-    toml_url = "https://zingypay.com/.well-known/stellar.toml"
-
     try:
-        # Send an HTTP GET request to the TOML URL
-        response = requests.get(toml_url)
+        # Use the issuer's public key to fetch the issuer's account details from the Stellar network
+        server = Server(horizon_url="https://horizon.stellar.org")
+        issuer_account = server.accounts().account_id(issuer).call()
 
-        # Check if the request was successful
-        if response.status_code == 200:
-            # Parse the TOML data from the response
-            toml_data = toml.loads(response.text)
+        # Get the issuer's home domain from the account data
+        issuer_domain = issuer_account.get("home_domain")
 
-            # Extract asset information from the TOML data
-            assets = toml_data.get("CURRENCIES", [])
+        # Check if issuer_domain is a valid domain using regular expressions
+        if issuer_domain and re.match(r'^[a-zA-Z0-9.-]+$', issuer_domain):
+            # Valid domain, retrieve the image URL from the asset_info
+            toml_url = f"https://{issuer_domain}/.well-known/stellar.toml"
+            response = requests.get(toml_url)
 
-            for asset_info in assets:
-                if asset_info.get("code") == asset_code and asset_info.get("issuer") == issuer:
-                    # If issuer domain is not provided, set it to "Unknown"
-                    issuer_domain = asset_info.get("issuer_domain", "Unknown")
+            if response.status_code == 200:
+                toml_data = toml.loads(response.text)
+                assets = toml_data.get("CURRENCIES", [])
 
-                    # Retrieve the image URL from the asset_info
-                    image_url = asset_info.get("image", "https://example.com/unknown.png")
+                for asset_info in assets:
+                    if asset_info.get("code") == asset_code:
+                        image_url = asset_info.get("image", None)
+                        if image_url:
+                            return {
+                                "name": asset_info.get("name", "Unknown Currency"),
+                                "ticker": asset_code,
+                                "image_url": image_url,
+                                "issuer": issuer,
+                                "home_domain": issuer_domain,
+                            }
 
-                    return {
-                        "name": asset_info.get("name", "Unknown Currency"),
-                        "ticker": asset_code,
-                        "image_url": image_url,
-                        "issuer": issuer,
-                        "home_domain": issuer_domain,
-                    }
+        # If issuer_domain is not valid, or fetching toml fails, use a beautified image
+        return {
+            "name": "Unknown Currency",
+            "ticker": asset_code,
+            "image_url": get_beautified_image_url(asset_code),
+            "issuer": issuer,
+            "home_domain": "Unknown",
+        }
 
-    except requests.exceptions.RequestException as e:
-        # Handle any exceptions that may occur during the request
-        print(f"Error retrieving asset information: {e}")
+    except Exception as e:
+        # Handle any exceptions that may occur during the request or account retrieval
+        print(f"Error retrieving asset information: {str(e)}")
 
     # Return default information if asset info is not found
     return {
@@ -340,6 +367,52 @@ def get_asset_info(asset_code, issuer):
     }
 
 
+
+def fetch_asset_info_from_toml_urls(asset_code, issuer, toml_urls):
+    for toml_url in toml_urls:
+        try:
+            # Send an HTTP GET request to the TOML URL
+            response = requests.get(toml_url)
+
+            # Check if the request was successful
+            if response.status_code == 200:
+                # Parse the TOML data from the response
+                toml_data = toml.loads(response.text)
+
+                # Extract asset information from the TOML data
+                assets = toml_data.get("CURRENCIES", [])
+
+                for asset_info in assets:
+                    if asset_info.get("code") == asset_code and asset_info.get("issuer") == issuer:
+                        return asset_info
+
+        except requests.exceptions.RequestException as e:
+            # Handle any exceptions that may occur during the request
+            print(f"Error retrieving asset information from TOML URL {toml_url}: {e}")
+
+    return None
+
+def fetch_asset_info_from_home_domain(asset_code, issuer):
+    try:
+        # Construct the home domain URL
+        home_domain_url = f"https://{issuer}"
+
+        # Send an HTTP GET request to the home domain URL
+        response = requests.get(home_domain_url)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Parse the JSON data from the response (if applicable)
+            asset_info = response.json()
+
+            if asset_info:
+                return asset_info
+
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Error retrieving asset information from home domain {home_domain_url}: {e}")
+
+    return None
 
 # Function to fetch currency details from StellarTerm API
 def get_currency_details(asset_code, asset_issuer):
