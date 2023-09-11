@@ -44,12 +44,21 @@ class StellarAccount(models.Model):
 
 
 class Currency(models.Model):
-    code = models.CharField(max_length=10, unique=True, default='')
-    name = models.CharField(max_length=50, default='')
-    symbol = models.CharField(max_length=10, default='')
+    code = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=500)
+    symbol = models.CharField(max_length=100)
 
     def __str__(self):
         return self.code
+
+class Balance(models.Model):
+    account = models.ForeignKey(StellarAccount, on_delete=models.CASCADE, related_name='balances')
+    currency = models.ForeignKey(Currency, on_delete=models.CASCADE)
+    balance = models.DecimalField(max_digits=20, decimal_places=7, default=decimal.Decimal('0.0000000'))
+
+    def __str__(self):
+        return f"{self.currency.code} Balance: {self.balance}"
+
 
 class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, StellarAccount, Transaction, UserProfile, Currency, Payment, TokenConversion
+from .models import User, StellarAccount, Transaction, UserProfile, Currency, Payment, TokenConversion, Balance
 
 # Define admin classes for your models
 
@@ -18,6 +18,10 @@ class UserProfileAdmin(admin.ModelAdmin):
 class CurrencyAdmin(admin.ModelAdmin):
     list_display = ('code', 'name', 'symbol')
 
+class BalanceAdmin(admin.ModelAdmin):
+    list_display = ('account', 'currency', 'balance')
+
+
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ('user', 'amount_ngn', 'amount_oso', 'amount_afro', 'payment_reference', 'timestamp')
 
@@ -33,6 +37,4 @@ admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Currency, CurrencyAdmin)
 admin.site.register(Payment, PaymentAdmin)
 admin.site.register(TokenConversion, TokenConversionAdmin)
-
-
-
+admin.site.register(Balance, BalanceAdmin)

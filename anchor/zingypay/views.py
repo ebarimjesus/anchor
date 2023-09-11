@@ -5,7 +5,7 @@ from stellar_sdk import Server, Keypair, TransactionBuilder, Asset
 import requests
 import json
 import re
-from .models import Transaction, UserProfile, User, StellarAccount, Payment, TokenConversion
+from .models import Transaction, UserProfile, User, StellarAccount, Payment, TokenConversion, Balance, Currency
 from .forms import DepositForm
 from .forms import UsernameForm
 import paystackapi  # Make sure you've installed this package
@@ -13,11 +13,13 @@ import paystackapi  # Make sure you've installed this package
 
 import os
 import requests
+import toml
 import time
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
+from django.contrib import messages
 
 
 
@@ -196,6 +198,7 @@ def get_stellar_expert_link(public_key):
     return f"https://stellar.expert/explorer/public/account/{public_key}"
 
 
+
 @login_required
 def create_account(request):
     # Check if the user has already created an account
@@ -211,6 +214,11 @@ def create_account(request):
         if form.is_valid():
             # Get the authenticated user's username
             username = form.cleaned_data['username']
+
+            # Check if the username is already in use
+            if StellarAccount.objects.filter(username=username).exists():
+                messages.error(request, 'Username already in use. Please choose another.')
+                return render(request, 'create_account.html', {'form': form})
 
             # Generate a new Stellar mnemonic
             stellar_mnemonic = StellarMnemonic()
@@ -258,6 +266,10 @@ def create_account(request):
             response = server.submit_transaction(transaction)
             transaction_hash = response["hash"]
 
+            # Fetch the balance from the Stellar network
+            account = server.accounts().account_id(public_key).call()
+            balance = account['balances'][0]['balance'] if 'balances' in account and account['balances'] else '0'
+
             # Create a new StellarAccount object and save it to the database
             stellar_account = StellarAccount(
                 user=request.user,
@@ -265,56 +277,136 @@ def create_account(request):
                 secret_key=secret_key,
                 mnemonic=mnemonic,
                 transaction_hash=transaction_hash,
-                balance=balance, 
-                federation_address=stellar_account.username,
+                balance=balance,
+                federation_address = f"{username}*zingypay.com",
                 stellar_expert_link=get_stellar_expert_link(public_key),  # Generate Stellar.expert link
                 username=username  # Save the provided username as the federation address
             )
             stellar_account.save()
 
-            return redirect('view_account', account_id=stellar_account.pk)
+            return redirect('view_account', account_pk=stellar_account.pk)
     else:
         # If the user is not logged in or the form is not submitted, display the form
         form = UsernameForm()
 
     return render(request, 'create_account.html', {'form': form})
 
+# ...
+
+# Define a function to retrieve asset information from the Stellar.toml file
+def get_asset_info(asset_code, issuer):
+    # Define the URL of the Stellar.toml file
+    toml_url = "https://zingypay.com/.well-known/stellar.toml"
+
+    try:
+        # Send an HTTP GET request to the TOML URL
+        response = requests.get(toml_url)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Parse the TOML data from the response
+            toml_data = toml.loads(response.text)
+
+            # Extract asset information from the TOML data
+            assets = toml_data.get("CURRENCIES", [])
+
+            for asset_info in assets:
+                if asset_info.get("code") == asset_code and asset_info.get("issuer") == issuer:
+                    # If issuer domain is not provided, set it to "Unknown"
+                    issuer_domain = asset_info.get("issuer_domain", "Unknown")
+
+                    # Retrieve the image URL from the asset_info
+                    image_url = asset_info.get("image", "https://example.com/unknown.png")
+
+                    return {
+                        "name": asset_info.get("name", "Unknown Currency"),
+                        "ticker": asset_code,
+                        "image_url": image_url,
+                        "issuer": issuer,
+                        "home_domain": issuer_domain,
+                    }
+
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Error retrieving asset information: {e}")
+
+    # Return default information if asset info is not found
+    return {
+        "name": "Unknown Currency",
+        "ticker": asset_code,
+        "image_url": "https://example.com/unknown.png",
+        "issuer": issuer,
+        "home_domain": "Unknown",
+    }
 
 
+
+# Function to fetch currency details from StellarTerm API
+def get_currency_details(asset_code, asset_issuer):
+    try:
+        # Build the URL to fetch currency details based on asset code and issuer
+        url = f"https://api.stellarterm.com/v1/ticker.json?asset_code={asset_code}&issuer={asset_issuer}"
+
+        # Make a GET request to the API
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            data = response.json()
+            if 'name' in data and 'ticker' in data and 'image' in data:
+                # Extract currency details from the API response
+                return {
+                    "name": data['name'],
+                    "ticker": data['ticker'],
+                    "image_url": data['image'],
+                }
+    except Exception as e:
+        print(f"Error fetching currency details: {str(e)}")
+
+    # If fetching currency details fails, return default values
+    return {"name": "Unknown Currency", "ticker": asset_code, "image_url": image_url}
+
+
+@login_required
 def view_account(request, account_pk):
     try:
         stellar_account = StellarAccount.objects.get(pk=account_pk)
 
         # Connect to the Stellar main network (replace with the main network Horizon URL)
-        server = Server(horizon_url="https://horizon.stellar.org")  # Use the main network Horizon URL
+        server = Server(horizon_url="https://horizon.stellar.org")
 
         # Fetch account details from the Stellar network
         account = server.accounts().account_id(stellar_account.public_key).call()
 
-        # Initialize a list to store balances and assets
+        # Initialize lists to store balances and assets
         balances = []
         assets = []
 
-        # Iterate through the account's balances
         for balance in account['balances']:
             balance_amount = balance['balance']
-            asset_type = balance['asset_type']
-            
-            # For non-native assets, fetch the asset details
-            if asset_type != 'native':
-                asset = server.assets().asset_code(balance['asset_code']).asset_issuer(balance['asset_issuer']).call()
-                asset_name = asset['name']
-            else:
-                asset_name = "XLM"  # Native asset (XLM)
+            asset_code = balance.get('asset_code', 'XLM')
+            asset_issuer = balance.get('asset_issuer')
+
+            # Fetch asset information from Stellar.toml or StellarTerm API
+            asset_info = get_asset_info(asset_code, asset_issuer)
+
+            # Create or update the Balance object
+            currency, created = Currency.objects.get_or_create(code=asset_code, defaults={'name': asset_info['name'], 'symbol': asset_code})
+            Balance.objects.update_or_create(account=stellar_account, currency=currency, defaults={'balance': balance_amount})
 
             balances.append(balance_amount)
-            assets.append(f"{balance_amount} {asset_name}")
+            assets.append({
+                'amount': balance_amount,
+                'name': asset_info['name'],
+                'ticker': asset_code,
+                'image_url': asset_info['image_url'],
+            })
 
         context = {
             'stellar_account': stellar_account,
             'balances': balances,
             'assets': assets,
-            'federation_address': stellar_account.username,
+            'federation_address': f"{username}*zingypay.com",
         }
 
     except StellarAccount.DoesNotExist:
@@ -322,6 +414,7 @@ def view_account(request, account_pk):
         context = {'stellar_account': None}
 
     return render(request, 'account_details.html', context)
+
 
 
 # Define a function to submit a transaction with retries

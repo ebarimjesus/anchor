@@ -6,4 +6,5 @@ python-dateutil
 stellar-sdk
 whitenoise
 paystackapi
+toml
 
