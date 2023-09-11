@@ -30,8 +30,6 @@ urlpatterns = [
     path("", include(polaris.urls)),
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('create_account/', views.create_account, name='create_account'),
-    path('account/<int:account_id>/', views.view_account, name='view_account'),
     path('accounts/login/', CustomLoginView.as_view(), name='login'),
     path('accounts/logout/', CustomLogoutView.as_view(), name='logout'),
     path('accounts/register/', RegistrationView.as_view(), name='register'),

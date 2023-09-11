@@ -33,7 +33,7 @@ class StellarAccount(models.Model):
     secret_key = models.CharField(max_length=56, default='')
     mnemonic = models.CharField(max_length=100, default='')
     transaction_hash = models.CharField(max_length=64, default='')
-    balance = models.DecimalField(max_digits=20, decimal_places=7, default=0)
+    balance = models.DecimalField(max_digits=20, decimal_places=7, default='')
     stellar_expert_link = models.URLField(max_length=200, default='')
     username = models.CharField(max_length=50, default='')
     federation_address = models.CharField(max_length=100, default='')

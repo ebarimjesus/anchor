@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Stellar Account Details</title>
-</head>
-<body>
-    <h1>Stellar Account Details</h1>
-    {% if stellar_account %}
-    <p>Public Key: {{ stellar_account.public_key }}</p>
-    <p>Secret Key: {{ stellar_account.secret_key }}</p>
-    <p>Mnemonic: {{ stellar_account.mnemonic }}</p>
-    <p>Transaction Hash: {{ stellar_account.transaction_hash }}</p>
-    <p>Balance: {{ stellar_account.balance }}</p>
-    <p>Federation Address: {{ stellar_account.federation_address }}</p>
-    <p>Stellar.expert Link: <a href="{{ stellar_account.stellar_expert_link }}" target="_blank">{{ stellar_account.stellar_expert_link }}</a></p>
-    {% else %}
-    <p>Account not found.</p>
-    {% endif %}
-</body>
-</html>
+   
+    <head>
+        <title>Stellar Account Details</title>
+        <style>
+            .account-details {
+                text-align: center;
+                padding: 20px;
+            }
+            .account-details p {
+                margin: 10px 0;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>AFRO Account Details</h1>
+        <div class="account-details">
+            {% if stellar_account %}
+                <p>Public Key: {{ stellar_account.public_key }}</p>
+                <p>Secret Key: {{ stellar_account.secret_key }}</p>
+                <p>Mnemonic: {{ stellar_account.mnemonic }}</p>
+                <p>Transaction Hash: {{ stellar_account.transaction_hash }}</p>
+                <p>Balance: {{ stellar_account.balance }}</p>
+                <p>Federation Address: {{ stellar_account.federation_address }}</p>
+                <p>Stellar.expert Link: <a href="{{ stellar_account.stellar_expert_link }}" target="_blank">{{ stellar_account.stellar_expert_link }}</a></p>
+            {% else %}
+                <p>Account not found.</p>
+            {% endif %}
+        </div>
+    </body>
 
 {% endblock %}
-
 

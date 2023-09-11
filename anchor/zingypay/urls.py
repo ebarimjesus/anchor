@@ -8,6 +8,6 @@ urlpatterns = [
     # path('calculate_exchange_rate/', views.calculate_exchange_rate, name='calculate_exchange_rate'),
     path('payment-form/', views.payment_form, name='payment_form'),
     path('create_account/', views.create_account, name='create_account'),
-    path('view_account/<int:account_id>/', views.view_account, name='view_account'),
+    path('view_account/<int:account_pk>/', views.view_account, name='view_account'),
 ]
 

@@ -203,7 +203,7 @@ def create_account(request):
 
     if existing_account:
         # If the user already has an account, redirect to the account view
-        return redirect('view_account', account_id=existing_account.pk)
+        return redirect('view_account', account_pk=existing_account.pk)
 
     if request.method == 'POST':
         # If the form is submitted with a username, create the account
@@ -265,7 +265,8 @@ def create_account(request):
                 secret_key=secret_key,
                 mnemonic=mnemonic,
                 transaction_hash=transaction_hash,
-                balance=0,  # Initialize balance as 0
+                balance=balance, 
+                federation_address=stellar_account.username,
                 stellar_expert_link=get_stellar_expert_link(public_key),  # Generate Stellar.expert link
                 username=username  # Save the provided username as the federation address
             )
@@ -279,15 +280,48 @@ def create_account(request):
     return render(request, 'create_account.html', {'form': form})
 
 
-def view_account(request, account_id):
+
+def view_account(request, account_pk):
     try:
-        stellar_account = StellarAccount.objects.get(pk=account_id)
+        stellar_account = StellarAccount.objects.get(pk=account_pk)
+
+        # Connect to the Stellar main network (replace with the main network Horizon URL)
+        server = Server(horizon_url="https://horizon.stellar.org")  # Use the main network Horizon URL
+
+        # Fetch account details from the Stellar network
+        account = server.accounts().account_id(stellar_account.public_key).call()
+
+        # Initialize a list to store balances and assets
+        balances = []
+        assets = []
+
+        # Iterate through the account's balances
+        for balance in account['balances']:
+            balance_amount = balance['balance']
+            asset_type = balance['asset_type']
+            
+            # For non-native assets, fetch the asset details
+            if asset_type != 'native':
+                asset = server.assets().asset_code(balance['asset_code']).asset_issuer(balance['asset_issuer']).call()
+                asset_name = asset['name']
+            else:
+                asset_name = "XLM"  # Native asset (XLM)
+
+            balances.append(balance_amount)
+            assets.append(f"{balance_amount} {asset_name}")
+
+        context = {
+            'stellar_account': stellar_account,
+            'balances': balances,
+            'assets': assets,
+            'federation_address': stellar_account.username,
+        }
+
     except StellarAccount.DoesNotExist:
         # Handle the case where the account is not found
-        stellar_account = None
+        context = {'stellar_account': None}
 
-    return render(request, 'account_details.html', {'stellar_account': stellar_account})
-
+    return render(request, 'account_details.html', context)
 
 
 # Define a function to submit a transaction with retries

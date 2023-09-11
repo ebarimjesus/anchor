@@ -207,7 +207,12 @@
     <nav>
         <a href="{% url 'payment_form' %}">GET AFRO</a>
         <a href="{% url 'create_account' %}">Create AFRO Account</a>
-        
+        {% if stellar_account %}
+           <a href="{% url 'view_account' account_pk=stellar_account.pk %}">View Account</a>
+        {% else %}
+        <!-- Handle the case where stellar_account is not found -->
+          <p>Afro account not found.</p>
+        {% endif %}
         <a href="#motivation">Motivation</a>
         <a href="#products">Products</a>
         <a href="#services">Services</a>
