@@ -30,4 +30,5 @@ class WithdrawForm(forms.Form):
 class UsernameForm(forms.Form):
     username = forms.CharField(max_length=50, label='Username')
 
-    
+class HomeDomainForm(forms.Form):
+    home_domain = forms.CharField(max_length=255, required=False)

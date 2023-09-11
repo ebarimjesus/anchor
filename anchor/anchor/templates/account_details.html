@@ -17,6 +17,21 @@
         }
         .balance-item {
             margin: 10px 0;
+            max-width: 30%;
+            align-content: center;
+            align-items: center;
+        }
+        .home-domain-form {
+            margin-top: 20px;
+            padding: 30px;
+        }
+        .home-domain-input {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .asset-image {
+            max-height: 20px;
+            line-height: 1;
         }
     </style>
 </head>
@@ -27,19 +42,30 @@
         <p>Secret Key: {{ stellar_account.secret_key }}</p>
         <p>Mnemonic: {{ stellar_account.mnemonic }}</p>
         <p>Transaction Hash: {{ stellar_account.transaction_hash }}</p>
+
         {% if balances %}
             <p>Balances:</p>
             <ul class="balance-list">
                 {% for balance in balances %}
                     <li class="balance-item">
                         <p>{{ balance.amount }} {{ balance.currency.ticker }}</p>  
-                        <p><img src="{{ balance.currency.image_url }}" alt="{{ balance.currency.name }}"></p>
+                        <p><img src="{{ balance.currency.image_url }}" alt="{{ balance.currency.name }}" class="asset-image"></p>
                     </li>
                 {% endfor %}
             </ul>
         {% endif %}
         <p>Federation Address: {{ federation_address }}</p>
         <p>Stellar.expert Link: <a href="{{ stellar_account.stellar_expert_link }}" target="_blank">{{ stellar_account.stellar_expert_link }}</a></p>
+        
+        {# Display the Home Domain Form #}
+        <form method="post" class="home-domain-form">
+            {% csrf_token %}
+            <label for="{{ home_domain_form.home_domain.id_for_label }}">Enter Home Domain to Search for Currencies:</label>
+            {{ home_domain_form.home_domain }}
+            <button type="submit">Submit</button>
+        </form>
     </div>
 </body>
 {% endblock %}
+
+

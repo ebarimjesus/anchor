@@ -313,49 +313,41 @@ def get_beautified_image_url(asset_code):
 
 
 
-def get_asset_info(asset_code, issuer):
+from .forms import HomeDomainForm 
+
+# Define a function to retrieve asset information from the Stellar.toml file
+def get_asset_info(asset_code, issuer, toml_url):
     try:
-        # Use the issuer's public key to fetch the issuer's account details from the Stellar network
-        server = Server(horizon_url="https://horizon.stellar.org")
-        issuer_account = server.accounts().account_id(issuer).call()
+        # Send an HTTP GET request to the TOML URL
+        response = requests.get(toml_url)
 
-        # Get the issuer's home domain from the account data
-        issuer_domain = issuer_account.get("home_domain")
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Parse the TOML data from the response
+            toml_data = toml.loads(response.text)
 
-        # Check if issuer_domain is a valid domain using regular expressions
-        if issuer_domain and re.match(r'^[a-zA-Z0-9.-]+$', issuer_domain):
-            # Valid domain, retrieve the image URL from the asset_info
-            toml_url = f"https://{issuer_domain}/.well-known/stellar.toml"
-            response = requests.get(toml_url)
+            # Extract asset information from the TOML data
+            assets = toml_data.get("CURRENCIES", [])
 
-            if response.status_code == 200:
-                toml_data = toml.loads(response.text)
-                assets = toml_data.get("CURRENCIES", [])
+            for asset_info in assets:
+                if asset_info.get("code") == asset_code and asset_info.get("issuer") == issuer:
+                    # If issuer domain is not provided, set it to "Unknown"
+                    issuer_domain = asset_info.get("issuer_domain", "Unknown")
 
-                for asset_info in assets:
-                    if asset_info.get("code") == asset_code:
-                        image_url = asset_info.get("image", None)
-                        if image_url:
-                            return {
-                                "name": asset_info.get("name", "Unknown Currency"),
-                                "ticker": asset_code,
-                                "image_url": image_url,
-                                "issuer": issuer,
-                                "home_domain": issuer_domain,
-                            }
+                    # Retrieve the image URL from the asset_info
+                    image_url = asset_info.get("image", "https://example.com/unknown.png")
 
-        # If issuer_domain is not valid, or fetching toml fails, use a beautified image
-        return {
-            "name": "Unknown Currency",
-            "ticker": asset_code,
-            "image_url": get_beautified_image_url(asset_code),
-            "issuer": issuer,
-            "home_domain": "Unknown",
-        }
+                    return {
+                        "name": asset_info.get("name", "Unknown Currency"),
+                        "ticker": asset_code,
+                        "image_url": image_url,
+                        "issuer": issuer,
+                        "home_domain": issuer_domain,
+                    }
 
-    except Exception as e:
-        # Handle any exceptions that may occur during the request or account retrieval
-        print(f"Error retrieving asset information: {str(e)}")
+    except requests.exceptions.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Error retrieving asset information: {e}")
 
     # Return default information if asset info is not found
     return {
@@ -365,6 +357,72 @@ def get_asset_info(asset_code, issuer):
         "issuer": issuer,
         "home_domain": "Unknown",
     }
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django import forms
+
+# Your other imports...
+
+# Define a form for home domain input
+class HomeDomainForm(forms.Form):
+    home_domain = forms.CharField(max_length=255, required=False)
+
+# Your other view functions...
+
+@login_required
+def view_account(request, account_pk):
+    try:
+        stellar_account = StellarAccount.objects.get(pk=account_pk)
+
+        # Get the username from the stellar_account object
+        username = stellar_account.username  # Assuming the username is already set correctly
+
+        # Initialize the form
+        home_domain_form = HomeDomainForm(request.POST or None)
+
+        # Initialize balances list
+        balances = []
+
+        # Define the default TOML URL (ZingyPay domain)
+        toml_url = "https://zingypay.com/.well-known/stellar.toml"
+
+        # Connect to the Stellar main network (replace with the main network Horizon URL)
+        server = Server(horizon_url="https://horizon.stellar.org")
+
+        # Fetch account details from the Stellar network
+        account = server.accounts().account_id(stellar_account.public_key).call()
+
+        for balance in account['balances']:
+            balance_amount = balance['balance']
+            asset_code = balance.get('asset_code', 'XLM')
+            asset_issuer = balance.get('asset_issuer')
+
+            # Fetch asset information from the ZingyPay Stellar.toml file
+            asset_info = get_asset_info(asset_code, asset_issuer, toml_url)
+
+            balances.append({
+                'amount': balance_amount,
+                'currency': {
+                    'name': asset_info['name'],
+                    'ticker': asset_code,
+                    'image_url': asset_info['image_url'],
+                }
+            })
+
+        context = {
+            'stellar_account': stellar_account,
+            'balances': balances,
+            'federation_address': f"{username}*zingypay.com",
+            'home_domain_form': home_domain_form,  # Pass the form to the template
+        }
+
+    except StellarAccount.DoesNotExist:
+        # Handle the case where the account is not found
+        context = {'stellar_account': None}
+
+    return render(request, 'account_details.html', context)
+
 
 
 
@@ -438,53 +496,6 @@ def get_currency_details(asset_code, asset_issuer):
 
     # If fetching currency details fails, return default values
     return {"name": "Unknown Currency", "ticker": asset_code, "image_url": image_url}
-
-
-@login_required
-def view_account(request, account_pk):
-    try:
-        stellar_account = StellarAccount.objects.get(pk=account_pk)
-
-        # Get the username from the stellar_account object
-        username = stellar_account.username  # Assuming the username is already set correctly
-
-        # Connect to the Stellar main network (replace with the main network Horizon URL)
-        server = Server(horizon_url="https://horizon.stellar.org")
-
-        # Fetch account details from the Stellar network
-        account = server.accounts().account_id(stellar_account.public_key).call()
-
-        # Initialize lists to store balances and assets
-        balances = []
-
-        for balance in account['balances']:
-            balance_amount = balance['balance']
-            asset_code = balance.get('asset_code', 'XLM')
-            asset_issuer = balance.get('asset_issuer')
-
-            # Fetch asset information from Stellar.toml or StellarTerm API
-            asset_info = get_asset_info(asset_code, asset_issuer)
-
-            balances.append({
-                'amount': balance_amount,
-                'currency': {
-                    'name': asset_info['name'],
-                    'ticker': asset_code,
-                    'image_url': asset_info['image_url'],
-                }
-            })
-
-        context = {
-            'stellar_account': stellar_account,
-            'balances': balances,
-            'federation_address': f"{username}*zingypay.com"
-        }
-
-    except StellarAccount.DoesNotExist:
-        # Handle the case where the account is not found
-        context = {'stellar_account': None}
-
-    return render(request, 'account_details.html', context)
 
 
 
