@@ -32,3 +32,9 @@ class UsernameForm(forms.Form):
 
 class HomeDomainForm(forms.Form):
     home_domain = forms.CharField(max_length=255, required=False)
+
+class ImportStellarAccountForm(forms.Form):
+    mnemonic_seed = forms.CharField(max_length=200, required=False)
+    secret_key = forms.CharField(max_length=56, required=False)
+
+    

@@ -1,4 +1,5 @@
 
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from stellar_sdk import Server, Keypair, TransactionBuilder, Asset
@@ -63,7 +64,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from .forms import RegistrationForm
+from .forms import RegistrationForm, ImportStellarAccountForm
 from .models import Transaction, UserProfile, User, Currency
 
 import requests
@@ -81,9 +82,9 @@ class CustomLogoutView(LogoutView):
     # Additional customization if needed
 
 class RegistrationView(View):
-    template_name = 'registration/register.html'  # Create this template
-    form_class = RegistrationForm  # Use the custom registration form
-    success_url = reverse_lazy('login')  # URL to redirect after successful registration
+    template_name = 'registration/register.html'
+    form_class = RegistrationForm
+    success_url = reverse_lazy('login')
 
     def get(self, request):
         return render(request, self.template_name, {'form': self.form_class()})
@@ -91,9 +92,18 @@ class RegistrationView(View):
     def post(self, request):
         form = self.form_class(request.POST)
         if form.is_valid():
+            # Create the user
             user = form.save()
-            # Additional logic like sending confirmation email, logging in the user, etc.
+
+            # Create a StellarAccount for the user
+            stellar_account = StellarAccount(user=user)
+            stellar_account.save()
+
+            # Log in the user
+            login(request, user)
+
             return redirect(self.success_url)
+
         return render(request, self.template_name, {'form': form})
 
 
@@ -291,6 +301,8 @@ def create_account(request):
 
     return render(request, 'create_account.html', {'form': form})
 
+
+
 # ...
 def beautify_asset_code(asset_code):
     # Add logic to beautify or colorize the asset code here
@@ -358,17 +370,6 @@ def get_asset_info(asset_code, issuer, toml_url):
         "home_domain": "Unknown",
     }
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from django import forms
-
-# Your other imports...
-
-# Define a form for home domain input
-class HomeDomainForm(forms.Form):
-    home_domain = forms.CharField(max_length=255, required=False)
-
-# Your other view functions...
 
 @login_required
 def view_account(request, account_pk):
@@ -422,7 +423,6 @@ def view_account(request, account_pk):
         context = {'stellar_account': None}
 
     return render(request, 'account_details.html', context)
-
 
 
 

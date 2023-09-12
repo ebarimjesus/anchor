@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Import Stellar Account</title>
+</head>
+<body>
+    <h1>Import Stellar Account</h1>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit">Import Account</button>
+    </form>
+    
+    <br>
+    {% if user.is_authenticated %}
+    
+    {% if user.stellaraccount %}
+        <p>User has a StellarAccount: {{ user.stellaraccount }}</p>
+        <a href="{% url 'view_account' account_pk=user.stellaraccount.pk %}">View Account</a>
+    {% else %}
+        <p>User does not have a StellarAccount.</p>
+    {% endif %}
+{% else %}
+    <p>User is not authenticated.</p>
+{% endif %}
+
+</body>
+</html>
+
