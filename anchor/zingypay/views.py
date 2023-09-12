@@ -679,3 +679,31 @@ def payment_form(request):
     return render(request, 'payment_form.html')
 
 
+from .forms import StellarAddressResolutionForm
+
+def resolve_stellar_address(request):
+    resolved_data = None
+    if request.method == 'GET':
+        form = StellarAddressResolutionForm(request.GET)
+        if form.is_valid():
+            stellar_address = form.cleaned_data['stellar_address']
+            domain = 'zingypay.com'  # Replace with your actual domain
+
+            try:
+                federation_server = FederationServer.create_for_domain(domain)
+                response = federation_server.resolve_address(stellar_address)
+                resolved_data = response.to_dict()
+            except Exception as e:
+                error_message = str(e)
+        else:
+            error_message = 'Invalid form submission.'
+
+    else:
+        form = StellarAddressResolutionForm()
+
+    return render(request, 'resolve_stellar_address.html', {
+        'form': form,
+        'resolved_data': resolved_data,
+    })
+
+

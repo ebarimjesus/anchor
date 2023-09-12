@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Resolve Stellar Address</h1>
+
+<form id="resolve-form">
+    <input type="text" name="stellar_address" placeholder="Enter Stellar address">
+    <button type="submit">Resolve</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+    document.getElementById('resolve-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        fetch('/resolve_stellar_address/', {
+            method: 'GET',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the resolved data in the 'result' div
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+            // Handle errors, e.g., display an error message
+            console.error(error);
+        });
+    });
+</script>
+
+{% if resolved_data %}
+<h2>Resolved Information</h2>
+<pre>{{ resolved_data|safe }}</pre>
+{% endif %}
+
+{% endblock %}
+
+

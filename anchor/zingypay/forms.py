@@ -37,4 +37,6 @@ class ImportStellarAccountForm(forms.Form):
     mnemonic_seed = forms.CharField(max_length=200, required=False)
     secret_key = forms.CharField(max_length=56, required=False)
 
-    
+class StellarAddressResolutionForm(forms.Form):
+    stellar_address = forms.CharField(label='Stellar Address')
+

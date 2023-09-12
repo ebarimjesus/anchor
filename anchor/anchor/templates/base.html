@@ -29,7 +29,7 @@
             <a href="{% url 'view_account' user_id=user.id account_pk=user.stellaraccount.pk %}">View Account</a>
         
         {% endif %}
-
+        <a href="{% url 'resolve_stellar_address' %}">Resolve Stellar Address</a>
         <a href="{% url 'register' %}">Register</a>
         <a href="{% url 'login' %}">Login</a>
         <a href="{% url 'logout' %}">Logout</a>

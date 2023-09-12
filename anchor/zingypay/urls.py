@@ -8,7 +8,7 @@ urlpatterns = [
     # path('calculate_exchange_rate/', views.calculate_exchange_rate, name='calculate_exchange_rate'),
     path('payment-form/', views.payment_form, name='payment_form'),
     path('create_account/', views.create_account, name='create_account'),
-    
+    path('resolve_stellar_address/', views.resolve_stellar_address, name='resolve_stellar_address'),
     path('view_account/<int:account_pk>/', views.view_account, name='view_account'),
     
     # path('import-stellar-account/', views.import_stellar_account, name='import_stellar_account'),
