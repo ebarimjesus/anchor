@@ -141,7 +141,6 @@
 
     <!-- Total cost display -->
     <div class="payment-total-cost">
-        <p><span id="total-amount-xlm">0.00</span> XLM</p>
         <p><span id="total-amount">0.00</span> USD</p>
         <p><span id="total-amount-ngn">0.00</span></p>
     </div>
@@ -311,18 +310,17 @@
 </script>
 
 <script>
+
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
         const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
-        const tokenAmount = parseFloat(document.getElementById("amount").value);
+        const amountInUSD = parseFloat(document.getElementById("total-amount").textContent);
         const email = document.getElementById('user-email').value;
         const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
-
+        const tokenAmount = parseFloat(document.getElementById("amount").value);
+        
         // Get the user's Stellar public key from the form
         const userPublicKey = document.getElementById('user-wallet').value;
-
-        // Calculate the total amount in NGN (assuming you have already fetched the rate)
-        const totalAmountNGN = parseFloat(document.getElementById("total-amount-ngn").textContent.replace('₦', '').trim());
 
         // Generate a unique reference using the user's Stellar public key
         const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
@@ -331,7 +329,7 @@
         var handler = PaystackPop.setup({
             key: publicKey,
             email: email,
-            amount: totalAmountNGN * 100, // Convert to kobo (Paystack's currency unit)
+            amount: amountInUSD * 100, // Convert to kobo (Paystack's currency unit)
             currency: "NGN", // Use the appropriate currency code
             ref: reference, // Pass the unique reference here
             metadata: {
@@ -340,11 +338,6 @@
                         display_name: "Token Type",
                         variable_name: "token_type",
                         value: selectedToken,
-                    },
-                    {
-                        display_name: "Token Amount",
-                        variable_name: "token_amount",
-                        value: tokenAmount,
                     },
                 ],
             },
