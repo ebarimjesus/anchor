@@ -94,3 +94,15 @@ class TokenConversion(models.Model):
         return f"OSO to AFRO Conversion by {self.user.username}: OSO: {self.amount_oso}, AFRO: {self.amount_afro}"
 
 
+class PaymentTransaction(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Link the transaction to a user if applicable
+    reference = models.CharField(max_length=255, unique=True)  # Unique reference for the transaction
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20)  # Payment status (e.g., 'success', 'failed', 'pending')
+    payment_method = models.CharField(max_length=20)  # Payment method (e.g., 'paystack', 'flutterwave')
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.reference
+
+        

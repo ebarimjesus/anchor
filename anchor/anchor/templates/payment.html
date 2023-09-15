@@ -1,96 +1,384 @@
-{% load static %}
-<!DOCTYPE html>
 
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>AFRO Token ICO</title>
-    <!-- Include Paystack's JavaScript library -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Purchase</title>
     <script src="https://js.paystack.co/v1/inline.js"></script>
+    <!-- Include the Flutterwave React component if needed -->
+    <script src="https://unpkg.com/flutterwave-react-v3@latest/dist/index.js"></script>
+
+    <!-- Add your styles here -->
+    <style>
+        /* Apply a reset to remove default browser styles */
+        body, div, p, label, input, button {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: none;
+            font-size: 100%;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #f5f5f5;
+        }
+
+        .payment-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+
+        .payment-total-cost {
+            margin-bottom: 20px;
+        }
+
+        .payment-total-cost p {
+            margin: 5px 0;
+        }
+
+        label {
+            display: inline-block;
+            margin-right: 20px;
+            font-weight: bold;
+        }
+
+        .payment-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .payment-button {
+            display: block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .payment-button:hover {
+            background-color: #0056b3;
+        }
+
+        #transaction-status {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* Radio buttons */
+        input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        /* Currency display */
+        #total-amount-ngn {
+            color: #009933;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <h1>AFRO Token Initial Coin Offering (ICO)</h1>
-    <p>Welcome to the AFRO Token ICO! Get your AFRO tokens now.</p>
-
-    <div id="token-price">
-        <p>1 AFRO Token = $<span id="afro-to-usdc">0.00</span> USD</p>
+<div class="payment-container">
+    <div class="payment-total-cost">
+        <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
+        <p>1 AFRO Token (XLM) = $<span id="afro-ask-price">0.00</span> (Sell Price), $<span id="afro-ask-price-usd">0.00</span> USD</p>
+    </div>
+    <div class="payment-total-cost">
+        <p>1 OSO Token (XLM) = $<span id="oso-bid-price">0.00</span> (Buy Price), $<span id="oso-bid-price-usd">0.00</span> USD</p>
+        <p>1 OSO Token (XLM) = $<span id="oso-ask-price">0.00</span> (Sell Price), $<span id="oso-ask-price-usd">0.00</span> USD</p>
+    </div>
+    <div class="payment-total-cost">
+        <p>1 LIFE Token (XLM) = $<span id="life-bid-price">0.00</span> (Buy Price), $<span id="life-bid-price-usd">0.00</span> USD</p>
+        <p>1 LIFE Token (XLM) = $<span id="life-ask-price">0.00</span> (Sell Price), $<span id="life-ask-price-usd">0.00</span> USD</p>
+    </div>
+    <div class="payment-total-cost">
+        <p>1 NATURE Token (XLM) = $<span id="nature-bid-price">0.00</span> (Buy Price), $<span id="nature-bid-price-usd">0.00</span> USD</p>
+        <p>1 NATURE Token (XLM) = $<span id="nature-ask-price">0.00</span> (Sell Price), $<span id="nature-ask-price-usd">0.00</span> USD</p>
     </div>
 
-    <div id="token-amount">
-        <label for="amount">Enter the number of AFRO tokens you want to purchase:</label>
-        <input type="number" id="amount" min="1" step="1" placeholder="Enter the amount">
-        <button onclick="calculateTotal()">Calculate Total</button>
+    <label>
+        <input type="radio" name="token-type" value="AFRO"> AFRO
+    </label>
+    <label>
+        <input type="radio" name="token-type" value="OSO"> OSO
+    </label>
+    <label>
+        <input type="radio" name="token-type" value="LIFE"> LIFE
+    </label>
+    <label>
+        <input type="radio" name="token-type" value="NATURE"> NATURE
+    </label>
+
+    <!-- User input fields -->
+    <div class="payment-user-info">
+        <label class="payment-label" for="user-email">Email Address:</label>
+        <input class="payment-input" type="email" id="user-email" placeholder="Enter your email" required>
+
+        <label class="payment-label" for="user-phone">Phone Number:</label>
+        <input class="payment-input" type="tel" id="user-phone" placeholder="Enter your phone number" required>
+
+        <label class="payment-label" for="user-wallet">Wallet or Federation Address:</label>
+        <input class="payment-input" type="text" id="user-wallet" placeholder="Enter your wallet or federation address" required>
+
+        <!-- Add more fields as needed, such as name, address, etc. -->
+
+        <label class="payment-label" for="amount">Enter the number of tokens you want to purchase:</label>
+        <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount" required>
+        <input type="hidden" id="selected-asset" value="">
+        <button class="payment-button" id="calculate-button">Calculate Total</button>
     </div>
 
-    <div id="total-cost">
-        <p>Total Cost: $<span id="total-amount">0.00</span> USD</p>
+    <!-- Total cost display -->
+    <div class="payment-total-cost">
+        <p><span id="total-amount-xlm">0.00</span> XLM</p>
+        <p><span id="total-amount">0.00</span> USD</p>
+        <p><span id="total-amount-ngn">0.00</span></p>
     </div>
 
-    <div id="payment-options">
-        <p>Select your payment method:</p>
-        <!-- Use Paystack's payment form -->
-        <button onclick="initializePayment()">Pay with Paystack</button>
+    <!-- Payment method selection -->
+    <div class="payment-method-selection">
+        <label>
+            <input type="radio" name="payment-method" value="paystack" checked> Pay with Paystack
+        </label>
+        <label>
+            <input type="radio" name="payment-method" value="flutterwave"> Pay with Flutterwave
+        </label>
     </div>
 
-    <div id="transaction-status">
+    <!-- Transaction status display -->
+    <div class="payment-total-cost">
         <!-- Transaction status will be displayed here -->
+        <p id="transaction-status"></p>
     </div>
 
-    <script>
-        // Fetch the AFRO to USD exchange rate from your backend API
-        function fetchExchangeRate() {
-            // Replace with your backend API endpoint for fetching exchange rates
-            fetch("/get_exchange_rate/")
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        const afroToUsd = data.afro_to_usd;
-                        document.getElementById("afro-to-usdc").textContent = afroToUsd.toFixed(2);
+    <!-- Payment buttons -->
+    <!-- Pay with Paystack button -->
+    <button class="payment-button" id="paystack-button">Pay with Paystack</button>
+
+    <!-- Pay with Flutterwave button (added a new button) -->
+    <button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/8.0.0/stellar-sdk.min.js"></script>
+<script>
+    // Define Stellar server and assets for each token
+    const server = new StellarSdk.Server('https://horizon.stellar.org');
+    const tokenPairs = [
+        { baseAssetCode: 'AFRO', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
+        { baseAssetCode: 'OSO', counterAssetCode: 'XLM', issuerPublicKey: 'GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC' },
+        { baseAssetCode: 'LIFE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
+        { baseAssetCode: 'NATURE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' }
+        // Add more tokens as needed
+    ];
+
+    // Function to fetch and display token prices
+    function fetchTokenPrices(baseAssetCode) {
+        // Find the corresponding token pair
+        const pair = tokenPairs.find((pair) => pair.baseAssetCode === baseAssetCode);
+        if (!pair) {
+            console.error('Invalid token selected.');
+            return;
+        }
+
+        const counterAssetCode = pair.counterAssetCode;
+        const counterAssetIssuer = pair.counterAssetIssuer;
+
+        // Create Stellar assets for both base and counter assets
+        const baseAsset = new StellarSdk.Asset(pair.baseAssetCode, pair.issuerPublicKey);
+        const counterAsset = new StellarSdk.Asset(pair.counterAssetCode, pair.counterAssetIssuer);
+
+        server.orderbook(baseAsset, counterAsset)
+            .call()
+            .then((orderbook) => {
+                const bidPriceXLM = parseFloat(orderbook.bids[0].price);
+                const askPriceXLM = parseFloat(orderbook.asks[0].price);
+
+                // Update the HTML elements with the retrieved XLM prices
+                document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price`).textContent = `Bid Price (XLM): ${bidPriceXLM.toFixed(7)}`;
+                document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price`).textContent = `Ask Price (XLM): ${askPriceXLM.toFixed(7)}`;
+
+                // Use fixed rates for XLM/USD and USD/NGN conversions
+                const xlmToUsdRate = 0.4; // Replace with your fixed XLM/USD rate
+                const usdToNgnRate = 410; // Replace with your fixed USD/NGN rate
+
+                // Calculate the final bid and ask prices in USD
+                const bidPriceUSD = bidPriceXLM * xlmToUsdRate;
+                const askPriceUSD = askPriceXLM * xlmToUsdRate;
+
+                // Update the HTML elements with the retrieved USD prices
+                document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price-usd`).textContent = `Bid Price (USD): $${bidPriceUSD.toFixed(2)}`;
+                document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price-usd`).textContent = `Ask Price (USD): $${askPriceUSD.toFixed(2)}`;
+
+                // Calculate the total amount in USD (use ask price for calculation)
+                const tokenAmount = parseFloat(document.getElementById("amount").value);
+                const totalAmountUSD = askPriceUSD * tokenAmount;
+
+                // Calculate the total amount in NGN
+                const totalAmountNGN = totalAmountUSD * usdToNgnRate;
+
+                // Update the total amount in NGN
+                document.getElementById("total-amount").textContent = totalAmountUSD.toFixed(2);
+                document.getElementById("total-amount-ngn").textContent = `Total Amount in NGN: ₦${totalAmountNGN.toFixed(2)}`;
+            })
+            .catch((error) => {
+                console.error(`Error fetching orderbook for ${baseAssetCode}/${counterAssetCode}:`, error);
+            });
+    }
+
+    // Function to handle radio button changes
+    function handleTokenSelectionChange(event) {
+        const selectedToken = event.target.value;
+        fetchTokenPrices(selectedToken);
+    }
+
+    // Add event listeners to the radio buttons
+    const radioButtons = document.querySelectorAll('input[name="token-type"]');
+    radioButtons.forEach((radioButton) => {
+        radioButton.addEventListener('change', handleTokenSelectionChange);
+    });
+
+    // Calculate the total price in XLM when token amount is entered
+    const calculateXlmTotal = () => {
+        const tokenAmount = parseFloat(document.getElementById("amount").value);
+        const totalAmountXLM = tokenAmount / parseFloat(document.getElementById("afro-ask-price").textContent.split(":")[1].trim()); // Use the ask price for the calculation
+        document.getElementById("total-amount-xlm").textContent = totalAmountXLM.toFixed(7);
+    };
+
+    // Add an event listener to the token amount input field
+    const amountInput = document.getElementById("amount");
+    amountInput.addEventListener("input", calculateXlmTotal);
+
+    // Calculate XLM total initially
+    calculateXlmTotal();
+</script>
+
+<script>
+    // ... Your existing code for token selection, price calculation, and Paystack initialization ...
+
+    // Function to initialize the Flutterwave payment
+    function initializeFlutterwavePayment() {
+        // Define your Flutterwave configuration here
+        const config = {
+            // Other configuration options...
+
+            callback: (response) => {
+                // Handle the Flutterwave callback response here
+                // Send the payment response to the backend for processing
+                fetch('/flutterwave-payment-callback/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(response),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the backend response, which can include a success message
+                    if (data.status === 'success') {
+                        document.getElementById('transaction-status').textContent = "Payment successful!";
                     } else {
-                        console.error("Error fetching exchange rate:", data.error_message);
+                        document.getElementById('transaction-status').textContent = "Payment failed or was canceled.";
                     }
                 })
-                .catch(error => {
-                    console.error("Error fetching exchange rate:", error);
+                .catch((error) => {
+                    console.error('Error sending Flutterwave payment response to the backend:', error);
                 });
-        }
+            },
+            // ... Other configuration options ...
+        };
 
-        // Call fetchExchangeRate function to get the initial exchange rate
-        fetchExchangeRate();
+        // Initialize the Flutterwave payment
+        const fwButton = document.getElementById("flutterwave-button");
+        fwButton.addEventListener("click", () => {
+            const flutterwave = new Flutterwave(config);
+            flutterwave.setup();
+        });
+    }
 
-        // Function to calculate the total cost based on the number of tokens entered
-        function calculateTotal() {
-            const amount = parseFloat(document.getElementById("amount").value);
-            const afroToUsd = parseFloat(document.getElementById("afro-to-usdc").textContent);
-            const totalAmount = amount * afroToUsd;
-            document.getElementById("total-amount").textContent = totalAmount.toFixed(2);
-        }
- 
-        // Function to initialize the Paystack payment
-        function initializePayment() {
-            const amount = parseFloat(document.getElementById("amount").value) * 100; // Convert to kobo (Paystack's currency unit)
-            const email = getUserEmailAddress(); // Replace with the user's email
-            const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
+    // Call the initializeFlutterwavePayment function to set up the Flutterwave payment
+    initializeFlutterwavePayment();
+</script>
 
-            const paymentParams = {
-                key: publicKey,
-                email: email,
-                amount: amount,
-                currency: "NGN", // Use the appropriate currency code
-                ref: "AFROICO_" + Date.now(), // Generate a unique reference
-                callback: function (response) {
-                    // Handle successful payment here
-                    document.getElementById("transaction-status").innerHTML = "<p>Payment successful! You will receive your AFRO tokens shortly.</p>";
-                },
-                onClose: function () {
-                    // Handle payment cancellation or failure
-                    document.getElementById("transaction-status").innerHTML = "<p>Payment canceled or failed. Please try again.</p>";
-                }
-            };
+<script>
 
-            // Open the Paystack payment modal
-            const handler = PaystackPop.setup(paymentParams);
-            handler.openIframe();
-        }
-    </script>
+    // Function to initialize the Paystack payment
+    function initializePaystackPayment() {
+        const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
+        const amountInUSD = parseFloat(document.getElementById("total-amount").textContent);
+        const email = document.getElementById('user-email').value;
+        const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
+        
+        // Get the user's Stellar public key from the form
+        const userPublicKey = document.getElementById('user-wallet').value;
+
+        // Generate a unique reference using the user's Stellar public key
+        const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
+
+        // Create the Paystack handler
+        var handler = PaystackPop.setup({
+            key: publicKey,
+            email: email,
+            amount: amountInUSD * 100, // Convert to kobo (Paystack's currency unit)
+            currency: "NGN", // Use the appropriate currency code
+            ref: reference, // Pass the unique reference here
+            metadata: {
+                custom_fields: [
+                    {
+                        display_name: "Token Type",
+                        variable_name: "token_type",
+                        value: selectedToken,
+                    },
+                ],
+            },
+            callback: function (response) {
+                // Handle the Paystack callback response
+                // Send the payment response to the backend for processing
+                fetch('{% url 'paystack-payment-callback' %}', { // Adjust the URL to match your Django endpoint
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(response),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the backend response, which can include a success message
+                    if (data.status === 'success') {
+                        document.getElementById('transaction-status').textContent = "Payment successful!";
+                    } else {
+                        document.getElementById('transaction-status').textContent = "Payment failed or was canceled.";
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error sending Paystack payment response to the backend:', error);
+                });
+            },
+            onClose: function () {
+                // Handle the case where the Paystack dialog is closed
+                document.getElementById('transaction-status').textContent = "Payment dialog closed.";
+            },
+        });
+
+        // Open the Paystack payment dialog
+        handler.openIframe();
+    }
+
+    // Add an event listener for the payment button
+    const paymentButton = document.getElementById("paystack-button"); // Change to your Paystack button ID
+    paymentButton.addEventListener("click", initializePaystackPayment);
+</script>
 </body>
 </html>
+
+

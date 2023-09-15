@@ -12,6 +12,12 @@ from .forms import UsernameForm
 import paystackapi  # Make sure you've installed this package
 
 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
+from .models import PaymentTransaction  # Import the PaymentTransaction model
+
+
 import os
 import requests
 import toml
@@ -676,34 +682,244 @@ def convert_oso_to_afro(token_amount_in_oso):
 @login_required
 def payment_form(request):
     # Render the payment form template
-    return render(request, 'payment_form.html')
+    return render(request, 'payment.html')
 
 
-from .forms import StellarAddressResolutionForm
+@csrf_exempt
+@require_POST
+def initiate_flutterwave_payment(request):
+    try:
+        amount = float(request.POST.get('amount'))
+        email = request.POST.get('email')
+        secret_key = os.getenv('FLUTTERWAVE_SECRET_KEY')
 
-def resolve_stellar_address(request):
-    resolved_data = None
-    if request.method == 'GET':
-        form = StellarAddressResolutionForm(request.GET)
-        if form.is_valid():
-            stellar_address = form.cleaned_data['stellar_address']
-            domain = 'zingypay.com'  # Replace with your actual domain
+        if not secret_key:
+            return JsonResponse({'status': 'error', 'message': 'Flutterwave secret key is missing'})
 
-            try:
-                federation_server = FederationServer.create_for_domain(domain)
-                response = federation_server.resolve_address(stellar_address)
-                resolved_data = response.to_dict()
-            except Exception as e:
-                error_message = str(e)
+        # Generate a unique reference for the transaction
+        reference = f"FLW_{os.urandom(12).hex()}"
+
+        # Initialize the payment request
+        payload = {
+            "tx_ref": reference,
+            "amount": amount,
+            "currency": "NGN",
+            "payment_type": "card",
+            "redirect_url": "https://zingypay.com/zingypay/flutterwave-callback/",
+            "order_id": reference,
+            "customer": {
+                "email": email,
+            },
+            "customizations": {
+                "title": "Payment for Items",
+                "description": "Payment for items in cart",
+            },
+        }
+
+        headers = {
+            "Authorization": f"Bearer {secret_key}",
+            "Content-Type": "application/json",
+        }
+
+        response = requests.post("https://api.flutterwave.com/v3/charges?type=card", json=payload, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            # Create a payment record in the database
+            PaymentTransaction.objects.create(
+                reference=reference,
+                amount=amount,
+                status='pending',
+                payment_method='flutterwave',
+            )
+            # Render the payment.html template with context data
+            return render(request, 'payment.html', {'payment_link': data.get('data').get('link')})
         else:
-            error_message = 'Invalid form submission.'
+            return JsonResponse({'status': 'error', 'message': 'Failed to initiate payment'})
 
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+@csrf_exempt
+@require_POST
+def flutterwave_payment_callback(request):
+    payload = json.loads(request.body)
+    tx_ref = payload.get('tx_ref')
+    status = payload.get('status')
+
+    if status == 'successful':
+        try:
+            # Update the payment record in the database
+            transaction = PaymentTransaction.objects.get(reference=tx_ref)
+            transaction.status = 'success'
+            transaction.save()
+        except PaymentTransaction.DoesNotExist:
+            pass  # Handle the case where the transaction record is not found
+
+        # Render the payment_success.html template with context data
+        return render(request, 'payment_success.html', {'message': 'Payment successful'})
     else:
-        form = StellarAddressResolutionForm()
+        return JsonResponse({'status': 'error', 'message': 'Payment failed or was canceled'})
 
-    return render(request, 'resolve_stellar_address.html', {
-        'form': form,
-        'resolved_data': resolved_data,
-    })
+# Add views and functions for Stellar crypto payments here
+@csrf_exempt
+@require_POST
+def initiate_stellar_payment(request):
+    try:
+        amount = float(request.POST.get('amount'))
+        secret_key = os.getenv('STELLAR_SECRET_KEY')
+
+        if not secret_key:
+            return JsonResponse({'status': 'error', 'message': 'Stellar secret key is missing'})
+
+        # Initialize the Stellar server
+        server = Server("https://horizon.stellar.org")
+        source_keypair = Keypair.from_secret(secret_key)
+
+        # Fetch the account information of the sender
+        source_account = server.load_account(source_keypair.public_key)
+
+        # Get the recipient wallet address from the submitted form
+        wallet_address = request.POST.get('recipient_wallet')
+
+        if not wallet_address:
+            return JsonResponse({'status': 'error', 'message': 'Recipient wallet address is missing'})
+
+        # Build the Stellar transaction
+        transaction = (
+            TransactionBuilder(
+                source_account=source_account,
+                network_passphrase=Network.PUBLIC_NETWORK_PASSPHRASE,
+                base_fee=100,  # Adjust the base fee as needed
+            )
+            .append_payment_op(destination=wallet_address, amount=str(amount), asset_code="XLM")
+            .set_timeout(30)
+            .build()
+        )
+
+        # Sign the transaction
+        transaction.sign(source_keypair)
+
+        # Submit the transaction to the Stellar network
+        response = server.submit_transaction(transaction)
+
+        if response['result_xdr'] and 'tx_hash' in response['result_xdr']:
+            # Create a payment record in the database
+            PaymentTransaction.objects.create(
+                reference=response['result_xdr']['tx_hash'],
+                amount=amount,
+                status='success',
+                payment_method='stellar',
+                recipient_wallet=wallet_address,
+            )
+            # Render the payment_success.html template with context data
+            return render(request, 'payment_success.html', {'message': 'Payment successful'})
+
+        return JsonResponse({'status': 'error', 'message': 'Failed to initiate Stellar payment'})
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+
+@csrf_exempt
+@require_POST
+def initiate_paystack_payment(request):
+    try:
+        amount = float(request.POST.get('amount'))
+        email = request.POST.get('email')
+        public_key = os.getenv('PAYSTACK_PUBLIC_KEY')
+
+        if not public_key:
+            return JsonResponse({'status': 'error', 'message': 'Paystack public key is missing'})
+
+        # Generate a unique reference for the transaction
+        reference = f"PS_{os.urandom(12).hex()}"
+
+        # Initialize the payment request
+        payload = {
+            "email": email,
+            "amount": int(amount * 100),  # Amount in kobo (Paystack's currency unit)
+            "currency": "NGN",  # Use the appropriate currency code
+            "reference": reference,
+            "callback_url": "https://zingypay.com/paystack-payment-callback/",  # Replace with your callback URL
+            "metadata": {
+                "custom_fields": [
+                    {
+                        "display_name": "Payment For",
+                        "variable_name": "payment_for",
+                        "value": "Token Purchase",
+                    },
+                ],
+            },
+        }
+
+        headers = {
+            "Authorization": f"Bearer {public_key}",
+            "Content-Type": "application/json",
+        }
+
+        response = requests.post("https://api.paystack.co/transaction/initialize", json=payload, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            # Create a payment record in the database
+            # Replace PaymentTransaction with your actual model for recording payments
+            PaymentTransaction.objects.create(
+                reference=reference,
+                amount=amount,
+                status='pending',
+                payment_method='paystack',
+            )
+            # Render the payment.html template with payment link
+            return render(request, 'payment.html', {'payment_link': data.get('data').get('authorization_url')})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Failed to initiate payment'})
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)})
+
+
+
+@csrf_exempt
+@require_POST
+def paystack_payment_callback(request):
+    # Parse the JSON payload sent by Paystack
+    try:
+        payload = json.loads(request.body.decode('utf-8'))
+    except json.JSONDecodeError as e:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON payload'}, status=400)
+
+    # Extract necessary data from the payload
+    data = payload.get('data', {})
+    status = payload.get('event')
+
+    # Ensure that the required data is present
+    reference = data.get('reference')
+    if not reference:
+        return JsonResponse({'status': 'error', 'message': 'Transaction reference not found in payload'}, status=400)
+
+    # Here, you can use the reference as needed, such as associating it with the user's Stellar public key
+    user_public_key = data.get('user_public_key')
+
+    if status == 'charge.success':
+        try:
+            # Update the payment record in the database (you can implement this part)
+            PaymentTransaction.objects.get(reference=reference).update(status='success')
+
+            # Redirect to the payment success page
+            return redirect('payment_success')
+        except PaymentTransaction.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Payment transaction not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Payment failed or was canceled'}, status=400)
+
+
+def payment_success(request):
+    # You can add any additional logic here if needed
+    return render(request, 'payment_success.html')
 
 
