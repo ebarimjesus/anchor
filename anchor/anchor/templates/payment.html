@@ -311,16 +311,18 @@
 </script>
 
 <script>
-
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
         const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
-        const amountInUSD = parseFloat(document.getElementById("total-amount").textContent);
+        const tokenAmount = parseFloat(document.getElementById("amount").value);
         const email = document.getElementById('user-email').value;
         const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
-        
+
         // Get the user's Stellar public key from the form
         const userPublicKey = document.getElementById('user-wallet').value;
+
+        // Calculate the total amount in NGN (assuming you have already fetched the rate)
+        const totalAmountNGN = parseFloat(document.getElementById("total-amount-ngn").textContent.replace('₦', '').trim());
 
         // Generate a unique reference using the user's Stellar public key
         const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
@@ -329,7 +331,7 @@
         var handler = PaystackPop.setup({
             key: publicKey,
             email: email,
-            amount: amountInUSD * 100, // Convert to kobo (Paystack's currency unit)
+            amount: totalAmountNGN * 100, // Convert to kobo (Paystack's currency unit)
             currency: "NGN", // Use the appropriate currency code
             ref: reference, // Pass the unique reference here
             metadata: {
@@ -339,12 +341,17 @@
                         variable_name: "token_type",
                         value: selectedToken,
                     },
+                    {
+                        display_name: "Token Amount",
+                        variable_name: "token_amount",
+                        value: tokenAmount,
+                    },
                 ],
             },
             callback: function (response) {
                 // Handle the Paystack callback response
                 // Send the payment response to the backend for processing
-                fetch('{% url 'paystack-payment-callback' %}', { // Adjust the URL to match your Django endpoint
+                fetch('{% url 'paystack_payment_callback' %}', { // Adjust the URL to match your Django endpoint
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -378,6 +385,7 @@
     const paymentButton = document.getElementById("paystack-button"); // Change to your Paystack button ID
     paymentButton.addEventListener("click", initializePaystackPayment);
 </script>
+
 </body>
 </html>
 
