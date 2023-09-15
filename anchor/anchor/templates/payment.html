@@ -1,6 +1,7 @@
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,20 +28,25 @@
         }
 
         .payment-container {
-            max-width: 600px;
+            max-width: 60%;
             margin: 0 auto;
             padding: 20px;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 15px;
             background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+            margin-bottom: 20px;
         }
 
         .payment-total-cost {
             margin-bottom: 20px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
         }
 
         .payment-total-cost p {
-            margin: 5px 0;
+            margin: 15px 0;
         }
 
         label {
@@ -65,6 +71,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-top: 10px;
         }
 
         .payment-button:hover {
@@ -89,6 +96,7 @@
     </style>
 </head>
 <body>
+    <h1>Token Purchase</h1>
 <div class="payment-container">
     <div class="payment-total-cost">
         <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
@@ -141,8 +149,8 @@
 
     <!-- Total cost display -->
     <div class="payment-total-cost">
-        <p><span id="total-amount">0.00</span> USD</p>
-        <p><span id="total-amount-ngn">0.00</span></p>
+        <p>Total Amount: $<span id="total-amount">0.00</span> USD</p>
+        <p>Total Amount (NGN): <span id="total-amount-ngn">0.00</span> NGN</p>
     </div>
 
     <!-- Payment method selection -->
@@ -380,6 +388,6 @@
 </script>
 
 </body>
-</html>
+{% endblock %}
 
 
