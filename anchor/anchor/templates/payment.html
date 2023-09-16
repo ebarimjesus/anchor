@@ -149,8 +149,8 @@
 
     <!-- Total cost display -->
     <div class="payment-total-cost">
-        <p>Total Amount: $<span id="total-amount">0.00</span> USD</p>
-        <p>Total Amount (NGN): <span id="total-amount-ngn">0.00</span> NGN</p>
+        <p>Total Amount: $<span id="total-amount">0.00</span> </p>
+        <p> <span id="total-amount-ngn">0.00</span> </p>
     </div>
 
     <!-- Payment method selection -->
@@ -216,8 +216,8 @@
                 document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price`).textContent = `Ask Price (XLM): ${askPriceXLM.toFixed(7)}`;
 
                 // Use fixed rates for XLM/USD and USD/NGN conversions
-                const xlmToUsdRate = 0.4; // Replace with your fixed XLM/USD rate
-                const usdToNgnRate = 410; // Replace with your fixed USD/NGN rate
+                const xlmToUsdRate = 0.124; // Replace with your fixed XLM/USD rate
+                const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
 
                 // Calculate the final bid and ask prices in USD
                 const bidPriceUSD = bidPriceXLM * xlmToUsdRate;
@@ -282,7 +282,7 @@
             callback: (response) => {
                 // Handle the Flutterwave callback response here
                 // Send the payment response to the backend for processing
-                fetch('/flutterwave-payment-callback/', {
+                fetch('/flutterwave_payment_callback/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -318,26 +318,28 @@
 </script>
 
 <script>
-
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
         const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
-        const amountInUSD = parseFloat(document.getElementById("total-amount").textContent);
-        const email = document.getElementById('user-email').value;
-        const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
         const tokenAmount = parseFloat(document.getElementById("amount").value);
-        
+        const email = document.getElementById('user-email').value;
+        const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
+
         // Get the user's Stellar public key from the form
         const userPublicKey = document.getElementById('user-wallet').value;
 
         // Generate a unique reference using the user's Stellar public key
         const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
 
+        // Calculate the Paystack amount based on token amount (in NGN)
+        const tokenPriceInNGN = 1000; // Replace with the actual price of 1 token in NGN
+        const amountInKobo = Math.round(tokenAmount * tokenPriceInNGN * 100); // Convert to kobo
+
         // Create the Paystack handler
         var handler = PaystackPop.setup({
             key: publicKey,
             email: email,
-            amount: amountInUSD * 100, // Convert to kobo (Paystack's currency unit)
+            amount: amountInKobo, // Use the calculated amount in kobo
             currency: "NGN", // Use the appropriate currency code
             ref: reference, // Pass the unique reference here
             metadata: {
@@ -346,6 +348,11 @@
                         display_name: "Token Type",
                         variable_name: "token_type",
                         value: selectedToken,
+                    },
+                    {
+                        display_name: "Token Amount",
+                        variable_name: "token_amount",
+                        value: tokenAmount.toString(), // Convert token amount to string
                     },
                 ],
             },
@@ -386,6 +393,7 @@
     const paymentButton = document.getElementById("paystack-button"); // Change to your Paystack button ID
     paymentButton.addEventListener("click", initializePaystackPayment);
 </script>
+
 
 </body>
 {% endblock %}

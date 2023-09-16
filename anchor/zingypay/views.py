@@ -843,7 +843,7 @@ def initiate_paystack_payment(request):
             "amount": int(amount * 100),  # Amount in kobo (Paystack's currency unit)
             "currency": "NGN",  # Use the appropriate currency code
             "reference": reference,
-            "callback_url": "https://zingypay.com/zingypay/paystack_payment_callback/",  # Replace with your callback URL
+            "callback_url": "https://localhost/paystack_payment_callback/",  # Replace with your callback URL
             "metadata": {
                 "custom_fields": [
                     {
