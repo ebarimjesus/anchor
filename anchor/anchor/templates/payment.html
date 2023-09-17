@@ -11,7 +11,7 @@
     <title>Token Purchase</title>
     <script src="https://js.paystack.co/v1/inline.js"></script>
     <!-- Include the Flutterwave React component if needed -->
-    <script src="https://unpkg.com/flutterwave-react-v3@latest/dist/index.js"></script>
+    <script src="https://checkout.flutterwave.com/v3.js"></script>
 
     <!-- Add your styles here -->
     <style>
@@ -332,50 +332,78 @@
 
 
 <script>
-    // ... Your existing code for token selection, price calculation, and Paystack initialization ...
+   // Function to initialize the Flutterwave payment
+function initializeFlutterwavePayment() {
+    const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
+    const tokenAmount = parseFloat(document.getElementById("amount").value);
+    const email = document.getElementById('user-email').value;
+    const publicKey = "FLWPUBK_TEST-8a60b4e066d2ce99c1a68b8ab3e53401-X"; // Replace with your Flutterwave public key
 
-    // Function to initialize the Flutterwave payment
-    function initializeFlutterwavePayment() {
-        // Define your Flutterwave configuration here
-        const config = {
-            // Other configuration options...
+    // Get the user's Stellar public key from the form
+    const userPublicKey = document.getElementById('user-wallet').value;
 
-            callback: (response) => {
-                // Handle the Flutterwave callback response here
-                // Send the payment response to the backend for processing
-                fetch('/flutterwave_payment_callback/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(response),
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                    // Handle the backend response, which can include a success message
-                    if (data.status === 'success') {
-                        document.getElementById('transaction-status').textContent = "Payment successful!";
-                    } else {
-                        document.getElementById('transaction-status').textContent = "Payment failed or was canceled.";
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error sending Flutterwave payment response to the backend:', error);
-                });
-            },
-            // ... Other configuration options ...
-        };
+    // Generate a unique reference using the user's Stellar public key
+    const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
 
-        // Initialize the Flutterwave payment
-        const fwButton = document.getElementById("flutterwave-button");
-        fwButton.addEventListener("click", () => {
-            const flutterwave = new Flutterwave(config);
-            flutterwave.setup();
-        });
-    }
+    const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
+    const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
+    const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
 
-    // Call the initializeFlutterwavePayment function to set up the Flutterwave payment
-    initializeFlutterwavePayment();
+    // Define metadata to include token type and token amount
+    const metadata = {
+        token_type: selectedToken,
+        token_amount: tokenAmount.toString(), // Convert token amount to string
+    };
+
+    // Define your Flutterwave configuration here
+    const config = {
+        // Other configuration options...
+        public_key: publicKey,
+        tx_ref: reference,
+        amount: amountInKobo, // Use the calculated amount in kobo
+        currency: "NGN", // Use the appropriate currency code
+        redirect_url: "", // Specify your redirect URL
+        payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr, account, credit, ussd, barter",
+        customer: {
+            email: email,
+        },
+        metadata: metadata, // Include token type and token amount in metadata
+        callback: function (response) {
+            // Handle the Flutterwave callback response here
+            // Send the payment response to the backend for processing
+            fetch('/flutterwave_payment_callback/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(response),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                // Handle the backend response, which can include a success message
+                if (data.status === 'success') {
+                    document.getElementById('transaction-status').textContent = "Payment successful!";
+                } else {
+                    document.getElementById('transaction-status').textContent = "Payment failed or was canceled.";
+                }
+            })
+            .catch((error) => {
+                console.error('Error sending Flutterwave payment response to the backend:', error);
+            });
+        },
+        onClose: function () {
+            // Handle the case where the Flutterwave dialog is closed
+            document.getElementById('transaction-status').textContent = "Payment dialog closed.";
+        },
+    };
+
+    // Initialize the Flutterwave payment
+    FlutterwaveCheckout(config);
+}
+
+// Add an event listener for the Flutterwave payment button
+const flutterwaveButton = document.getElementById("flutterwave-button");
+flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
 </script>
    
 <script>
