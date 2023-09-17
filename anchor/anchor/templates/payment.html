@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 
 {% block content %}
@@ -93,6 +94,34 @@
             color: #009933;
             font-weight: bold;
         }
+
+        /* Add styles for token options */
+.token-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* Style the radio button labels */
+.token-option label {
+    position: relative;
+    padding-left: 40px; /* Adjust the padding as needed to create space for the image */
+    font-weight: bold;
+}
+
+/* Style the token images */
+.token-option img {
+    width: 20px; /* Adjust the width and height of the images as needed */
+    height: 20px;
+    margin-right: 10px; /* Adjust the margin as needed to create spacing between the image and label */
+    border-radius: 50%; /* Make the images circular if desired */
+    object-fit: cover; /* Ensure the image fits within the specified dimensions */
+    position: absolute;
+    
+    
+    transform: translateY(-50%);
+}
     </style>
 </head>
 <body>
@@ -114,67 +143,87 @@
         <p>1 NATURE Token (XLM) = $<span id="nature-bid-price">0.00</span> (Buy Price), $<span id="nature-bid-price-usd">0.00</span> USD</p>
         <p>1 NATURE Token (XLM) = $<span id="nature-ask-price">0.00</span> (Sell Price), $<span id="nature-ask-price-usd">0.00</span> USD</p>
     </div>
-
-    <label>
-        <input type="radio" name="token-type" value="AFRO"> AFRO
-    </label>
-    <label>
-        <input type="radio" name="token-type" value="OSO"> OSO
-    </label>
-    <label>
-        <input type="radio" name="token-type" value="LIFE"> LIFE
-    </label>
-    <label>
-        <input type="radio" name="token-type" value="NATURE"> NATURE
-    </label>
-
-    <!-- User input fields -->
-    <div class="payment-user-info">
-        <label class="payment-label" for="user-email">Email Address:</label>
-        <input class="payment-input" type="email" id="user-email" placeholder="Enter your email" required>
-
-        <label class="payment-label" for="user-phone">Phone Number:</label>
-        <input class="payment-input" type="tel" id="user-phone" placeholder="Enter your phone number" required>
-
-        <label class="payment-label" for="user-wallet">Wallet or Federation Address:</label>
-        <input class="payment-input" type="text" id="user-wallet" placeholder="Enter your wallet or federation address" required>
-
-        <!-- Add more fields as needed, such as name, address, etc. -->
-
-        <label class="payment-label" for="amount">Enter the number of tokens you want to purchase:</label>
-        <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount" required>
-        <input type="hidden" id="selected-asset" value="">
-        <button class="payment-button" id="calculate-button">Calculate Total</button>
-    </div>
-
-    <!-- Total cost display -->
-    <div class="payment-total-cost">
-        <p>Total Amount: $<span id="total-amount">0.00</span> </p>
-        <p> <span id="total-amount-ngn">0.00</span> </p>
-    </div>
-
-    <!-- Payment method selection -->
-    <div class="payment-method-selection">
+    
+    <div class="token-option">
+        <img id="afro-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO Token Image">
         <label>
-            <input type="radio" name="payment-method" value="paystack" checked> Pay with Paystack
-        </label>
-        <label>
-            <input type="radio" name="payment-method" value="flutterwave"> Pay with Flutterwave
+            <input type="radio" name="token-type" value="AFRO"> AFRO
         </label>
     </div>
-
-    <!-- Transaction status display -->
-    <div class="payment-total-cost">
-        <!-- Transaction status will be displayed here -->
-        <p id="transaction-status"></p>
+    <div class="token-option">
+        <img id="oso-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png" alt="OSO Token Image">
+        <label>
+            <input type="radio" name="token-type" value="OSO"> OSO
+        </label>
     </div>
+    <div class="token-option">
+        <img id="life-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1691841326/life-800x600_m22ylm.png" alt="LIFE Token Image">
+        <label>
+            <input type="radio" name="token-type" value="LIFE"> LIFE
+        </label>
+    </div>
+    <div class="token-option">
+        <img id="nature-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png" alt="NATURE Token Image">
+        <label>
+            <input type="radio" name="token-type" value="NATURE"> NATURE
+        </label>
+    </div>
+    <!-- Add similar token-option div elements for other assets -->
+    
 
-    <!-- Payment buttons -->
-    <!-- Pay with Paystack button -->
-    <button class="payment-button" id="paystack-button">Pay with Paystack</button>
+<!-- Include your HTML code here -->
 
-    <!-- Pay with Flutterwave button (added a new button) -->
-    <button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
+<!-- User input fields -->
+<div class="payment-user-info">
+    <label class="payment-label" for="user-name">Full Name:</label>
+    <input class="payment-input" type="text" id="user-name" placeholder="Enter your full name" required>
+
+    <label class="payment-label" for="user-email">Email Address:</label>
+    <input class="payment-input" type="email" id="user-email" placeholder="Enter your email" required>
+
+    <label class="payment-label" for="user-phone">Phone Number:</label>
+    <input class="payment-input" type="tel" id="user-phone" placeholder="Enter your phone number" required>
+
+    <label class="payment-label" for="user-wallet">Wallet or Federation Address:</label>
+    <input class="payment-input" type="text" id="user-wallet" placeholder="Enter your wallet or federation address" required>
+
+    <!-- Add more fields as needed, such as name, address, etc. -->
+
+    <label class="payment-label" for="amount">Enter the number of tokens you want to purchase:</label>
+    <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount" required>
+    <input type="hidden" id="selected-asset" value="">
+    <input type="hidden" id="paystack-amount" name="paystack-amount" value=""> <!-- Hidden input for Paystack amount -->
+    <button class="payment-button" id="calculate-button">Calculate Total</button>
+</div>
+
+<!-- Total cost display -->
+<div class="payment-total-cost">
+    <p>Total Amount in USD: $<span id="total-amount">0.00</span> </p>
+    <p> <span id="total-amount-ngn">0.00</span> </p>
+</div>
+
+<!-- Payment method selection -->
+<div class="payment-method-selection">
+    <label>
+        <input type="radio" name="payment-method" value="paystack" checked> Pay with Paystack
+    </label>
+    <label>
+        <input type="radio" name="payment-method" value="flutterwave"> Pay with Flutterwave
+    </label>
+</div>
+
+<!-- Transaction status display -->
+<div class="payment-total-cost">
+    <!-- Transaction status will be displayed here -->
+    <p id="transaction-status"></p>
+</div>
+
+<!-- Payment buttons -->
+<!-- Pay with Paystack button -->
+<button class="payment-button" id="paystack-button">Pay with Paystack</button>
+
+<!-- Pay with Flutterwave button (added a new button) -->
+<button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/8.0.0/stellar-sdk.min.js"></script>
@@ -232,7 +281,7 @@
                 const totalAmountUSD = askPriceUSD * tokenAmount;
 
                 // Calculate the total amount in NGN
-                const totalAmountNGN = totalAmountUSD * usdToNgnRate;
+                const totalAmountNGN = totalAmountUSD * usdToNgnRate + 260;
 
                 // Update the total amount in NGN
                 document.getElementById("total-amount").textContent = totalAmountUSD.toFixed(2);
@@ -316,14 +365,14 @@
     // Call the initializeFlutterwavePayment function to set up the Flutterwave payment
     initializeFlutterwavePayment();
 </script>
-
+   
 <script>
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
         const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
         const tokenAmount = parseFloat(document.getElementById("amount").value);
         const email = document.getElementById('user-email').value;
-        const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
+        const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
 
         // Get the user's Stellar public key from the form
         const userPublicKey = document.getElementById('user-wallet').value;
@@ -331,9 +380,10 @@
         // Generate a unique reference using the user's Stellar public key
         const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
 
-        // Calculate the Paystack amount based on token amount (in NGN)
-        const tokenPriceInNGN = 1000; // Replace with the actual price of 1 token in NGN
-        const amountInKobo = Math.round(tokenAmount * tokenPriceInNGN * 100); // Convert to kobo
+        // Calculate the Paystack amount based on the total amount in USD
+        const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
+        const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
+        const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate * 100 + 26000);
 
         // Create the Paystack handler
         var handler = PaystackPop.setup({
@@ -395,7 +445,6 @@
 </script>
 
 
+
 </body>
 {% endblock %}
-
-
