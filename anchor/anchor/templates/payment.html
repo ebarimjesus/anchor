@@ -342,18 +342,12 @@ function initializeFlutterwavePayment() {
     // Get the user's Stellar public key from the form
     const userPublicKey = document.getElementById('user-wallet').value;
 
-    // Generate a unique reference using the user's Stellar public key
-    const reference = `PURCHASE_${userPublicKey}_${Date.now()}`;
+    // Generate a unique reference including token type and token amount
+    const reference = `PURCHASE_${userPublicKey}_${selectedToken}_${tokenAmount}_${Date.now()}`;
 
     const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
     const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
     const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
-
-    // Define metadata to include token type and token amount
-    const metadata = {
-        token_type: selectedToken,
-        token_amount: tokenAmount.toString(), // Convert token amount to string
-    };
 
     // Define your Flutterwave configuration here
     const config = {
@@ -367,7 +361,6 @@ function initializeFlutterwavePayment() {
         customer: {
             email: email,
         },
-        metadata: metadata, // Include token type and token amount in metadata
         callback: function (response) {
             // Handle the Flutterwave callback response here
             // Send the payment response to the backend for processing
@@ -404,8 +397,8 @@ function initializeFlutterwavePayment() {
 // Add an event listener for the Flutterwave payment button
 const flutterwaveButton = document.getElementById("flutterwave-button");
 flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
-</script>
-   
+</script> 
+
 <script>
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
