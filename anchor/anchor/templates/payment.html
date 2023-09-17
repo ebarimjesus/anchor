@@ -3,6 +3,8 @@
 
 {% block content %}
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +27,7 @@
         }
 
         body {
-            background-color: #f5f5f5;
+            background-color: #c06113;
         }
 
         .payment-container {
@@ -96,228 +98,238 @@
         }
 
         /* Add styles for token options */
-.token-option {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-    cursor: pointer;
-}
+        .token-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
 
-/* Style the radio button labels */
-.token-option label {
-    position: relative;
-    padding-left: 40px; /* Adjust the padding as needed to create space for the image */
-    font-weight: bold;
-}
+        /* Style the radio button labels */
+        .token-option label {
+            position: relative;
+            padding-left: 40px; /* Adjust the padding as needed to create space for the image */
+            font-weight: bold;
+        }
 
-/* Style the token images */
-.token-option img {
-    width: 20px; /* Adjust the width and height of the images as needed */
-    height: 20px;
-    margin-right: 10px; /* Adjust the margin as needed to create spacing between the image and label */
-    border-radius: 50%; /* Make the images circular if desired */
-    object-fit: cover; /* Ensure the image fits within the specified dimensions */
-    position: absolute;
-    
-    
-    transform: translateY(-50%);
-}
+        /* Style the token images */
+        .token-option img {
+            width: 20px; /* Adjust the width and height of the images as needed */
+            height: 20px;
+            margin-right: 10px; /* Adjust the margin as needed to create spacing between the image and label */
+            border-radius: 50%; /* Make the images circular if desired */
+            object-fit: cover; /* Ensure the image fits within the specified dimensions */
+            position: absolute;
+            transform: translateY(-50%);
+        }
     </style>
 </head>
 <body>
     <h1>Token Purchase</h1>
-<div class="payment-container">
-    <div class="payment-total-cost">
-        <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
-        <p>1 AFRO Token (XLM) = $<span id="afro-ask-price">0.00</span> (Sell Price), $<span id="afro-ask-price-usd">0.00</span> USD</p>
+    <div class="payment-container">
+        <div class="payment-total-cost">
+            <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
+            <p>1 AFRO Token (XLM) = $<span id="afro-ask-price">0.00</span> (Sell Price), $<span id="afro-ask-price-usd">0.00</span> USD</p>
+        </div>
+        <div class="payment-total-cost">
+            <p>1 OSO Token (XLM) = $<span id="oso-bid-price">0.00</span> (Buy Price), $<span id="oso-bid-price-usd">0.00</span> USD</p>
+            <p>1 OSO Token (XLM) = $<span id="oso-ask-price">0.00</span> (Sell Price), $<span id="oso-ask-price-usd">0.00</span> USD</p>
+        </div>
+        <div class="payment-total-cost">
+            <p>1 LIFE Token (XLM) = $<span id="life-bid-price">0.00</span> (Buy Price), $<span id="life-bid-price-usd">0.00</span> USD</p>
+            <p>1 LIFE Token (XLM) = $<span id="life-ask-price">0.00</span> (Sell Price), $<span id="life-ask-price-usd">0.00</span> USD</p>
+        </div>
+        <div class="payment-total-cost">
+            <p>1 NATURE Token (XLM) = $<span id="nature-bid-price">0.00</span> (Buy Price), $<span id="nature-bid-price-usd">0.00</span> USD</p>
+            <p>1 NATURE Token (XLM) = $<span id="nature-ask-price">0.00</span> (Sell Price), $<span id="nature-ask-price-usd">0.00</span> USD</p>
+        </div>
+
+        <div class="token-option">
+            <img id="afro-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO Token Image">
+            <label>
+                <input type="radio" name="token-type" value="AFRO"> AFRO
+            </label>
+        </div>
+        <div class="token-option">
+            <img id="oso-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png" alt="OSO Token Image">
+            <label>
+                <input type="radio" name="token-type" value="OSO"> OSO
+            </label>
+        </div>
+        <div class="token-option">
+            <img id="life-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1691841326/life-800x600_m22ylm.png" alt="LIFE Token Image">
+            <label>
+                <input type="radio" name="token-type" value="LIFE"> LIFE
+            </label>
+        </div>
+        <div class="token-option">
+            <img id="nature-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png" alt="NATURE Token Image">
+            <label>
+                <input type="radio" name="token-type" value="NATURE"> NATURE
+            </label>
+        </div>
+
+        <!-- User input fields -->
+        <div class="payment-user-info">
+            <label class="payment-label" for="user-name">Full Name:</label>
+            <input class="payment-input" type="text" id="user-name" placeholder="Enter your full name" required>
+
+            <label class="payment-label" for="user-email">Email Address:</label>
+            <input class="payment-input" type="email" id="user-email" placeholder="Enter your email" required>
+
+            <label class="payment-label" for="user-phone">Phone Number:</label>
+            <input class="payment-input" type="tel" id="user-phone" placeholder="Enter your phone number" required>
+
+            <label class="payment-label" for="user-wallet">Wallet or Federation Address:</label>
+            <input class="payment-input" type="text" id="user-wallet" placeholder="Enter your wallet or federation address" required>
+
+            <!-- Add more fields as needed, such as name, address, etc. -->
+
+            <label class="payment-label" for="amount">Enter the number of tokens you want to purchase:</label>
+            <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount" required>
+            <input type="hidden" id="selected-asset" value="">
+            <input type="hidden" id="paystack-amount" name="paystack-amount" value=""> <!-- Hidden input for Paystack amount -->
+        </div>
+
+        <!-- Total cost display -->
+        <div class="payment-total-cost">
+            <p>Total Amount in USD: $<span id="total-amount">0.00</span> </p>
+            <p> <span id="total-amount-ngn">0.00</span> </p>
+        </div>
+
+        <!-- Payment method selection -->
+        <div class="payment-method-selection">
+            <label>
+                <input type="radio" name="payment-method" value="paystack" checked> Pay with Paystack
+            </label>
+            <label>
+                <input type="radio" name="payment-method" value="flutterwave"> Pay with Flutterwave
+            </label>
+        </div>
+
+        <!-- Transaction status display -->
+        <div class="payment-total-cost">
+            <!-- Transaction status will be displayed here -->
+            <p id="transaction-status"></p>
+        </div>
+
+        <!-- Payment buttons -->
+        <!-- Pay with Paystack button -->
+        <button class="payment-button" id="paystack-button">Pay with Paystack</button>
+
+        <!-- Pay with Flutterwave button (added a new button) -->
+        <button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
     </div>
-    <div class="payment-total-cost">
-        <p>1 OSO Token (XLM) = $<span id="oso-bid-price">0.00</span> (Buy Price), $<span id="oso-bid-price-usd">0.00</span> USD</p>
-        <p>1 OSO Token (XLM) = $<span id="oso-ask-price">0.00</span> (Sell Price), $<span id="oso-ask-price-usd">0.00</span> USD</p>
-    </div>
-    <div class="payment-total-cost">
-        <p>1 LIFE Token (XLM) = $<span id="life-bid-price">0.00</span> (Buy Price), $<span id="life-bid-price-usd">0.00</span> USD</p>
-        <p>1 LIFE Token (XLM) = $<span id="life-ask-price">0.00</span> (Sell Price), $<span id="life-ask-price-usd">0.00</span> USD</p>
-    </div>
-    <div class="payment-total-cost">
-        <p>1 NATURE Token (XLM) = $<span id="nature-bid-price">0.00</span> (Buy Price), $<span id="nature-bid-price-usd">0.00</span> USD</p>
-        <p>1 NATURE Token (XLM) = $<span id="nature-ask-price">0.00</span> (Sell Price), $<span id="nature-ask-price-usd">0.00</span> USD</p>
-    </div>
-    
-    <div class="token-option">
-        <img id="afro-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO Token Image">
-        <label>
-            <input type="radio" name="token-type" value="AFRO"> AFRO
-        </label>
-    </div>
-    <div class="token-option">
-        <img id="oso-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png" alt="OSO Token Image">
-        <label>
-            <input type="radio" name="token-type" value="OSO"> OSO
-        </label>
-    </div>
-    <div class="token-option">
-        <img id="life-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1691841326/life-800x600_m22ylm.png" alt="LIFE Token Image">
-        <label>
-            <input type="radio" name="token-type" value="LIFE"> LIFE
-        </label>
-    </div>
-    <div class="token-option">
-        <img id="nature-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png" alt="NATURE Token Image">
-        <label>
-            <input type="radio" name="token-type" value="NATURE"> NATURE
-        </label>
-    </div>
-    <!-- Add similar token-option div elements for other assets -->
-    
 
-<!-- Include your HTML code here -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/8.0.0/stellar-sdk.min.js"></script>
+    <script>
+        // Define Stellar server and assets for each token
+        const server = new StellarSdk.Server('https://horizon.stellar.org');
+        const tokenPairs = [
+            { baseAssetCode: 'AFRO', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
+            { baseAssetCode: 'OSO', counterAssetCode: 'XLM', issuerPublicKey: 'GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC' },
+            { baseAssetCode: 'LIFE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
+            { baseAssetCode: 'NATURE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' }
+            // Add more tokens as needed
+        ];
 
-<!-- User input fields -->
-<div class="payment-user-info">
-    <label class="payment-label" for="user-name">Full Name:</label>
-    <input class="payment-input" type="text" id="user-name" placeholder="Enter your full name" required>
+        // Function to fetch and display token prices
+        function fetchTokenPrices(baseAssetCode) {
+            // Find the corresponding token pair
+            const pair = tokenPairs.find((pair) => pair.baseAssetCode === baseAssetCode);
+            if (!pair) {
+                console.error('Invalid token selected.');
+                return;
+            }
 
-    <label class="payment-label" for="user-email">Email Address:</label>
-    <input class="payment-input" type="email" id="user-email" placeholder="Enter your email" required>
+            const counterAssetCode = pair.counterAssetCode;
+            const counterAssetIssuer = pair.counterAssetIssuer;
 
-    <label class="payment-label" for="user-phone">Phone Number:</label>
-    <input class="payment-input" type="tel" id="user-phone" placeholder="Enter your phone number" required>
+            // Create Stellar assets for both base and counter assets
+            const baseAsset = new StellarSdk.Asset(pair.baseAssetCode, pair.issuerPublicKey);
+            const counterAsset = new StellarSdk.Asset(pair.counterAssetCode, pair.counterAssetIssuer);
 
-    <label class="payment-label" for="user-wallet">Wallet or Federation Address:</label>
-    <input class="payment-input" type="text" id="user-wallet" placeholder="Enter your wallet or federation address" required>
+            server.orderbook(baseAsset, counterAsset)
+                .call()
+                .then((orderbook) => {
+                    const bidPriceXLM = parseFloat(orderbook.bids[0].price);
+                    const askPriceXLM = parseFloat(orderbook.asks[0].price);
 
-    <!-- Add more fields as needed, such as name, address, etc. -->
+                    // Use fixed rates for XLM/USD and USD/NGN conversions
+                    const xlmToUsdRate = 0.124; // Replace with your fixed XLM/USD rate
+                    const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
 
-    <label class="payment-label" for="amount">Enter the number of tokens you want to purchase:</label>
-    <input class="payment-input" type="number" id="amount" min="1" step="1" placeholder="Enter the amount" required>
-    <input type="hidden" id="selected-asset" value="">
-    <input type="hidden" id="paystack-amount" name="paystack-amount" value=""> <!-- Hidden input for Paystack amount -->
-    <button class="payment-button" id="calculate-button">Calculate Total</button>
-</div>
+                    // Calculate the equivalent prices in USD
+                    const bidPriceUSD = bidPriceXLM * xlmToUsdRate;
+                    const askPriceUSD = askPriceXLM * xlmToUsdRate;
 
-<!-- Total cost display -->
-<div class="payment-total-cost">
-    <p>Total Amount in USD: $<span id="total-amount">0.00</span> </p>
-    <p> <span id="total-amount-ngn">0.00</span> </p>
-</div>
+                    // Update the HTML elements with the retrieved XLM prices
+                    document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price`).textContent = `Bid Price (XLM): ${bidPriceXLM.toFixed(7)}`;
+                    document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price`).textContent = `Ask Price (XLM): ${askPriceXLM.toFixed(7)}`;
 
-<!-- Payment method selection -->
-<div class="payment-method-selection">
-    <label>
-        <input type="radio" name="payment-method" value="paystack" checked> Pay with Paystack
-    </label>
-    <label>
-        <input type="radio" name="payment-method" value="flutterwave"> Pay with Flutterwave
-    </label>
-</div>
+                    // Update the HTML elements with the equivalent USD prices
+                    document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price-usd`).textContent = `Bid Price (USD): $${bidPriceUSD.toFixed(2)}`;
+                    document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price-usd`).textContent = `Ask Price (USD): $${askPriceUSD.toFixed(2)}`;
 
-<!-- Transaction status display -->
-<div class="payment-total-cost">
-    <!-- Transaction status will be displayed here -->
-    <p id="transaction-status"></p>
-</div>
-
-<!-- Payment buttons -->
-<!-- Pay with Paystack button -->
-<button class="payment-button" id="paystack-button">Pay with Paystack</button>
-
-<!-- Pay with Flutterwave button (added a new button) -->
-<button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
-</div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/8.0.0/stellar-sdk.min.js"></script>
-<script>
-    // Define Stellar server and assets for each token
-    const server = new StellarSdk.Server('https://horizon.stellar.org');
-    const tokenPairs = [
-        { baseAssetCode: 'AFRO', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
-        { baseAssetCode: 'OSO', counterAssetCode: 'XLM', issuerPublicKey: 'GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC' },
-        { baseAssetCode: 'LIFE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' },
-        { baseAssetCode: 'NATURE', counterAssetCode: 'XLM', issuerPublicKey: 'GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV' }
-        // Add more tokens as needed
-    ];
-
-    // Function to fetch and display token prices
-    function fetchTokenPrices(baseAssetCode) {
-        // Find the corresponding token pair
-        const pair = tokenPairs.find((pair) => pair.baseAssetCode === baseAssetCode);
-        if (!pair) {
-            console.error('Invalid token selected.');
-            return;
+                    // Update the total amount if a token amount is entered
+                    const tokenAmount = parseFloat(document.getElementById("amount").value);
+                    if (!isNaN(tokenAmount)) {
+                        updateTotalAmount(baseAssetCode, tokenAmount, askPriceUSD, usdToNgnRate);
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching orderbook:', error);
+                });
         }
 
-        const counterAssetCode = pair.counterAssetCode;
-        const counterAssetIssuer = pair.counterAssetIssuer;
+        // Function to update the total amount
+        function updateTotalAmount(baseAssetCode, tokenAmount, askPriceUSD, usdToNgnRate) {
+            // Calculate the total amount in USD
+            const totalAmountUSD = tokenAmount * askPriceUSD;
 
-        // Create Stellar assets for both base and counter assets
-        const baseAsset = new StellarSdk.Asset(pair.baseAssetCode, pair.issuerPublicKey);
-        const counterAsset = new StellarSdk.Asset(pair.counterAssetCode, pair.counterAssetIssuer);
+            // Calculate the total amount in NGN
+            const totalAmountNGN = totalAmountUSD * usdToNgnRate;
 
-        server.orderbook(baseAsset, counterAsset)
-            .call()
-            .then((orderbook) => {
-                const bidPriceXLM = parseFloat(orderbook.bids[0].price);
-                const askPriceXLM = parseFloat(orderbook.asks[0].price);
+            // Update the HTML element with the total amount
+            document.getElementById("total-amount").textContent = totalAmountUSD.toFixed(2);
+            document.getElementById("total-amount-ngn").textContent = `Total Amount in NGN: ₦${totalAmountNGN.toFixed(2)}`;
 
-                // Update the HTML elements with the retrieved XLM prices
-                document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price`).textContent = `Bid Price (XLM): ${bidPriceXLM.toFixed(7)}`;
-                document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price`).textContent = `Ask Price (XLM): ${askPriceXLM.toFixed(7)}`;
+            // Update the hidden Paystack amount input
+            document.getElementById("paystack-amount").value = totalAmountUSD.toFixed(2);
+        }
 
-                // Use fixed rates for XLM/USD and USD/NGN conversions
-                const xlmToUsdRate = 0.124; // Replace with your fixed XLM/USD rate
+        // Function to handle token type selection
+        function handleTokenTypeSelection() {
+            const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
+            document.getElementById("selected-asset").value = selectedToken;
+            fetchTokenPrices(selectedToken);
+        }
+
+        // Add an event listener to the token type radio buttons
+        const tokenTypeRadios = document.querySelectorAll('input[name="token-type"]');
+        tokenTypeRadios.forEach((radio) => {
+            radio.addEventListener("change", handleTokenTypeSelection);
+        });
+
+        // Add an event listener to the amount input
+        const amountInput = document.getElementById("amount");
+        amountInput.addEventListener("input", () => {
+            const selectedToken = document.getElementById("selected-asset").value;
+            const tokenAmount = parseFloat(amountInput.value);
+            if (!isNaN(tokenAmount)) {
+                fetchTokenPrices(selectedToken);
+                const askPriceUSD = parseFloat(document.getElementById(`${selectedToken.toLowerCase()}-ask-price-usd`).textContent.split(":")[1].trim());
                 const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
+                updateTotalAmount(selectedToken, tokenAmount, askPriceUSD, usdToNgnRate);
+            }
+        });
 
-                // Calculate the final bid and ask prices in USD
-                const bidPriceUSD = bidPriceXLM * xlmToUsdRate;
-                const askPriceUSD = askPriceXLM * xlmToUsdRate;
+        // Calculate and display initial token prices
+        const initialSelectedToken = document.querySelector('input[name="token-type"]:checked').value;
+        fetchTokenPrices(initialSelectedToken);
+        handleTokenTypeSelection(); // Handle the initial selection
+    </script>
 
-                // Update the HTML elements with the retrieved USD prices
-                document.getElementById(`${baseAssetCode.toLowerCase()}-bid-price-usd`).textContent = `Bid Price (USD): $${bidPriceUSD.toFixed(2)}`;
-                document.getElementById(`${baseAssetCode.toLowerCase()}-ask-price-usd`).textContent = `Ask Price (USD): $${askPriceUSD.toFixed(2)}`;
-
-                // Calculate the total amount in USD (use ask price for calculation)
-                const tokenAmount = parseFloat(document.getElementById("amount").value);
-                const totalAmountUSD = askPriceUSD * tokenAmount;
-
-                // Calculate the total amount in NGN
-                const totalAmountNGN = totalAmountUSD * usdToNgnRate;
-
-                // Update the total amount in NGN
-                document.getElementById("total-amount").textContent = totalAmountUSD.toFixed(2);
-                document.getElementById("total-amount-ngn").textContent = `Total Amount in NGN: ₦${totalAmountNGN.toFixed(2)}`;
-            })
-            .catch((error) => {
-                console.error(`Error fetching orderbook for ${baseAssetCode}/${counterAssetCode}:`, error);
-            });
-    }
-
-    // Function to handle radio button changes
-    function handleTokenSelectionChange(event) {
-        const selectedToken = event.target.value;
-        fetchTokenPrices(selectedToken);
-    }
-
-    // Add event listeners to the radio buttons
-    const radioButtons = document.querySelectorAll('input[name="token-type"]');
-    radioButtons.forEach((radioButton) => {
-        radioButton.addEventListener('change', handleTokenSelectionChange);
-    });
-
-    // Calculate the total price in XLM when token amount is entered
-    const calculateXlmTotal = () => {
-        const tokenAmount = parseFloat(document.getElementById("amount").value);
-        const totalAmountXLM = tokenAmount / parseFloat(document.getElementById("afro-ask-price").textContent.split(":")[1].trim()); // Use the ask price for the calculation
-        document.getElementById("total-amount-xlm").textContent = totalAmountXLM.toFixed(7);
-    };
-
-    // Add an event listener to the token amount input field
-    const amountInput = document.getElementById("amount");
-    amountInput.addEventListener("input", calculateXlmTotal);
-
-    // Calculate XLM total initially
-    calculateXlmTotal();
-</script>
 
 <script>
     // ... Your existing code for token selection, price calculation, and Paystack initialization ...
