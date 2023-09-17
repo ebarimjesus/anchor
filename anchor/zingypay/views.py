@@ -705,7 +705,7 @@ def initiate_flutterwave_payment(request):
             "amount": amount,
             "currency": "NGN",
             "payment_type": "card",
-            "redirect_url": "https://zingypay.com/zingypay/flutterwave-callback/",
+            "redirect_url": "https://zingypay.com/zingypay/flutterwave_payment_callback/",
             "order_id": reference,
             "customer": {
                 "email": email,
