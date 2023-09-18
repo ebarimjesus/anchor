@@ -36,10 +36,11 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 15px;
-            background-color: #fff;
+            background-color: #0af3e7;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
             margin-bottom: 20px;
+            color: rgb(49, 49, 240)
         }
 
         .payment-total-cost {
@@ -357,7 +358,7 @@ function initializeFlutterwavePayment() {
         amount: amountInKobo, // Use the calculated amount in kobo
         currency: "NGN", // Use the appropriate currency code
         redirect_url: "", // Specify your redirect URL
-        payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr, account, credit, ussd, barter",
+        payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr, account, credit, ussd",
         customer: {
             email: email,
         },
