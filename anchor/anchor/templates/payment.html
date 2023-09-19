@@ -424,7 +424,7 @@ function initializeFlutterwavePayment() {
     const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
     const tokenAmount = parseFloat(document.getElementById("amount").value);
     const email = document.getElementById('user-email').value;
-    const publicKey = "FLWPUBK_TEST-be0ddb38f5f9f67a6b6befdf65b5ca0f-X"; // Replace with your Flutterwave public key
+    const publicKey = "FLWPUBK-49a4914e3f9adaa91e2fd10497a7da92-X"; // Replace with your Flutterwave public key
 
     // Get the user's Stellar public key from the form
     const userPublicKey = document.getElementById('user-wallet').value;
@@ -492,7 +492,7 @@ flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
         const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
         const tokenAmount = parseFloat(document.getElementById("amount").value);
         const email = document.getElementById('user-email').value;
-        const publicKey = "pk_test_934eca836db70269df56bd3bbe80ce33476f94a1"; // Replace with your Paystack public key
+        const publicKey = "pk_live_081c6cf541c64f08115d6285e4b0b5d69953e651"; // Replace with your Paystack public key
 
         // Get the user's Stellar public key from the form
         const userPublicKey = document.getElementById('user-wallet').value;
