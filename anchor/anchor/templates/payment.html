@@ -285,8 +285,16 @@
         <!-- Pay with Paystack button -->
         <button class="payment-button" id="paystack-button">Pay with Paystack</button>
 
-        <!-- Pay with Flutterwave button (added a new button) -->
+        <!-- Add a hidden input fields for full name and phone number -->
+        <input type="hidden" id="user-fullname" name="user-fullname" value="">
+        <input type="hidden" id="user-phone-number" name="user-phone-number" value="">
+
+        <!-- Pay with Flutterwave button -->
         <button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
+
+        <!-- Add a hidden input fields for full name and phone number -->
+        <input type="hidden" id="user-fullname-flutterwave" name="user-fullname-flutterwave" value="">
+        <input type="hidden" id="user-phone-number-flutterwave" name="user-phone-number-flutterwave" value="">
     </div>
 
     <!-- Discounted AFRO Token information -->
@@ -435,74 +443,72 @@
     </script>
 
 
+
+<!-- JavaScript code for Flutterwave integration -->
+<script src="https://checkout.flutterwave.com/v3.js"></script>
 <script>
-   // Function to initialize the Flutterwave payment
-function initializeFlutterwavePayment() {
-    const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
-    const tokenAmount = parseFloat(document.getElementById("amount").value);
-    const email = document.getElementById('user-email').value;
-    const publicKey = "FLWPUBK-49a4914e3f9adaa91e2fd10497a7da92-X"; // Replace with your Flutterwave public key
+    // Function to initialize the Flutterwave payment
+    function initializeFlutterwavePayment() {
+        const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
+        const tokenAmount = parseFloat(document.getElementById("amount").value);
+        const email = document.getElementById('user-email').value;
+        const publicKey = "FLWPUBK-49a4914e3f9adaa91e2fd10497a7da92-X"; // Replace with your Flutterwave public key
 
-    // Get the user's Stellar public key from the form
-    const userPublicKey = document.getElementById('user-wallet').value;
+        // Get the user's Stellar public key from the form
+        const userPublicKey = document.getElementById('user-wallet').value;
 
-    // Generate a unique reference including token type and token amount
-    const reference = `PURCHASE_${userPublicKey}_${selectedToken}_${tokenAmount}_${Date.now()}`;
+        // Generate a unique reference including token type and token amount
+        const reference = `PURCHASE_${userPublicKey}_${selectedToken}_${tokenAmount}_${Date.now()}`;
 
-    const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
-    const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
-    const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
+        const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
+        const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
+        const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
 
-    // Define your Flutterwave configuration here
-    const config = {
-        // Other configuration options...
-        public_key: publicKey,
-        tx_ref: reference,
-        amount: amountInKobo, // Use the calculated amount in kobo
-        currency: "NGN", // Use the appropriate currency code
-        redirect_url: "", // Specify your redirect URL
-        payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr, account, credit, ussd",
-        customer: {
-            email: email,
-        },
-        callback: function (response) {
-            // Handle the Flutterwave callback response here
-            // Send the payment response to the backend for processing
-            fetch('/flutterwave_payment_callback/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(response),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                // Handle the backend response, which can include a success message
-                if (data.status === 'success') {
-                    document.getElementById('transaction-status').textContent = "Payment successful!";
-                } else {
-                    document.getElementById('transaction-status').textContent = "Payment failed or was canceled.";
-                }
-            })
-            .catch((error) => {
-                console.error('Error sending Flutterwave payment response to the backend:', error);
-            });
-        },
-        onClose: function () {
-            // Handle the case where the Flutterwave dialog is closed
-            document.getElementById('transaction-status').textContent = "Payment dialog closed.";
-        },
-    };
+        // Get the user's full name and phone number from the form
+        const fullName = document.getElementById('user-name').value;
+        const phoneNumber = document.getElementById('user-phone').value;
 
-    // Initialize the Flutterwave payment
-    FlutterwaveCheckout(config);
-}
+        // Set the hidden input fields with the full name and phone number
+        document.getElementById('user-fullname-flutterwave').value = fullName;
+        document.getElementById('user-phone-number-flutterwave').value = phoneNumber;
 
-// Add an event listener for the Flutterwave payment button
-const flutterwaveButton = document.getElementById("flutterwave-button");
-flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
-</script> 
+        // Define your Flutterwave configuration here
+        const config = {
+            // Other configuration options...
+            public_key: publicKey,
+            tx_ref: reference,
+            amount: amountInKobo, // Use the calculated amount in kobo
+            currency: "NGN", // Use the appropriate currency code
+            redirect_url: "", // Specify your redirect URL
+            payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr",
+            customer: {
+                email: email,
+                phone_number: phoneNumber, // Include phone number here
+                full_name: fullName, // Include full name here
+            },
+            customizations: {
+                title: "Your Payment Title",
+                description: "Payment for tokens",
+                logo: "https://res.cloudinary.com/dp7civtid/image/upload/v1691671447/zingypay_icon-1_opygpp.png",
+            },
+        };
 
+        // Initialize Flutterwave
+        const paymentModal = Flutterwave(config);
+
+        // Open the Flutterwave payment modal
+        paymentModal.open();
+    }
+
+    // Add an event listener for the Flutterwave payment button
+    const flutterwaveButton = document.getElementById("flutterwave-button");
+    flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
+</script>
+
+
+
+<!-- JavaScript code for Paystack integration -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
 <script>
     // Function to initialize the Paystack payment
     function initializePaystackPayment() {
@@ -521,6 +527,13 @@ flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
         const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
         const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate * 100 + 2600);
 
+        // Get the user's full name and phone number from the form
+        const fullName = document.getElementById('user-name').value;
+        const phoneNumber = document.getElementById('user-phone').value;
+
+        // Set the hidden input fields with the full name and phone number
+        document.getElementById('user-fullname').value = fullName;
+        document.getElementById('user-phone-number').value = phoneNumber;
 
         // Create the Paystack handler
         var handler = PaystackPop.setup({
@@ -541,12 +554,22 @@ flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
                         variable_name: "token_amount",
                         value: tokenAmount.toString(), // Convert token amount to string
                     },
+                    {
+                        display_name: "Full Name",
+                        variable_name: "full_name",
+                        value: fullName,
+                    },
+                    {
+                        display_name: "Phone Number",
+                        variable_name: "phone_number",
+                        value: phoneNumber,
+                    },
                 ],
             },
             callback: function (response) {
                 // Handle the Paystack callback response
                 // Send the payment response to the backend for processing
-                fetch('{% url 'paystack_payment_callback' %}', { // Adjust the URL to match your Django endpoint
+                fetch('/paystack_payment_callback/', { // Adjust the URL to match your Django endpoint
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -576,9 +599,9 @@ flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
         handler.openIframe();
     }
 
-    // Add an event listener for the payment button
-    const paymentButton = document.getElementById("paystack-button"); // Change to your Paystack button ID
-    paymentButton.addEventListener("click", initializePaystackPayment);
+    // Add an event listener for the Paystack payment button
+    const paystackButton = document.getElementById("paystack-button");
+    paystackButton.addEventListener("click", initializePaystackPayment);
 </script>
 
 
