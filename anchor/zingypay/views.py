@@ -71,7 +71,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from .forms import RegistrationForm, ImportStellarAccountForm
-from .models import Transaction, UserProfile, User, Currency
+from .models import Transaction, UserProfile, User, Currency, PaymentTransaction
 
 import requests
 import json
