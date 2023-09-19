@@ -27,16 +27,16 @@
         }
 
         body {
-            background-color: #c06113;
+            background-color: #ce6209;
         }
 
         .payment-container {
-            max-width: 60%;
+            max-width: 85%;
             margin: 0 auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            border: 3px solid #09d309;
             border-radius: 15px;
-            background-color: #0af3e7;
+            background-color: #000000;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             margin-top: 50px;
             margin-bottom: 20px;
@@ -123,11 +123,61 @@
             position: absolute;
             transform: translateY(-50%);
         }
+
+        /* Mobile-friendly styles */
+        @media screen and (max-width: 480px) {
+            .payment-body {
+                padding: 20px;
+                align-items: flex-start;
+            }
+    
+            .payment-container {
+                margin: 0;
+                border-radius: 0;
+            }
+    
+            .payment-heading {
+                margin-top: 0;
+            }
+        }
     </style>
 </head>
 <body>
-    <h1>Token Purchase</h1>
+    <div class="page-container">
+        <div class="payment-container">
+            <h1 class="payment-heading">Welcome to the AFRO Token ICO!</h1>
+        
+            <p class="payment-text">At AFRO Smartchain, we're thrilled to introduce you to the future of innovation. On January 1st, 2024, we will launch the AFRO Smartchain, a revolutionary blockchain platform designed to empower developers, entrepreneurs, and innovators across Africa and the world.</p>
+        
+            <p class="payment-text">The AFRO Smartchain is not just a blockchain; it's a canvas for endless possibilities. Here's why it's a game-changer:</p>
+        
+            <h2 class="payment-heading">Key Features:</h2>
+            <ul>
+                <li>**Scalability**: AFRO Smartchain is designed to handle a vast number of transactions per second, ensuring that it can support large-scale applications and services.</li>
+                <li>**Security**: Our blockchain employs state-of-the-art security measures, safeguarding your data and assets with the utmost diligence.</li>
+                <li>**Flexibility**: AFRO Smartchain provides developers with the freedom to create decentralized applications (dApps) tailored to their specific needs.</li>
+                <li>**Interoperability**: Our platform seamlessly interacts with existing blockchain ecosystems, including Ethereum. This means you can leverage the power of both worlds.</li>
+                <li>**Low Transaction Costs**: AFRO Smartchain ensures that transaction fees remain minimal, making it cost-effective for users and developers alike.</li>
+                <li>**Community-Driven**: We believe in the strength of community collaboration. AFRO Smartchain encourages active participation and governance by its users.</li>
+            </ul>
+        
+            <p class="payment-text">As an investor in AFRO Token, the native currency of the AFRO Smartchain, you stand to benefit in numerous ways:</p>
+        
+            <h2 class="payment-heading">Investor Benefits:</h2>
+            <ul>
+                <li>**Potential for Growth**: AFRO Token has the potential to appreciate in value as the AFRO Smartchain gains traction and adoption.</li>
+                <li>**Participation in Innovation**: By owning AFRO Tokens, you become a part of the innovation journey, supporting projects that drive positive change in Africa and globally.</li>
+                <li>**Access to Exclusive Services**: AFRO Token holders may gain access to exclusive services, discounts, or opportunities within the AFRO Smartchain ecosystem and other projects like Zingy-AI {formaly called TalkGPT, our AI assistant with a voice and ears} at https://ai.zingypay.com, and the AFro Mart at https://test-app.zingypay.com.</li>
+                <li>**Global Impact**: Your investment contributes to the development of groundbreaking solutions that address challenges not only in Africa but also on a global scale.</li>
+            </ul>
+        
+            <p class="payment-text">Join us in revolutionizing the way we innovate, collaborate, and build a brighter future. Together, we'll unleash the potential of the AFRO Smartchain and empower innovators to create lasting change.</p>
+        
+            <p class="payment-text">Get ready to embark on this extraordinary journey with us. Stay tuned for updates and be prepared to secure your AFRO Tokens when the Afro Smartchain launches on January 1st, 2024!</p>
+        </div>
+    
     <div class="payment-container">
+        <h1 class="payment-heading">Token Purchase</h1>
         <div class="payment-total-cost">
             <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
             <p>1 AFRO Token (XLM) = $<span id="afro-ask-price">0.00</span> (Sell Price), $<span id="afro-ask-price-usd">0.00</span> USD</p>
@@ -221,6 +271,27 @@
         <!-- Pay with Flutterwave button (added a new button) -->
         <button class="payment-button" id="flutterwave-button">Pay with Flutterwave</button>
     </div>
+
+    <!-- Discounted AFRO Token information -->
+    <div class="payment-container">
+        <h1 class="payment-heading">Special Offer: Discounted AFRO Tokens</h1>
+        <p class="payment-text">As a token of appreciation for your support, we are offering a limited-time discount on AFRO Tokens! Within one week of the ICO offer, you can purchase AFRO Tokens at a reduced rate to enable us finish the development of the Afro Smartchain and its eventful launch. Moreso, we'll help you to sell 1000 AFRO Tokens to get cash deposited into your bank account the following day as a reward for your loyalty to the Afro race. Don't miss out on this exclusive opportunity to get involved in the AFRO Smartchain revolution at a discounted price.</p>
+        <p class="payment-text">Stay tuned for updates when the Afro Smartchain launches on January 1st, 2024!</p>
+    </div>
+
+    <div class="payment-container">
+        <h1 class="payment-heading">Bank Transfer</h1>
+        <p class="payment-text">You can make a payment directly into our bank account for the purchase of AFRO Tokens from the developers faucet at discounted rates. Please use the following bank details:</p>
+        <p class="payment-text">Bank Name: Moniepoint</p>
+        <p class="payment-text">Account Name: ZINGYPAY.COM-</p>
+        <p class="payment-text">Account Number: [Account Number]</p>
+        <p class="payment-text">Reference: 5,000 AFRO Tokens</p>
+        <p class="payment-text">Amount: ₦15,000.00</p>
+        <p class="payment-text">After making the payment, please use the chat widget at the bottom-right corner of the page, or send an email to admin@zingypay.com with proof of payment and your public key, and our team will process your AFRO Token purchase.</p>
+    </div>
+    
+    
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-sdk/8.0.0/stellar-sdk.min.js"></script>
     <script>
