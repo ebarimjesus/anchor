@@ -158,6 +158,32 @@
            max-height: 400px;
        }
 
+       
+    /* Style for the share button containers */
+    .share-button {
+        display: inline-block;
+        margin-right: 10px; /* Add spacing between buttons */
+    }
+
+    /* Style for the Facebook share button */
+    .facebook-share-button {
+        background-color: #1877F2; /* Facebook blue color */
+        color: #fff; /* White text */
+        padding: 15px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+    /* Style for the Twitter share button */
+    .twitter-share-button {
+        background-color: #1DA1F2; /* Twitter blue color */
+        color: #fff; /* White text */
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+  
+
 
         /* Mobile Responsiveness */
         @media (max-width: 767px) {
@@ -243,6 +269,20 @@
             <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/OSO-GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
         </div>
     </div>
+
+        <!-- Facebook Share Button -->
+<div class="share-button">
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener noreferrer" class="facebook-share-button">
+        Share on Facebook
+    </a>
+</div>
+
+<!-- Twitter Share Button -->
+<div class="share-button">
+    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text=Check%20out%20ZingyPay" target="_blank" rel="noopener noreferrer" class="twitter-share-button">
+        Share on Twitter
+    </a>
+</div>
     
     <section id="motivation">
         <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1691869114/Go-Afro-Go_kflsey.png" class="max-image">
@@ -290,17 +330,17 @@
     <section id="products">
         <h2>Our Products</h2>
         <p>
-            ZingyPay is under active development by Wiz Technologies. More products to come in the following days. You can get some of the products here. <button><a href="https://zingypay.wiztech.site">Learn more</a></button>
+            ZingyPay is under active development by Wiz Technologies. More products to come in the following days. You can get some of the products here. <button><a href="https://test-app.zingypay.com">Learn more</a></button>
         </p>
         <ul>
            <li>
                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO">
-               <strong>AFRO:</strong> Afro is the 'One Africa' Digital Currency designed to facilitate glocal trade in Africa's economies to forestall over dependence on the USD, Euro, Etc.; while also showcasing and promoting the afro culture which is the bedrock of all extant humanity. The current price for 1 AFRO is about 1 dollar, but to enable us build a stronger liquidity pool we're offering 1000 AFRO for as low as 10,000 naira. <button><a href="https://paystack.com/pay/zingypay">Buy AFRO Here</a></button></p>
+               <strong>AFRO:</strong> Afro is the 'One Africa' Digital Currency designed to facilitate glocal trade in Africa's economies to forestall over dependence on the USD, Euro, Etc.; while also showcasing and promoting the afro culture which is the bedrock of all extant humanity. The current price for 1 AFRO is about 1 dollar, but to enable us build a stronger liquidity pool we're offering 1000 AFRO for as low as 10,000 naira. <button><a href="https://zingypay.com/zingypay/payment-form">Buy AFRO Here</a></button></p>
             </li>
 
             <li>
                 <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1690689235/life_y29ju9.png" alt="LIFE">
-                <strong>LIFE:</strong> Life is Zingypay's glocally facing currency to facilitate glocal trade amongst individuals, businesses, organizations, and governments for fast, seamless, and cheap transactions. It is created to enhance lives on the planet. Life is free, but a rich life isn't. You can now buy LIFE with your cards or bank transfer. <button><a href="https://lobstr.co/trade/LIFE:GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV">Buy Life</a></button>
+                <strong>LIFE:</strong> Life is Zingypay's glocally facing currency to facilitate glocal trade amongst individuals, businesses, organizations, and governments for fast, seamless, and cheap transactions. It is created to enhance lives on the planet. Life is free, but a rich life isn't. You can now buy LIFE with your cards or bank transfer. <button><a href="https://zingypay.com/zingypay/payment-form">Buy Life</a></button>
             </li>
             <!-- Add more product details as needed -->
         </ul>
@@ -317,8 +357,8 @@
                 <strong>Connect Bank Acc.:</strong>ZingyPay enables you to connect and maintain all your bank accounts and account transactions from on place. You don't have to wonder from app to app when viewing account balances, or initiating transactions anymore. <button><a href="https://connect.zingypay.com">Connect Accounts</a></button>
             </li>
             <li>
-                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573602/Exchange_ivh3zz.png" alt="Swap">
-                <strong>Swap/Trade on Cryptocurrencies:</strong> ZingyPay enables you to trade on several cryptocurrencies from a single dashboard. You can buy new crypto currencies or trade existing ones. <button><a href="https://interstellar.exchange/app/#/trade/GBSBVFTPVRTCIM3DCDOXNRTAPPTJQBRLPNVQYKFUTHLMDR43HJYO2YHZ/AFRO/GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV/NGNT/GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD">Trade here</a></button>
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1695206970/Zingy-Trader_wexy3k.png" alt="Swap">
+                <strong>Swap/Trade on Cryptocurrencies:</strong> ZingyPay enables you to trade on several cryptocurrencies from a single dashboard. You can buy new crypto currencies or trade existing ones. <button><a href="https://zingytrader.zingypay.com/markets/?search=zingypay.com">Trade here</a></button>
             </li>
             <li>
                 <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573725/Savings_pqmhjj.png" alt="Savings">
@@ -375,16 +415,16 @@
                 <h2>Zingy Marketplace</h2>
                 We are excited to announce that we are launching the Zingy Marketplace, an online marketplace for our vendors and buyers, where buyers will receive instant payments from sellers anywhere in the world. With Zingy Marketplace, you can easily find the products and services you need at the best prices. The Zingy Marketplace is designed to be a one-stop-shop for all your needs. You can browse through a variety of products and services, compare prices and make purchases in a secure and convenient environment. We are also introducing a range of new features that will make your shopping experience even better. Our advanced search and filter options will allow you to quickly find exactly what you are looking for. You can also save your favorite products and services for easy access in the future. We are confident that the Zingy Marketplace will become your go-to destination for all your shopping needs. 
                 <div class="feature-button">
-                     <button><a href="" target="_blank">Marketplace</a></button>
+                     <button><a href="https://test-app.zingypay.com" target="_blank">Marketplace</a></button>
                 </div>
             </li>
 
             <li>
-                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Exchange_kioaeb.png" alt="Exchange">
-                <strong>Download Wallets:</strong> You can download any wallet of your choice and trade on ZingyPay's digital assets in both Lobstr and Solar Wallets. Just type in the asset code or the issuer domain name{zingypay.com}, and the assets would pop up.
+                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1695207789/Zingy-Wallet_kwb7le.png" alt="Exchange">
+                <strong>Download Wallets:</strong> You can trade on the ZingyTrader which is ZingyPay's trading client, or download any ecosystem wallet of your choice and trade on ZingyPay's digital assets in both Lobstr and Solar Wallets. Just type in the asset code or the issuer domain name{zingypay.com}, and the assets would pop up.
                 <div>
                     <br>
-                    <button><a href="https://stellarterm.com/markets/?search=zingypay.com">Trade Aseets</a></button>
+                    <button><a href="https://zingytrader.zingypay.com/markets/?search=zingypay.com">Trade Aseets</a></button>
                     <br> 
                     <button><a href="https://lobstr.co/">Download Lobstr Wallet</a></button>
                     <br>
