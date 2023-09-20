@@ -185,5 +185,29 @@
                 margin-bottom: 20px; /* Add spacing between cards vertically */
             }
         }
+
+        /* Style for the share button containers */
+    .share-button {
+        display: inline-block;
+        margin-right: 10px; /* Add spacing between buttons */
+    }
+
+    /* Style for the Facebook share button */
+    .facebook-share-button {
+        background-color: #1877F2; /* Facebook blue color */
+        color: #fff; /* White text */
+        padding: 15px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
+
+    /* Style for the Twitter share button */
+    .twitter-share-button {
+        background-color: #1DA1F2; /* Twitter blue color */
+        color: #fff; /* White text */
+        padding: 15px 25px;
+        border-radius: 10px;
+        text-decoration: none;
+    }
   
 

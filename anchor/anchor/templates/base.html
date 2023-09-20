@@ -53,11 +53,25 @@
             <iframe onLoad="var c=this;window.addEventListener('message',function({data,source}){if(c&&source===c.contentWindow&&data.widget===c.src)c.style.height=data.height+'px'},false);" src="https://stellar.expert/widget/public/asset/summary/OSO-GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC" style="border:none;overflow:hidden;max-width:100%; min-width:300px;max-height:100%;min-height:200px;width:100%"></iframe>
         </div>
     </div>
+
+     
+    <!-- Facebook Share Button -->
+<div class="share-button">
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}" target="_blank" rel="noopener noreferrer" class="facebook-share-button">
+        Share on Facebook
+    </a>
+</div>
+
+<!-- Twitter Share Button -->
+<div class="share-button">
+    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri|urlencode }}&text=Check%20out%20ZingyPay" target="_blank" rel="noopener noreferrer" class="twitter-share-button">
+        Share on Twitter
+    </a>
+</div>
+
     
     {% block content %}
      
-     
-
     <!--Start of Tawk.to Script-->
     
     {% endblock %}
