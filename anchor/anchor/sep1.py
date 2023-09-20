@@ -14,7 +14,7 @@ CONFIG_DATA = {
     "SIGNING_KEY": "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC",
 
     # FEDERATION_SERVER
-    "FEDERATION_SERVER": "https://zingypay.com/federation",
+    "FEDERATION_SERVER": "https://federation.zingypay.com/federation",
 
     # NETWORK_PASSPHRASE
     "NETWORK_PASSPHRASE": 'Public Global Stellar Network ; September 2015',
@@ -78,7 +78,7 @@ CONFIG_DATA = {
             "anchor_asset_type": "crypto",
             "fixed_number": 900000000000,
             "desc": "OSO is Zingypay's asset created to cater to the Zingypay ecosystem, and the Osomba Smartchain. Users can readily buy OSO tokens and exchange them 1on1 with AFRO. More info in the White Paper.",
-            "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1694304204/oso_nnfxeh.png"
+            "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1695206993/oso_nwnm4h.png"
         }
     ],
 
