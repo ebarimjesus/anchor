@@ -299,7 +299,7 @@
 
     <!-- Discounted AFRO Token information -->
     <div class="payment-container">
-        <h1 class="payment-heading">Special Offer: Discounted AFRO Tokens</h1>
+        <h1 class="payment-heading">Special Offer: Discounted AFRO Tokens for First 1,000 People</h1>
         <p class="payment-text">As a token of appreciation for your support, we are offering a limited-time discount on AFRO Tokens! Within one week of the ICO offer, you can purchase AFRO Tokens at a reduced rate to enable us finish the development of the Afro Smartchain and its eventful launch. Moreso, we'll help you to sell 1000 AFRO Tokens to get cash deposited into your bank account the following day as a reward for your loyalty to the Afro race. Don't miss out on this exclusive opportunity to get involved in the AFRO Smartchain revolution at a discounted price.</p>
         <p class="payment-text">Stay tuned for updates when the Afro Smartchain launches on January 1st, 2024!</p>
     </div>
@@ -313,20 +313,25 @@
         <p class="payment-text">Account Name: ZINGYPAY.COM </p>
         <p class="payment-text">Account Number:6349360169 </p>
 
-        <h3>Account 02 Details</h3>
-        <p class="payment-text">Bank Name: Sterling Bank</p>
-        <p class="payment-text">Account Name: ZingyPay</p>
-        <p class="payment-text">Account Number: 6222070014</p>
+        <h3>Team Lead Account Details</h3>
+        <p class="payment-text">Bank Name: Zenith Bank Plc</p>
+        <p class="payment-text">Account Name: Fortune Ebarim</p>
+        <p class="payment-text">Account Number: 2123861212</p>
     
         <h3>Account 03 Details</h3>
-        <p class="payment-text">Bank Name: Sterling Bank</p>
-        <p class="payment-text">Account Name: ZingyPay</p>
-        <p class="payment-text">Account Number: 6222070014</p>
+        <p class="payment-text">Bank Name: Wema Bank PLC</p>
+        <p class="payment-text">Account Name: CHEAPBUY MARKETPLACE FLWFLW</p>
+        <p class="payment-text">Account Number: 7812154849</p>
+
         
         <h3>Payment Details</h3>
-        <p class="payment-text">Reference: 5,000 AFRO Tokens</p>
-        <p class="payment-text">Amount: ₦15,000.00</p>
-        <p class="payment-text">After making the payment, please use the chat widget at the bottom-right corner of the page, or send an email to admin@zingypay.com with proof of payment and your public key, and our team will process your AFRO Token purchase.</p>
+        <p class="payment-text">Reference:  Payment for AFRO</p>
+        <p class="payment-text">Amount: ₦10,000.00 for 5,000 tokens </p>
+        <p class="payment-text">Amount: ₦15,000.00 for 7,600 tokens </p>
+        <p class="payment-text">Amount: ₦20,000.00 for 9,800 tokens </p>
+        <p class="payment-text">Amount: ₦25,000.00 for 12,900 tokens </p>
+        <p class="payment-text">Amount: ₦30,000.00 for 20,000 tokens </p>
+        <p class="payment-text">After making the payment, please use the chat widget at the bottom-right corner of the page, or send an email to admin@zingypay.com with proof of payment and your public key, and our team will process your AFRO Token purchase. You can as well call +2349058528334.</p>
     </div>
     
     
@@ -448,62 +453,65 @@
 <script src="https://checkout.flutterwave.com/v3.js"></script>
 <script>
     // Function to initialize the Flutterwave payment
-    function initializeFlutterwavePayment() {
-        const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
-        const tokenAmount = parseFloat(document.getElementById("amount").value);
-        const email = document.getElementById('user-email').value;
-        const publicKey = "FLWPUBK-49a4914e3f9adaa91e2fd10497a7da92-X"; // Replace with your Flutterwave public key
+    document.addEventListener('DOMContentLoaded', function() {
+        function initializeFlutterwavePayment() {
+            console.log("Function called");
+            const selectedToken = document.querySelector('input[name="token-type"]:checked').value;
+            const tokenAmount = parseFloat(document.getElementById("amount").value);
+            const email = document.getElementById('user-email').value;
+            const publicKey = "FLWPUBK-1bb9c7fe992d687e60cf5426fc1464e0-X"; // Replace with your Flutterwave public key
 
-        // Get the user's Stellar public key from the form
-        const userPublicKey = document.getElementById('user-wallet').value;
+            // Get the user's Stellar public key from the form
+            const userPublicKey = document.getElementById('user-wallet').value;
 
-        // Generate a unique reference including token type and token amount
-        const reference = `PURCHASE_${userPublicKey}_${selectedToken}_${tokenAmount}_${Date.now()}`;
+            // Generate a unique reference including token type and token amount
+            const reference = `PURCHASE_${userPublicKey}_${selectedToken}_${tokenAmount}_${Date.now()}`;
 
-        const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
-        const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
-        const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
+            const totalAmountUSD = parseFloat(document.getElementById("total-amount").textContent);
+            const usdToNgnRate = 810; // Replace with your fixed USD/NGN rate
+            const amountInKobo = Math.round(totalAmountUSD * usdToNgnRate);
 
-        // Get the user's full name and phone number from the form
-        const fullName = document.getElementById('user-name').value;
-        const phoneNumber = document.getElementById('user-phone').value;
+            // Get the user's full name and phone number from the form
+            const fullName = document.getElementById('user-name').value;
+            const phoneNumber = document.getElementById('user-phone').value;
 
-        // Set the hidden input fields with the full name and phone number
-        document.getElementById('user-fullname-flutterwave').value = fullName;
-        document.getElementById('user-phone-number-flutterwave').value = phoneNumber;
+            // Set the hidden input fields with the full name and phone number
+            document.getElementById('user-fullname-flutterwave').value = fullName;
+            document.getElementById('user-phone-number-flutterwave').value = phoneNumber;
 
-        // Define your Flutterwave configuration here
-        const config = {
-            // Other configuration options...
-            public_key: publicKey,
-            tx_ref: reference,
-            amount: amountInKobo, // Use the calculated amount in kobo
-            currency: "NGN", // Use the appropriate currency code
-            redirect_url: "", // Specify your redirect URL
-            payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr",
-            customer: {
-                email: email,
-                phone_number: phoneNumber, // Include phone number here
-                full_name: fullName, // Include full name here
-            },
-            customizations: {
-                title: "ZingyPay",
-                description: "Payment for tokens",
-                logo: "https://res.cloudinary.com/dp7civtid/image/upload/v1691671447/zingypay_icon-1_opygpp.png",
-            },
-        };
+            // Define your Flutterwave configuration here
+            const config = {
+                public_key: publicKey,
+                tx_ref: reference,
+                amount: amountInKobo,
+                currency: "NGN",
+                payment_type: "card, banktransfer, mobilemoneyghana, mobilemoneyfranco, barter, nqr",
+                redirect_url: "https://zingytrader.zingypay.com",
+                customer: {
+                    email: email,
+                    phone_number: phoneNumber,
+                    name: name, // Use 'name' instead of 'full_name'
+                },
+                customizations: {
+                    title: "ZingyPay",
+                    description: "Payment for tokens",
+                    logo: "https://res.cloudinary.com/dp7civtid/image/upload/v1691671447/zingypay_icon-1_opygpp.png",
+                },
+            };
 
-        // Initialize Flutterwave
-        const paymentModal = Flutterwave(config);
+            // Initialize Flutterwave
+            const paymentModal = Flutterwave(config);
 
-        // Open the Flutterwave payment modal
-        paymentModal.open();
-    }
+            // Open the Flutterwave payment modal
+            paymentModal.open();
+        }
 
-    // Add an event listener for the Flutterwave payment button
-    const flutterwaveButton = document.getElementById("flutterwave-button");
-    flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
+        // Add an event listener for the Flutterwave payment button
+        const flutterwaveButton = document.getElementById("flutterwave-button");
+        flutterwaveButton.addEventListener("click", initializeFlutterwavePayment);
+    });
 </script>
+
 
 
 
