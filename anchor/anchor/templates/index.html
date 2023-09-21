@@ -14,7 +14,7 @@
             line-height: 1.6;
             margin: 0;
             padding: 0;
-            background-color: #f8f8f8;
+            background-color: #bd0202;
         }
 
         header {
@@ -234,8 +234,9 @@
     
     <nav>
         <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'payment_form' %}">GET AFRO</a>
-        <a href="{% url 'create_account' %}">Create AFRO Account</a>
+        <a href="https://zingytrader.zingypay.com">Create AFRO Account</a>
+        <a href="{% url 'payment_form' %}">Buy AFRO</a>
+        <a href="https://zingytrader.zingypay.com">Trade AFRO</a>
         {% if user.is_authenticated and user.stellaraccount %}
              <a href="{% url 'view_account' user_id=user.id account_pk=user.stellaraccount.pk %}">View Account</a>
         
@@ -353,10 +354,6 @@
         </p>
         <ul>
             <li>
-                <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1686573722/Telepay_gzns5w.png" alt="Connect">
-                <strong>Connect Bank Acc.:</strong>ZingyPay enables you to connect and maintain all your bank accounts and account transactions from on place. You don't have to wonder from app to app when viewing account balances, or initiating transactions anymore. <button><a href="https://connect.zingypay.com">Connect Accounts</a></button>
-            </li>
-            <li>
                 <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1695206970/Zingy-Trader_wexy3k.png" alt="Swap">
                 <strong>Swap/Trade on Cryptocurrencies:</strong> ZingyPay enables you to trade on several cryptocurrencies from a single dashboard. You can buy new crypto currencies or trade existing ones. <button><a href="https://zingytrader.zingypay.com/markets/?search=zingypay.com">Trade here</a></button>
             </li>
@@ -424,7 +421,7 @@
                 <strong>Download Wallets:</strong> You can trade on the ZingyTrader which is ZingyPay's trading client, or download any ecosystem wallet of your choice and trade on ZingyPay's digital assets in both Lobstr and Solar Wallets. Just type in the asset code or the issuer domain name{zingypay.com}, and the assets would pop up.
                 <div>
                     <br>
-                    <button><a href="https://zingytrader.zingypay.com/markets/?search=zingypay.com">Trade Aseets</a></button>
+                    <button><a href="https://zingytrader.zingypay.com/markets/?search=zingypay.com">Use ZingyTrader</a></button>
                     <br> 
                     <button><a href="https://lobstr.co/">Download Lobstr Wallet</a></button>
                     <br>

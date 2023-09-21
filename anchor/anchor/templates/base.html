@@ -23,8 +23,8 @@
 
     <nav>
         <a href="{% url 'home' %}">Home</a>
-        <a href="{% url 'payment_form' %}">GET AFRO</a>
-        <a href="{% url 'create_account' %}">Create AFRO Account</a>
+        <a href="{% url 'payment_form' %}">Buy AFRO</a>
+        <a href="https://zingytrader.zingypay.com">Trade AFRO</a>
         {% if user.is_authenticated and user.stellaraccount %}
             <a href="{% url 'view_account' user_id=user.id account_pk=user.stellaraccount.pk %}">View Account</a>
         
