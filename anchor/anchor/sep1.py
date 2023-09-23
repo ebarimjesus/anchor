@@ -48,6 +48,17 @@ CONFIG_DATA = {
             "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png"
         },
         {
+            "code": "ÇNB",
+            "issuer": "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC",
+            "status": "live",
+            "display_decimals": 7,
+            "is_asset_anchored": True,
+            "anchor_asset_type": "crypto",
+            "fixed_number": 10000000,
+            "desc": "ÇNB is Cannabis asset created to cater to the ZingyTrader's ecosystem trading hub. Users can readily buy ÇNB and exchange them 1on1000 with OSO. More info in the White Paper.",
+            "imag": "https://res.cloudinary.com/dp7civtid/image/upload/v1695474886/CNB_bvlwjy.png"
+        },
+        {
             "code": "LIFE",
             "issuer": "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV",
             "status": "live",
@@ -106,4 +117,7 @@ CONFIG_DATA = {
 # Function to return the TOML contents
 def return_toml_contents(request, *args, **kwargs):
     return CONFIG_DATA
+
+
+
 
