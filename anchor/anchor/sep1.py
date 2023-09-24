@@ -48,7 +48,7 @@ CONFIG_DATA = {
             "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png"
         },
         {
-            "code": "ÇNB",
+            "code": "CNB",
             "issuer": "GAEESZVR52HUAHPOJZYWMWS7TYLSPS46IAK3ZDT7HTFBULDVOYUNEWCC",
             "status": "live",
             "display_decimals": 7,
