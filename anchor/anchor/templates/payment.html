@@ -192,60 +192,108 @@
         
             <p class="payment-text">Get ready to embark on this extraordinary journey with us. Stay tuned for updates and be prepared to secure your AFRO Tokens during the ICO, and when the Afro Smartchain launches on January 1st, 2024!</p>
         </div>
-    
-    <div class="payment-container">
-        <h1 class="payment-heading">Token Purchase</h1>
-        <div class="payment-total-cost">
-            <p>1 AFRO Token (XLM) = $<span id="afro-bid-price">0.00</span> (Buy Price), $<span id="afro-bid-price-usd">0.00</span> USD</p>
-            <p>1 AFRO Token (XLM) = $<span id="afro-ask-price">0.00</span> (Sell Price), $<span id="afro-ask-price-usd">0.00</span> USD</p>
-        </div>
-        <div class="payment-total-cost">
-            <p>1 ÇNB Token (XLM) = $<span id="cnb-bid-price">0.00</span> (Buy Price), $<span id="cnb-bid-price-usd">0.00</span> USD</p>
-            <p>1 ÇNB Token (XLM) = $<span id="cnb-ask-price">0.00</span> (Sell Price), $<span id="cnb-ask-price-usd">0.00</span> USD</p>
-        </div>
-        <div class="payment-total-cost">
-            <p>1 LIFE Token (XLM) = $<span id="life-bid-price">0.00</span> (Buy Price), $<span id="life-bid-price-usd">0.00</span> USD</p>
-            <p>1 LIFE Token (XLM) = $<span id="life-ask-price">0.00</span> (Sell Price), $<span id="life-ask-price-usd">0.00</span> USD</p>
-        </div>
-        <div class="payment-total-cost">
-            <p>1 NATURE Token (XLM) = $<span id="nature-bid-price">0.00</span> (Buy Price), $<span id="nature-bid-price-usd">0.00</span> USD</p>
-            <p>1 NATURE Token (XLM) = $<span id="nature-ask-price">0.00</span> (Sell Price), $<span id="nature-ask-price-usd">0.00</span> USD</p>
-        </div>
-        <div class="payment-total-cost">
-            <p>1 OSO Token (XLM) = $<span id="oso-bid-price">0.00</span> (Buy Price), $<span id="oso-bid-price-usd">0.00</span> USD</p>
-            <p>1 OSO Token (XLM) = $<span id="oso-ask-price">0.00</span> (Sell Price), $<span id="oso-ask-price-usd">0.00</span> USD</p>
-        </div>
 
+        <div class="payment-container">
+            <h1 class="payment-heading">Token Purchase</h1>
+            <!-- Token options -->
+            <div class="token-option">
+                <label>
+                    <input type="radio" name="token-type" value="AFRO"> AFRO
+                </label>
+                <img id="afro-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO Token Image">
+            </div>
+    
+            <!-- Token prices -->
+            <div class="payment-total-cost">
+                <div class="token-price">
+                    <span id="afro-bid-price">Bid Price (XLM): 0.00</span>
+                    <span id="afro-bid-price-usd">Bid Price (USD): $0.00</span>
+                </div>
+                <div class="token-price">
+                    <span id="afro-ask-price">Ask Price (XLM): 0.00</span>
+                    <span id="afro-ask-price-usd">Ask Price (USD): $0.00</span>
+                </div>
+            </div>
+    
+            
+            <!-- Token options -->
+            <div class="token-option">
+                <label>
+                    <input type="radio" name="token-type" value="CNB"> ÇNB
+                </label>
+                <img id="cnb-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1695474886/CNB_bvlwjy.png" alt="ÇNB Token Image">
+            </div>
+                <!-- Token prices -->
+                <div class="payment-total-cost">
+                    <div class="token-price">
+                        <span id="cnb-bid-price">Bid Price (XLM): 0.00</span>
+                        <span id="cnb-bid-price-usd">Bid Price (USD): $0.00</span>
+                    </div>
+                    <div class="token-price">
+                        <span id="cnb-ask-price">Ask Price (XLM): 0.00</span>
+                        <span id="cnb-ask-price-usd">Ask Price (USD): $0.00</span>
+                    </div>
+                </div>
+                
+        <!-- Token options -->
         <div class="token-option">
-            <img id="afro-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1692079822/AFRO_TOKEN_ndqlai.png" alt="AFRO Token Image">
-            <label>
-                <input type="radio" name="token-type" value="AFRO"> AFRO
-            </label>
-        </div>
-        <div class="token-option">
-            <img id="cnb-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1695474886/CNB_bvlwjy.png" alt="ÇNB Token Image">
-            <label>
-                <input type="radio" name="token-type" value="CNB"> ÇNB
-            </label>
-        </div>
-        <div class="token-option">
-            <img id="life-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1691841326/life-800x600_m22ylm.png" alt="LIFE Token Image">
             <label>
                 <input type="radio" name="token-type" value="LIFE"> LIFE
             </label>
+            <img id="life-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1691841326/life-800x600_m22ylm.png" alt="LIFE Token Image">
         </div>
-        <div class="token-option">
-            <img id="nature-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png" alt="NATURE Token Image">
+            <!-- Token prices -->
+            <div class="payment-total-cost">
+                <div class="token-price">
+                    <span id="life-bid-price">Bid Price (XLM): 0.00</span>
+                    <span id="life-bid-price-usd">Bid Price (USD): $0.00</span>
+                </div>
+                <div class="token-price">
+                    <span id="life-ask-price">Ask Price (XLM): 0.00</span>
+                    <span id="life-ask-price-usd">Ask Price (USD): $0.00</span>
+                </div>
+            </div>
+         
+         <!-- Token options -->
+         <div class="token-option">
             <label>
                 <input type="radio" name="token-type" value="NATURE"> NATURE
             </label>
+            <img id="nature-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1690650612/nature_pzqdla.png" alt="NATURE Token Image">
         </div>
+            <!-- Token prices -->
+            <div class="payment-total-cost">
+                <div class="token-price">
+                    <span id="nature-bid-price">Bid Price (XLM): 0.00</span>
+                    <span id="nature-bid-price-usd">Bid Price (USD): $0.00</span>
+                </div>
+                <div class="token-price">
+                    <span id="nature-ask-price">Ask Price (XLM): 0.00</span>
+                    <span id="nature-ask-price-usd">Ask Price (USD): $0.00</span>
+                </div>
+            </div>
+        
+        <!-- Token options -->
         <div class="token-option">
-            <img id="oso-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1695206993/oso_nwnm4h.png" alt="OSO Token Image">
             <label>
                 <input type="radio" name="token-type" value="OSO"> OSO
             </label>
+            <img id="oso-image" class="asset-image" src="https://res.cloudinary.com/dp7civtid/image/upload/v1695206993/oso_nwnm4h.png" alt="OSO Token Image">
         </div>
+            <!-- Token prices -->
+            <div class="payment-total-cost">
+                <div class="token-price">
+                    <span id="oso-bid-price">Bid Price (XLM): 0.00</span>
+                    <span id="oso-bid-price-usd">Bid Price (USD): $0.00</span>
+                </div>
+                <div class="token-price">
+                    <span id="oso-ask-price">Ask Price (XLM): 0.00</span>
+                    <span id="oso-ask-price-usd">Ask Price (USD): $0.00</span>
+                </div>
+            </div>
+    
+        
+        
 
         <!-- User input fields -->
         <div class="payment-user-info">
