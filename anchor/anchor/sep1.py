@@ -40,7 +40,7 @@ CONFIG_DATA = {
             "code": "AFRO",
             "issuer": "GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV",
             "status": "live",
-            "display_decimals": 7,
+            "display_decimals": 2,
             "is_asset_anchored": True,
             "anchor_asset_type": "crypto",
             "fixed_number": 900000000000,
