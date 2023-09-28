@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-x7t(e2sofl%pexf)8$0(*d0z!q9*ikp$ej=xkwt9&2w#(1#s_!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['anchor-gdpq.onrender.com', 'localhost', 'zingypay.com']
+ALLOWED_HOSTS = ['anchor-bptz.onrender.com', 'localhost', 'zingypay.com']
 
 
 # Application definition
@@ -49,12 +49,13 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'polaris.middleware.TimezoneMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "anchor.middleware.CustomHeaderMiddleware",
 ]
 
 ROOT_URLCONF = 'anchor.urls'

@@ -7,7 +7,8 @@ CONFIG_DATA = {
         "GBZAC3UPMX3QI4346PRRNE77QORHFO2V4CVDICI6DUVJJSD3QHO7RFAF",
         "GD72XP6N3LQFP4C27GUDV22LBYASGACAIEME64IEGKNU2HGO6RIALLRR",
         "GBRTM5TWRKX2DCOH6OETIA45NJJXGVP6QB7JJ754QFAO62XG2XMCDBAA",
-        "GCLCIGPIF52BY3ASVR4QBLCZ7BHDYZRTAT75UYPSR4EXTI5KLUXHS2YG"
+        "GCLCIGPIF52BY3ASVR4QBLCZ7BHDYZRTAT75UYPSR4EXTI5KLUXHS2YG",
+        "GAZ237H33DS6AMCZMPP76DQ3W5WGUVWWBQYLKSO26YFI5JQJOKXEJW2M"
     ],
 
     # SIGNING_KEY
@@ -56,7 +57,7 @@ CONFIG_DATA = {
             "anchor_asset_type": "crypto",
             "fixed_number": 10000000,
             "desc": "ÇNB is Cannabis asset created to cater to the ZingyTrader's ecosystem trading hub. Users can readily buy ÇNB and exchange them 1on1000 with OSO. More info in the White Paper.",
-            "imag": "https://res.cloudinary.com/dp7civtid/image/upload/v1695474886/CNB_bvlwjy.png"
+            "image": "https://res.cloudinary.com/dp7civtid/image/upload/v1695474886/CNB_bvlwjy.png"
         },
         {
             "code": "LIFE",

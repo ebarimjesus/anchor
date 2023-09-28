@@ -1,0 +1,9 @@
+# Set headers for the /.well-known/stellar.toml path
+/.well-known/stellar.toml
+  Access-Control-Allow-Origin: *
+  Content-Type: text/plain
+
+# Set headers for all pages
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
