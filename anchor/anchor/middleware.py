@@ -1,15 +1,16 @@
-# anchor/middleware.py
-
-class CustomHeaderMiddleware:
+class CustomHeadersMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # Add custom headers to responses here
         response = self.get_response(request)
-        response["Access-Control-Allow-Origin"] = "*"
-        response["Content-Type"] = "text/plain"
-        response["X-Frame-Options"] = "DENY"
-        response["X-XSS-Protection"] = "1; mode=block"
+        
+        # Check if the request path matches the stellar.toml file
+        if request.path == '/.well-known/stellar.toml':
+            # Set custom headers for the stellar.toml file
+            response['Access-Control-Allow-Origin'] = '*'
+            response['Content-Type'] = 'text/plain'
+        
         return response
 
+        
