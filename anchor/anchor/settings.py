@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "anchor.middleware.CustomHeaderMiddleware",
+    'anchor.custom_middleware.CustomHeadersMiddleware',
 ]
 
 ROOT_URLCONF = 'anchor.urls'

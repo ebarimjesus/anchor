@@ -1,3 +1,5 @@
+# Create a custom middleware file, e.g., custom_middleware.py
+
 class CustomHeadersMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -13,4 +15,4 @@ class CustomHeadersMiddleware:
         
         return response
 
-        
+
