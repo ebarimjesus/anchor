@@ -105,4 +105,13 @@ class PaymentTransaction(models.Model):
     def __str__(self):
         return self.reference
 
-        
+class BankAccount(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bank_accounts')
+    account_number = models.CharField(max_length=20)
+    routing_number = models.CharField(max_length=20)
+    # Add other fields as needed
+
+    def __str__(self):
+        return f"Bank Account for {self.user.username}"
+
+
