@@ -27,6 +27,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['anchor-bptz.onrender.com', 'localhost', 'zingypay.com']
 
+POLARIS_ACTIVE_SEPS = ["sep1", "sep10", "sep12", "sep24", "sep31", "sep38"]
+
 
 # Application definition
 
