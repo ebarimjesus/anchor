@@ -29,6 +29,12 @@ ALLOWED_HOSTS = ['anchor-bptz.onrender.com', 'localhost', 'zingypay.com']
 
 POLARIS_ACTIVE_SEPS = ["sep1", "sep10", "sep12", "sep24", "sep31", "sep38"]
 
+HOST_URL = "https://zingypay.com"
+LOCAL_MODE = 0
+ENABLE_SEP_0023 = 1
+SIGNING_SEED = "SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW"
+SERVER_JWT_KEY = "drbn67hhb67u5yunb67unyjt67uny6unhjjhnbbhhbb6767uhty"
+
 
 # Application definition
 
