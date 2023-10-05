@@ -11,6 +11,20 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
+
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env
+load_dotenv()
+
+# Parse database configuration from $DATABASE_URL
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL')
+    )
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,21 +33,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-x7t(e2sofl%pexf)8$0(*d0z!q9*ikp$ej=xkwt9&2w#(1#s_!'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-
-ALLOWED_HOSTS = ['anchor-bptz.onrender.com', 'localhost', 'zingypay.com']
-
-POLARIS_ACTIVE_SEPS = ["sep1", "sep10", "sep12", "sep24", "sep31", "sep38"]
-
-HOST_URL = "https://zingypay.com"
-LOCAL_MODE = 0
-ENABLE_SEP_0023 = 1
-SIGNING_SEED = "SBCA53JJFZMMWTTF5GAS66EXYDOJTXPI5GKGVQCVE3Y66T6WSNA6S6OW"
-SERVER_JWT_KEY = "drbn67hhb67u5yunb67unyjt67uny6unhjjhnbbhhbb6767uhty"
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'True'  # Convert string 'True' to boolean True
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+POLARIS_ACTIVE_SEPS = os.getenv('POLARIS_ACTIVE_SEPS').split(',')
+HOST_URL = os.getenv('HOST_URL')
+LOCAL_MODE = int(os.getenv('LOCAL_MODE'))
+ENABLE_SEP_0023 = int(os.getenv('ENABLE_SEP_0023'))
+SIGNING_SEED = os.getenv('SIGNING_SEED')
+SERVER_JWT_KEY = os.getenv('SERVER_JWT_KEY')
 
 
 # Application definition
@@ -90,12 +98,12 @@ WSGI_APPLICATION = 'anchor.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'zingypay.db',
-    }
-}
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'zingypay.db',
+#    }
+# }
 
 
 # Password validation
