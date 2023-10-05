@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-x7t(e2sofl%pexf)8$0(*d0z!q9*ikp$ej=xkwt9&2w#(1#s_!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['anchor-bptz.onrender.com', 'localhost', 'zingypay.com']
 
