@@ -4,6 +4,7 @@ gunicorn
 django-cors-headers
 python-dateutil
 stellar-sdk
+stellar-sdk[aiohttp]
 whitenoise
 paystackapi
 toml
